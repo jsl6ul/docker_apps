@@ -1,0 +1,35 @@
+version: "2"
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+
+  app:
+    image: "{{ docker_apps_image_privatebin }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "privatebin"
+    networks:
+      - traefik_proxy
+    mem_limit: 256M
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.privatebin.entrypoints: "http, https"
+      traefik.http.routers.privatebin.rule: "Host(`privatebin.{{ docker_apps_domain }}`)"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.privatebin.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.privatebin.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.privatebin.tls.domains[0].main: "privatebin.{{ docker_apps_domain }}"
+{% endif %}
