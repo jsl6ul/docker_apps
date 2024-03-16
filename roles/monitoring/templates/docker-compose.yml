@@ -1,0 +1,149 @@
+---
+version: "2.4"
+
+volumes:
+  alertmanager:
+  grafana_plugins:
+  prometheus:
+  grafana_dashboards:
+
+networks:
+  default:
+  traefik_proxy:
+    external: true
+
+services:
+
+  prometheus:
+    image: "{{ docker_apps_image_monitoring_prometheus }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "prometheus"
+    networks:
+      - default
+      - traefik_proxy
+    mem_limit: 512M
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
+      - "prometheus:/prometheus"
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    links:
+      - alertmanager
+      - blackbox
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.prometheus.rule: "Host(`prometheus.{{ docker_apps_domain }}`)"
+      traefik.http.services.prometheus.loadbalancer.server.port: "9090"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.prometheus.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.prometheus.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.prometheus.tls.domains[0].main: "prometheus.{{ docker_apps_domain }}"
+{% endif %}
+    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --storage.tsdb.retention.time={{ prometheus_retention_time }}
+
+  alertmanager:
+    image: "{{ docker_apps_image_monitoring_alertmanager }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "alertmanager"
+    networks:
+      - default
+      - traefik_proxy
+    mem_limit: 512M
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+      - "alertmanager:/alertmanager"
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.alertmanager.rule: "Host(`alertmanager.{{ docker_apps_domain }}`)"
+      traefik.http.services.alertmanager.loadbalancer.server.port: "9093"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.alertmanager.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.alertmanager.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.alertmanager.tls.domains[0].main: "alertmanager.{{ docker_apps_domain }}"
+{% endif %}
+
+  blackbox:
+    image: "{{ docker_apps_image_monitoring_blackbox }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "blackbox"
+    networks:
+      - default
+      - traefik_proxy
+    mem_limit: 512M
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./blackbox_config.yml:/etc/blackbox_exporter/config.yml"
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.blackbox.rule: "Host(`blackbox.{{ docker_apps_domain }}`)"
+      traefik.http.services.blackbox.loadbalancer.server.port: "9115"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.blackbox.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.blackbox.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.blackbox.tls.domains[0].main: "blackbox.{{ docker_apps_domain }}"
+{% endif %}
+
+  grafana:
+    image: "{{ docker_apps_image_monitoring_grafana }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "grafana"
+    networks:
+      - default
+      - traefik_proxy
+    mem_limit: 512M
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "grafana_dashboards:/var/lib/grafana/dashboards/"
+      - "grafana_plugins:/var/lib/grafana/plugins/"
+      - "./grafana_providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
+      - "./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+      - "./grafana_dashboards:/var/lib/grafana/dashboards/ansible/"
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    links:
+      - prometheus
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.grafana.rule: "Host(`grafana.{{ docker_apps_domain }}`)"
+      traefik.http.services.grafana.loadbalancer.server.port: "3000"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.grafana.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.grafana.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.grafana.tls.domains[0].main: "grafana.{{ docker_apps_domain }}"
+{% endif %}
+    env_file: grafana.env
