@@ -1,0 +1,40 @@
+---
+- name: Set project directory
+  ansible.builtin.set_fact:
+    docker_apps_project: "{{ docker_apps_directory }}/{{ role_name }}"
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ docker_apps_project }}"
+    state: directory
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    mode: 0640
+
+- name: Create docker environment file
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/traefik.env"
+    content: "{{ traefik_envvar_file }}"
+    mode: 0640
+
+- name: Create traefik serverTransports file
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/serversTransports.yml"
+    content: "{{ docker_apps_traefik_serversTransports }}"
+  when: docker_apps_traefik_serversTransports is defined
+  notify: Restart container
+
+- name: Import certificate.yml
+  ansible.builtin.import_tasks: certificate.yml
+  when:
+    - docker_apps_traefik_tls
+    - docker_apps_traefik_certresolver == "none"
+
+- name: Deployment (add '-e docker_apps_restart=true' to force-restart)
+  community.docker.docker_compose:
+    docker_host: "{{ docker_apps_socket }}"
+    project_src: "{{ docker_apps_project }}"
+    restarted: "{{ docker_apps_restart | default(false) }}"

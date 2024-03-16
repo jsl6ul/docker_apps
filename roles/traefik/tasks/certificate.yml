@@ -1,0 +1,22 @@
+---
+- name: Copy certificate files
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/{{ item.name }}"
+    content: "{{ item.content }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { name: traefik-cert.crt, mode: "0644", content: "{{ traefik_certificate.crt }}" }
+    - { name: traefik-cert.key, mode: "0600", content: "{{ traefik_certificate.key }}" }
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Copy traefik-tls.yml
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/traefik-tls.yml"
+    content: |
+      tls:
+        stores:
+          default:
+            defaultCertificate:
+              certFile: /etc/ssl/traefik/cert.crt
+              keyFile: /etc/ssl/traefik/cert.key

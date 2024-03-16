@@ -1,0 +1,89 @@
+---
+# docker image
+docker_apps_image_traefik: "docker.io/traefik:v2.11"
+
+# default trafik ports
+traefik_ports:
+  - 80:80
+  - 443:443
+
+# content of traefik.env file
+traefik_envvar_file: |
+  # traefik static configuration through envvars
+  TRAEFIK_API=true
+  TRAEFIK_API_DASHBOARD=true
+  TRAEFIK_API_INSECURE=false
+  TRAEFIK_API_DEBUG=false
+  # Log level set to traefik logs.
+  # DEBUG, PANIC, FATAL, ERROR, WARN, and INFO
+  TRAEFIK_LOG_LEVEL=WARN
+  TRAEFIK_PROVIDERS_DOCKER=true
+  TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+  # EntryPoints are the network entry points into Traefik.
+  TRAEFIK_ENTRYPOINTS_http=true
+  TRAEFIK_ENTRYPOINTS_http_ADDRESS=:80
+  TRAEFIK_ENTRYPOINTS_https=true
+  TRAEFIK_ENTRYPOINTS_https_ADDRESS=:443
+  TRAEFIK_ENTRYPOINTS_ldap=true
+  TRAEFIK_ENTRYPOINTS_ldap_ADDRESS=:389
+  TRAEFIK_ENTRYPOINTS_ldaps=true
+  TRAEFIK_ENTRYPOINTS_ldaps_ADDRESS=:636
+  # file provider directory
+  TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik
+  {% if docker_apps_traefik_certresolver != "none" %}
+  # cert resolver settings
+  {{ docker_apps_traefik_certresolver_settings }}
+  {% endif %}
+  
+# You can add Traefik ServersTransport using this.
+# https://doc.traefik.io/traefik/routing/services/#serverstransport_1
+# docker_apps_traefik_serversTransports: |
+#   http:
+#     serversTransports:
+#       mytransport:
+#         serverName: "myhost"
+
+# traefik certificat, insert your certificate here.
+traefik_certificate:
+  crt: ""
+  key: ""
+
+# no settings required with docker_apps_traefik_certresolver: none
+# defined in docker_apps/roles/common/defaults/main.yml
+docker_apps_traefik_certresolver_settings: ""
+
+# An example of how to setup traefik with a let's encrypt providers. https://go-acme.github.io/lego/dns/
+# 'traefik_certresolver_settings' will be append to the traefik.env template
+# docker_apps_traefik_certresolver: mydomain
+# docker_apps_traefik_certresolver_settings: |
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain=true
+#   # caServer - staging
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory
+#   # caServer - production
+#   #TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_CASERVER=https://acme-v02.api.letsencrypt.org/directory
+# 
+#   # ACME certificates can be stored in a JSON file that needs to have a 600 file mode.
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_STORAGE=/data/acme.json
+#   # Use a DNS-01 ACME challenge rather than HTTP-01 challenge.
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_DNSCHALLENGE=true
+#   # dns challenge provider
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_DNSCHALLENGE_PROVIDER=easydns
+#   # Use custom DNS servers to resolve the FQDN authority.
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_DNSCHALLENGE_RESOLVERS=motorhead.easydns.org,rush.easydns.com,nirvana.easydns.net
+#   # the provider verifies the TXT record before letting ACME verify.
+#   # You can delay this operation by specifying a delay (in seconds) with delayBeforeCheck.
+#   # This option is useful when internal networks block external DNS queries
+#   #TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_DNSCHALLENGE_DELAYBEFORECHECK=10
+#   # mail address used for registration. pour changer: `certbot update_account --email new@email.org`
+#   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_EMAIL=me@example.com
+# 
+#   # easydns stuff
+#   EASYDNS_TOKEN={{ easydns_mydomain_api_token }}
+#   EASYDNS_KEY={{ easydns_mydomain_api_key }}
+#   # Additional Configuration - https://go-acme.github.io/lego/dns/easydns/
+#   # Time between DNS propagation check
+#   EASYDNS_POLLING_INTERVAL=60
+#   # Maximum waiting time for DNS propagation
+#   EASYDNS_PROPAGATION_TIMEOUT=3600
+#   # The TTL of the TXT record used for the DNS challenge
+#   EASYDNS_TTL=3601
