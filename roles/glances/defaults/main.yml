@@ -1,0 +1,3 @@
+---
+# glances docker images
+docker_apps_image_glances: "docker.io/nicolargo/glances:latest"
