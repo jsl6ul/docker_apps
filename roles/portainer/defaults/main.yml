@@ -1,0 +1,10 @@
+---
+# docker image
+docker_apps_image_portainer: "docker.io/portainer/portainer-ce:latest"
+
+portainer_admin_password: secret
+
+# a bcrypt hashed password created with htpasswd
+# $ docker run --rm httpd:2.4-alpine htpasswd -nbB admin <password> | cut -d ":" -f 2
+# https://docs.portainer.io/advanced/cli#method-2-creating-the-account-using-a-file
+portainer_admin_password_hash: secret
