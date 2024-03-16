@@ -1,0 +1,45 @@
+---
+- name: "Waiting for file: ipa-rewrite.conf (max 15min)"
+  ansible.builtin.wait_for:
+    path: "{{ ansible_env.HOME }}/.local/share/docker/volumes/freeipa_data/_data/etc/httpd/conf.d/ipa-rewrite.conf"
+    timeout: 900
+
+- name: Disable redirects to hard-coded domain
+  ansible.builtin.replace:
+    path: "{{ ansible_env.HOME }}/.local/share/docker/volumes/freeipa_data/_data/etc/httpd/conf.d/ipa-rewrite.conf"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+    backup: true
+  with_items:
+    - { regexp: ^(RewriteRule \^/\$) (https://.*)(/ipa/ui.*)$, replace: \1 \3 }
+    - { regexp: ^(RewriteRule \^\/ipa\/\(.*)$, replace: "#\\1" }
+    - { regexp: ^(RewriteRule \^\/\(.*)$, replace: "#\\1" }
+    - { regexp: ^(RewriteCond .*)$, replace: "#\\1" }
+  register: _fixredirect
+
+- name: "Waiting for file: rpcserver.py (max 15min)"
+  ansible.builtin.wait_for:
+    path: "{{ ansible_env.HOME }}/.local/share/docker/volumes/freeipa_python/_data/rpcserver.py"
+    timeout: 900
+
+- name: Deactivate HTTP RefererError
+  ansible.builtin.replace:
+    path: "{{ ansible_env.HOME }}/.local/share/docker/volumes/freeipa_python/_data/rpcserver.py"
+    regexp: ^([ ]*)(return self.marshal\(result, RefererError\(referer.*)$
+    replace: "\\1pass  # \\2"
+  register: _fixreferer
+
+- name: "Waiting for service: httpd (max 15min)"
+  ansible.builtin.command: |
+    docker exec freeipa_app_1 /usr/bin/systemctl status httpd
+  register: _httpd
+  until: _httpd.rc == 0
+  retries: 90
+  delay: 10
+  changed_when: false
+
+- name: Reload freeipa webserver
+  ansible.builtin.command: |
+    docker exec -t freeipa_app_1 systemctl reload httpd
+  when: _fixredirect.changed or _fixreferer.changed or force_reload is defined
+  changed_when: false

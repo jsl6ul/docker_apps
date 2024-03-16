@@ -1,0 +1,96 @@
+---
+docker_apps_image_freeipa: "docker.io/freeipa/freeipa-server:rocky-9-4.10.1"
+
+freeipa_dns_servers:
+  - 1.1.1.1
+  - 8.8.8.8
+  - 9.9.9.9
+
+# disable cgroup v2 pour freeipa
+docker_rootless_cgroupv2: false
+
+# freeipa directory server/manager password
+# freeipa_pwd_dm: <secret>
+
+# freeipa admin password
+# freeipa_pwd_admin: <secret>
+
+# freeipa certificate pin
+# freeipa_crt_pin: <secret>
+
+# The following variables should probably be defined in group_vars/all.yml
+# as they are used in several roles and playbooks.
+freeipa_realm: "{{ docker_apps_domain }}"
+freeipa_domain: "{{ docker_apps_domain }}"
+
+# freeipa_server_master: "ipa1.{{ docker_apps_domain }}"
+
+# If you have 3 freeipa server, you can define replica1 and
+# replica2 to set Domain & CA replication between them.
+# freeipa_server_replica1: "ipa2.{{ docker_apps_domain }}"
+# freeipa_server_replica2: "ipa3.{{ docker_apps_domain }}"
+
+# freeipa_enroll_principal: enrolluser
+# freeipa_enroll_pwd: <secret>
+
+# freeipa_bldap_principal: bindldapuser
+# freeipa_bldap_pwd: <secret>
+
+# do not validate self-signed certificates
+freeipa_validate_certs: false
+
+# configure freeipa with traefik proxy
+freeipa_traefik: false
+
+# server name to access freeipa web using traefik & let's encrypt
+freeipa_traefik_https_address: "ipa.{{ docker_apps_domain }}"
+
+# server name to access freeipa ldaps using traefik & let's encrypt
+freeipa_traefik_ldaps_address: "ldap.{{ docker_apps_domain }}"
+
+freeipa_ports:
+  # dns
+  #- "53:53/tcp"     # if you want freeipa as dns server
+  #- "53:53/udp"
+  # web
+  - "80:80/tcp"      # if your using traefik, open 80 in traefik container instead
+  - "443:443/tcp"    # if your using traefik, open 443 in traefik container instead
+  # kerberos
+  - "88:88/tcp"
+  - "88:88/udp"
+  - "464:464/tcp"
+  - "464:464/udp"
+  # ntp
+  #- "123:123/udp"   # if you want freeipa as ntp server
+  # ldap
+  - "389:389/tcp"
+  - "636:636/tcp"    # if your using traefik, open 636 in traefik container instead
+
+
+# serversTransports for connection between traefik proxy and freeipa service
+# freeipa forces https so traefik must accept freeipa's selfsigned
+# (or extract the rootCA from freeipa and add it to traefik maybe...?)
+docker_apps_traefik_serversTransports: |
+  http:
+    serversTransports:
+      freeipa:
+        serverName: "{{ freeipa_hostname }}.{{ docker_apps_domain }}"
+        insecureSkipVerify: "true"
+
+
+# freeipa installation commands
+freeipa_command_master: |
+  ipa-server-install --admin-password='{{ freeipa_pwd_admin }}' --ds-password='{{ freeipa_pwd_dm }}' --domain={{ freeipa_realm }} --realm={{ freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp
+
+freeipa_command_replica: |
+  ipa-replica-install --admin-password='{{ freeipa_pwd_admin }}' --domain={{ freeipa_domain }} --realm={{ freeipa_realm | upper }} --server={{ freeipa_server_master }} --hostname={{ freeipa_hostname }}.{{ docker_apps_domain }} --unattended --no-ntp --setup-ca
+
+# if you have a "real" certificate, you need to add the following parameters to the above commands.
+# (it should works, but I didn't test it)
+
+# --no-pkinit --http-pin {{ freeipa_crt_pin }} --dirsrv-pin {{ freeipa_crt_pin }} --http-cert-file /etc/pki/CA/certs/freeipa_cert.crt --http-cert-file /etc/pki/CA/private/freeipa_cert.key --dirsrv-cert-file /etc/pki/CA/certs/freeipa_cert.crt --dirsrv-cert-file /etc/pki/CA/private/freeipa_cert.key
+
+# certificat for ldaps & https. not used, using freeipa self-signed certificate.
+# freeipa_cert:
+#   crt: <fixme>
+#   key: <secret>

@@ -1,0 +1,93 @@
+---
+version: "2"
+
+networks:
+  traefik_proxy:
+    external: true
+
+volumes:
+  data:
+  python:
+
+services:
+
+  app:
+    image: "{{ docker_apps_image_freeipa }}"
+    hostname: "{{ freeipa_hostname }}.{{ docker_apps_domain }}"
+    sysctls:
+      - "net.ipv6.conf.all.disable_ipv6=0"
+    tmpfs:
+      - /run
+      - /var/cache
+      - /tmp
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "freeipa"
+    networks:
+      - traefik_proxy
+    dns: {{ freeipa_dns_servers }}
+    ports: {{ freeipa_ports }}
+    mem_limit: 2048M
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+      #DEBUG_TRACE: 1
+      #DEBUG_NO_EXIT: 1
+    volumes:
+      - "data:/data"
+      - "python:/usr/lib/python3.9/site-packages/ipaserver"
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+{% if freeipa_cert is defined %}
+      - "./freeipa_cert.crt:/etc/pki/CA/certs/freeipa_cert.crt:ro"
+      - "./freeipa_cert.key:/etc/pki/CA/private/freeipa_cert.key:ro"
+{% endif %}
+    command: {% if freeipa_role == 'master' %}{{ freeipa_command_master }}{% elif freeipa_role == 'replica' %}{{ freeipa_command_replica }}{% endif %}
+
+    labels:
+      traefik.enable: "{{ freeipa_traefik }}"
+      traefik.docker.network: "traefik_proxy"
+
+      # https for realm clients, (ie. passthrough)
+      # you must use a wildcard here, otherwise traefik will serve the letsencrypt cert.
+      # (ie. Traefik needs a cert to decrypt TLS to route by domain name.)
+      traefik.tcp.routers.freeipapt.rule: "HostSNI(`*`)"
+      traefik.tcp.routers.freeipapt.entrypoints: "http, https"
+      traefik.tcp.routers.freeipapt.tls.passthrough: "true"
+      traefik.tcp.routers.freeipapt.service: "freeipapt"
+      traefik.tcp.services.freeipapt.loadbalancer.server.port: "443"
+
+      # web gui through traefik and letsencrypt
+      traefik.http.routers.freeipa.rule: "Host(`{{ freeipa_traefik_https_address }}`)"
+      traefik.http.routers.freeipa.entrypoints: "http, https"
+      traefik.http.routers.freeipa.tls: "true"
+      traefik.http.services.freeipa.loadbalancer.server.port: "443"
+      traefik.http.routers.freeipa.service: "freeipa"
+      traefik.http.services.freeipa.loadbalancer.server.scheme: "https"
+{% if docker_apps_traefik_serversTransports is defined %}
+      traefik.http.services.freeipa.loadbalancer.serverstransport: "freeipa@file"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.freeipa.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.freeipa.tls.domains[0].main: "{{ freeipa_traefik_https_address }}"
+{% endif %}
+
+      # ldaps on port 636 (not tls 389)
+      traefik.tcp.routers.ldaps.rule: "HostSNI(`{{ freeipa_traefik_ldaps_address }}`)"
+      traefik.tcp.routers.ldaps.entrypoints: "ldaps"
+      traefik.tcp.routers.ldaps.tls: "true"
+      traefik.tcp.routers.ldaps.service: "ldaps"
+      traefik.tcp.services.ldaps.loadbalancer.server.port: "389"
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.tcp.routers.ldaps.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.tcp.routers.ldaps.tls.domains[0].main: "{{ freeipa_traefik_ldaps_address }}"
+{% endif %}
+
+      # passthrough ldaps for realm clients
+      traefik.tcp.routers.ldapspt.rule: "HostSNI(`*`)"
+      traefik.tcp.routers.ldapspt.entrypoints: "ldaps"
+      traefik.tcp.routers.ldapspt.tls.passthrough: "true"
+      traefik.tcp.routers.ldapspt.service: "ldapspt"
+      traefik.tcp.services.ldapspt.loadbalancer.server.port: "636"
