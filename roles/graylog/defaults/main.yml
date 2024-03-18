@@ -24,6 +24,7 @@ graylog_ports:
 # opensearch_admin_pwd: <secret>
 
 # smtp server and port if you want graylog alerts by mail
+graylog_smtp_mailfrom: "graylog@{{ docker_apps_domain }}"
 graylog_smtp_server: localhost
 graylog_smtp_port: 25
 
@@ -41,7 +42,7 @@ graylog_conf_file: |
   elasticsearch_replicas = 0
   elasticsearch_shards = 4
   http_bind_address = 0.0.0.0:80
-  http_external_uri = https://graylog.{{ docker_apps_domain }}/
+  http_external_uri = https://{{ traefik_address_graylog }}/
   http_publish_uri = http://localhost/
   is_master = true
   lb_recognition_period_seconds = 3
@@ -61,14 +62,14 @@ graylog_conf_file: |
   transport_email_auth_password = secret
   transport_email_auth_username = nobody
   transport_email_enabled = false
-  transport_email_from_email = graylog@{{ docker_apps_domain }}
+  transport_email_from_email = {{ graylog_smtp_mailfrom }}
   transport_email_hostname = {{ graylog_smtp_server }}
   transport_email_port = {{ graylog_smtp_port }}
   transport_email_subject_prefix = [GRAYLOG]
   transport_email_use_auth = false
   transport_email_use_ssl = false
   transport_email_use_tls = true
-  transport_email_web_interface_url = https://graylog.{{ docker_apps_domain }}
+  transport_email_web_interface_url = https://{{ traefik_address_graylog }}
   # Performance problems ?
   inputbuffer_processors = 1
   inputbuffer_ring_size = 16384
