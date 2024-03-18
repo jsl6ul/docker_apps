@@ -25,11 +25,11 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.privatebin.entrypoints: "http, https"
-      traefik.http.routers.privatebin.rule: "Host(`privatebin.{{ docker_apps_domain }}`)"
+      traefik.http.routers.privatebin.rule: "Host(`{{ traefik_address_privatebin }}`)"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.privatebin.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.privatebin.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.privatebin.tls.domains[0].main: "privatebin.{{ docker_apps_domain }}"
+      traefik.http.routers.privatebin.tls.domains[0].main: "{{ traefik_address_privatebin }}"
 {% endif %}
