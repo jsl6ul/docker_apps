@@ -4,16 +4,6 @@ Pre-configured ansible roles for applications running in Docker containers.
 
 This collection assumes that you use `jsl6ul.docker_rootless_mode` to setup the host and the account to run docker in rootless mode.
 
-- freeipa
-- gitlab
-- glances
-- graylog
-- homepage
-- monitoring (prometheus, alertmanager, grafana & blackbox)
-- portainer
-- privatebin
-- traefik
-
 
 # Traefik certificate
 
@@ -43,11 +33,18 @@ or look at `docker_apps/roles/traefik/defaults/main.yml` for an example with let
 # playbook example 
 
 ```
-- name: Setup docker containers
+- name: Setup rootless docker host
+  hosts: some_docker_host
+  become: true
+  roles:
+    - role: jsl6ul.docker_rootless_mode.host
+
+- name: Setup docker user and containers
   hosts: some_docker_host
   user: "{{ docker_rootless_user.name }}"
   become: false
   roles:
+    - role: jsl6ul.docker_rootless_mode.user
     - role: jsl6ul.docker_apps.traefik
     - role: jsl6ul.docker_apps.glances
 ```
