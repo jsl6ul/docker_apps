@@ -6,8 +6,8 @@ https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-engin
 
 # Gitlab runner
 
-Create a gitlab runner for your project, (Project settings, CI/CD, Runners, New project runner, Create runner)
-Copy token and run `register-runner.sh`
+Create a gitlab runner for your project, menu: `Project settings, CI/CD, Runners, New project runner, Create runner`,
+copy token and run `register-runner.sh`.
 
 ```
 $ ssh dockeruser@host
