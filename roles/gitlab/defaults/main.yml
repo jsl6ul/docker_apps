@@ -3,6 +3,9 @@
 docker_apps_image_gitlab: "docker.io/gitlab/gitlab-ce"
 docker_apps_image_gitlab_runner: "docker.io/gitlab/gitlab-runner"
 
+# gitlab server address
+traefik_address_gitlab: "gitlab.{{ docker_apps_domain }}"
+
 mem_limit_gitlab: 4096M
 mem_limit_gitlab_runner: 3072M
 
