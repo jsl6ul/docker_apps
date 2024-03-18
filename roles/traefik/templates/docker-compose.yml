@@ -1,0 +1,56 @@
+---
+version: "2.4"
+
+volumes:
+  data:
+
+# network between traefik and other docker applications
+networks:
+  proxy:
+
+services:
+
+  app:
+    image: "{{ docker_apps_image_traefik }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "traefik"
+    networks:
+      - proxy
+    mem_limit: 512M
+    ports: {{ traefik_ports }}
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
+      - "data:/data"
+{% if docker_apps_traefik_serversTransports is defined %}
+      - "./serversTransports.yml:/etc/traefik/serversTransports.yml"
+{% endif %}
+{% if docker_apps_traefik_certresolver == "none" %}
+      - "./traefik-tls.yml:/etc/traefik/tls.yml"
+      - "./traefik-cert.crt:/etc/ssl/traefik/cert.crt"
+      - "./traefik-cert.key:/etc/ssl/traefik/cert.key"
+{% endif %}
+    env_file: traefik.env
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ docker_apps_domain }}`) && PathPrefix(`/api`,`/dashboard`)"
+      traefik.http.routers.dashboard.entrypoints: "http, https"
+      traefik.http.routers.dashboard.service: "api@internal"
+
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.dashboard.tls: "true"
+      # redirect all http traffic to https
+      traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
+      #traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
+{% endif %}
+
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.traefik.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ docker_apps_domain }}"
+{% endif %}

@@ -1,0 +1,41 @@
+---
+version: "2.4"
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+
+  app:
+    image: "{{ docker_apps_image_glances }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "glances"
+    networks:
+      - traefik_proxy
+    mem_limit: 512M
+    environment:
+      TZ: "America/New_York"
+      GLANCES_OPT: "--webserver --time 5"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock:ro" # ro for monitoring only
+    pid: host
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.port: "61208"
+      traefik.http.routers.glances.entrypoints: "http, https"
+      traefik.http.routers.glances.rule: "Host(`{{ inventory_hostname }}.{{ docker_apps_domain }}`) && PathPrefix(`/glances`)"
+      traefik.http.middlewares.glancespstrip.stripprefix.prefixes: "/glances"
+      traefik.http.routers.glances.middlewares: "glancespstrip"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.glances.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.glances.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.glances.tls.domains[0].main: "{{ inventory_hostname }}.{{ docker_apps_domain }}"
+{% endif %}

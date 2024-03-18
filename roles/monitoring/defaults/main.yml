@@ -1,0 +1,339 @@
+---
+# docker image
+docker_apps_image_monitoring_prometheus: "docker.io/prom/prometheus"
+docker_apps_image_monitoring_alertmanager: "docker.io/prom/alertmanager"
+docker_apps_image_monitoring_blackbox: "docker.io/prom/blackbox-exporter"
+docker_apps_image_monitoring_grafana: "docker.io/grafana/grafana"
+
+grafana_admin_password: secret
+
+# servers address
+traefik_address_prometheus: "prometheus.{{ docker_apps_domain }}"
+traefik_address_alertmanager: "alertmanager.{{ docker_apps_domain }}"
+traefik_address_blackbox: "blackbox.{{ docker_apps_domain }}"
+traefik_address_grafana: "grafana.{{ docker_apps_domain }}"
+
+alertmanager_smtp_smarthost: "smtp.{{ docker_apps_domain }}:25"
+alertmanager_smtp_from: "alertmanager@{{ docker_apps_domain }}"
+alertmanager_main_receiver: "root@{{ docker_apps_domain }}"
+
+prometheus_retention_time: "365d"
+
+# alertmanager.yml
+alertmanager_yml: |
+  global:
+    # The smarthost and SMTP sender used for mail notifications.
+    smtp_smarthost: "{{ alertmanager_smtp_smarthost }}"
+    smtp_from: "{{ alertmanager_smtp_from }}"
+    smtp_require_tls: false
+  route:
+    group_by: ['alertname']
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 12h
+    receiver: 'main_receiver'
+  receivers:
+  - name: 'main_receiver'
+    email_configs:
+    - to: "{{ alertmanager_main_receiver }}"
+      send_resolved: true
+  # Inhibition rules allow to mute a set of alerts given that another alert is firing.
+  # We use this to mute any warning-level notifications if the same alert is already critical.
+  inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    # Apply inhibition if the alertname is the same.
+    equal: ['alertname', 'dev', 'instance']
+
+
+# blackbox_config.yml
+blackbox_config_yml: |
+  modules:
+    http_2xx:
+      prober: http
+      http:
+        preferred_ip_protocol: ip4
+    http_post_2xx:
+      prober: http
+      http:
+        method: POST
+        preferred_ip_protocol: ip4
+    tcp_connect:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+    tcp_connect_tls:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        tls: true
+        tls_config:
+          insecure_skip_verify: false
+    pop3s_banner:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        query_response:
+        - expect: "^+OK"
+        tls: true
+        tls_config:
+          insecure_skip_verify: false
+    ssh_banner:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        query_response:
+        - expect: "^SSH-2.0-"
+        - send: "SSH-2.0-blackbox-ssh-check"
+    irc_banner:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        query_response:
+        - send: "NICK prober"
+        - send: "USER prober prober prober :prober"
+        - expect: "PING :([^ ]+)"
+          send: "PONG ${1}"
+        - expect: "^:[^ ]+ 001"
+    icmp:
+      prober: icmp
+    # accept a self-signed certificate
+    http_selfsigned:
+      prober: http
+      http:
+        preferred_ip_protocol: ip4
+        fail_if_ssl: false
+        fail_if_not_ssl: true
+        tls_config:
+          insecure_skip_verify: true
+    # accept http 401 as ok
+    http_401ok:
+      prober: http
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [401]
+
+
+# grafana.env
+grafana_env: |
+  GF_SECURITY_ADMIN_PASSWORD={{ grafana_admin_password }}
+  GF_SERVER_ROOT_URL=http://localhost:3000
+  GF_SMTP_ENABLED=false
+  GF_INSTALL_PLUGINS=grafana-piechart-panel,vonage-status-panel
+  GF_AUTH_ANONYMOUS_ENABLED=true
+  GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+  GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+
+
+# grafana_datasources.yml
+grafana_datasources_yml: |
+  apiVersion: 1
+  # list of datasources that should be deleted from the database
+  deleteDatasources:
+    - name: Prometheus
+      orgId: 1
+  datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      orgId: 1
+      url: http://prometheus:9090/
+      version: 1
+      editable: false
+      isDefault: true
+      jsonData:
+        label: "default"
+
+
+# grafana_providers.yml
+grafana_providers_yml: |
+  apiVersion: 1
+  providers:
+    - name: dashboards
+      orgId: 1
+      folder: ''
+      folderUid: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      updateIntervalSeconds: 10
+      allowUiUpdates: false
+      options:
+        path: /var/lib/grafana/dashboards
+        foldersFromFilesStructure: true
+
+
+# prometheus_alerts.yml
+prometheus_alerts_yml: |
+  groups:
+  - name: main
+    rules:
+    - alert: "Prometheus target down"
+      expr: up==0
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Prometheus target down"
+    - alert: "Free space less than 10% and 200MB"
+      expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes < 0.10) + node_filesystem_avail_bytes < 200000000
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Free space less than 10% and less than 200MB"
+    - alert: "Blackbox probe error"
+      expr: probe_success==0
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Blackbox probe error for more than 5 minutes"
+    - alert: "ZFS pool state"
+      expr: node_zfs_zpool_state{state='online'}==1 < node_zfs_zpool_state==1
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "ZFS pool not online"
+    - alert: "Server Uptime Warning"
+      expr: (node_time_seconds - node_boot_time_seconds) < 600
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Server Uptime Warning"
+        description: "Server uptime is less than 10 minutes"
+    - alert: "Clock Not Synchronising"
+      expr: min_over_time(node_timex_sync_status[5m]) == 0 and node_timex_maxerror_seconds >= 16
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Clock is not synchronising"
+    - alert: "XFS filesystem free space warning"
+      expr: ((node_filesystem_avail_bytes{fstype="xfs"} / node_filesystem_size_bytes{fstype="xfs"} < 0.20) + node_filesystem_avail_bytes{fstype="xfs"} < 200000000) or (node_filesystem_avail_bytes{fstype="xfs"} / node_filesystem_size_bytes{fstype="xfs"} < 0.02)
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Free space less than: 20% & 200MB, or less than 2% free"
+    - alert: "Filesystem Read Only"
+      expr: node_filesystem_readonly == 1
+      for: 1m
+      labels:
+        severity: page
+      annotations:
+        summary: "Device is read-only"
+    - alert: "Filesystem Files Filling Up - Warning"
+      expr: |
+        (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 40
+        and predict_linear(node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'}[6h], 24*60*60) < 0
+        and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
+      for: 1h
+      labels:
+        severity: page
+      annotations:
+        summary: "Filesystem is predicted to run out of inodes within the next 24 hours"
+    - alert: "Filesystem Files Filling Up - Critical"
+      expr: |
+        (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 20
+        and predict_linear(node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'}[6h], 24*60*60) < 0
+        and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
+      for: 1h
+      labels:
+        severity: page
+      annotations:
+        summary: "Filesystem is predicted to run out of inodes within the next 4 hours"
+    - alert: "Unusual Disk Read Latency"
+      expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Unusual disk read latency"
+    - alert: "Unusual Disk Write Latency"
+      expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_write_completed_total[1m]) > 0.1 and rate(node_disk_write_completed_total[1m]) > 0
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Unusual disk write latency"
+    - alert: "Node Load Average"
+      expr: node_load15 / count by (instance, job) (node_cpu_seconds_total{mode='idle'}) > 5
+      for: 30m
+      labels:
+        severity: page
+      annotations:
+        summary: "Load average is greater than 5 for more than 30 minutes"
+    - alert: "Free swap space less than 50MB"
+      expr: node_memory_SwapFree_bytes < 50000000
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "Free swap space less than 50MB"
+    - alert: "File Descriptor Limit - Warning"
+      expr: node_filefd_allocated * 100 / node_filefd_maximum > 80
+      for: 15m
+      labels:
+        severity: page
+      annotations:
+        summary: "File descriptors usage is more than 80%"
+    - alert: "File Descriptor Limit - Critical"
+      expr: node_filefd_allocated * 100 / node_filefd_maximum > 95
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "File descriptors usage is more than 95%"
+    - alert: "The sssd service is not running"
+      expr: count(node_systemd_unit_state{name="sssd.service",state="active"}) != count(up{job="node-exporter"}==1)
+      for: 5m
+      labels:
+        severity: page
+      annotations:
+        summary: "The sssd service does not work on one or more nodes"
+
+
+# prometheus.yml
+prometheus_yml: |
+  # my global config
+  global:
+    scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+    evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+    # scrape_timeout is set to the global default (10s).
+  # Alertmanager configuration
+  alerting:
+    alertmanagers:
+    - static_configs:
+      - targets:
+        - alertmanager:9093
+  # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+  rule_files:
+    - "/etc/prometheus/alerts.yml"
+  # A scrape configuration containing exactly one endpoint to scrape:
+  # Here it's Prometheus itself.
+  scrape_configs:
+    # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+    - job_name: 'prometheus'
+      # metrics_path defaults to '/metrics'
+      # scheme defaults to 'http'.
+      static_configs:
+      - targets: ['localhost:9090']
+    - job_name: 'blackbox http'
+      metrics_path: /probe
+      params:
+        module: [http_2xx]  # Look for a HTTP 200 response.
+      static_configs:
+        - targets:
+            - https://prometheus.io/
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: blackbox:9115  # The blackbox exporter's real hostname:port.

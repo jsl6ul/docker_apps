@@ -1,0 +1,49 @@
+---
+- name: Set project directory
+  ansible.builtin.set_fact:
+    docker_apps_project: "{{ docker_apps_directory }}/{{ role_name }}"
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ docker_apps_project }}"
+    state: directory
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    mode: 0640
+
+- name: Copy settings file
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/settings.yaml"
+    content: "{{ homepage_settings_yaml }}"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy bookmarks file
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/bookmarks.yaml"
+    content: "{{ homepage_bookmarks_yaml }}"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy services file
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/services.yaml"
+    content: "{{ homepage_services_yaml }}"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy widgets file
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/widgets.yaml"
+    content: "{{ homepage_widgets_yaml }}"
+    mode: 0644
+  notify: Restart container
+
+- name: Deployment (add '-e docker_apps_restart=true' to force-restart)
+  community.docker.docker_compose:
+    docker_host: "{{ docker_apps_socket }}"
+    project_src: "{{ docker_apps_project }}"
+    restarted: "{{ docker_apps_restart | default(false) }}"

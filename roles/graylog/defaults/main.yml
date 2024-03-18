@@ -1,0 +1,85 @@
+---
+# docker image
+docker_apps_image_graylog: "docker.io/graylog/graylog:5.1.6"
+docker_apps_image_graylog_mongo: "docker.io/mongo:5.0.13"
+docker_apps_image_graylog_opensearch: "docker.io/opensearchproject/opensearch:2"
+
+# graylog server address
+traefik_address_graylog: "graylog.{{ docker_apps_domain }}"
+
+# graylog listening ports
+graylog_ports:
+  - "514:514/tcp" # syslog
+  - "514:514/udp" # syslog
+  - "5555:5555"   # raw4json
+
+# admin password hash as sha256sum.
+# echo -n "Enter Password: " && head -1 </dev/stdin | tr -d '\n' | sha256sum | cut -d" " -f1
+# graylog_root_password_sha2: <secret>
+
+# a secret that is used for password encryption and salting.
+# graylog_password_secret: <secret>
+
+# opensearch admin password
+# graylog_opensearch_admin_pwd: <secret>
+
+# smtp server and port if you want graylog alerts by mail
+graylog_smtp_mailfrom: "graylog@{{ docker_apps_domain }}"
+graylog_smtp_server: localhost
+graylog_smtp_port: 25
+
+# graylog.conf file
+graylog_conf_file: |
+  allow_highlighting = false
+  allow_leading_wildcard_searches = false
+  bin_dir = /usr/share/graylog/bin
+  data_dir = /usr/share/graylog/data
+  elasticsearch_analyzer = standard
+  elasticsearch_hosts = http://admin:{{ graylog_opensearch_admin_pwd }}@opensearch:9200
+  elasticsearch_index_prefix = graylog
+  elasticsearch_max_docs_per_index = 20000000
+  elasticsearch_max_number_of_indices = 20
+  elasticsearch_replicas = 0
+  elasticsearch_shards = 4
+  http_bind_address = 0.0.0.0:80
+  http_external_uri = https://{{ traefik_address_graylog }}/
+  http_publish_uri = http://localhost/
+  is_master = true
+  lb_recognition_period_seconds = 3
+  message_journal_dir = data/journal
+  message_journal_enabled = true
+  mongodb_max_connections = 1000
+  mongodb_threads_allowed_to_block_multiplier = 5
+  mongodb_uri = mongodb://mongo/graylog
+  node_id_file = /usr/share/graylog/data/config/node-id
+  password_secret = {{ graylog_password_secret }}
+  plugin_dir = /usr/share/graylog/plugin
+  retention_strategy = delete
+  root_password_sha2 = {{ graylog_root_password_sha2 }}
+  root_timezone = Canada/Eastern
+  root_username = admin
+  rotation_strategy = count
+  transport_email_auth_password = secret
+  transport_email_auth_username = nobody
+  transport_email_enabled = false
+  transport_email_from_email = {{ graylog_smtp_mailfrom }}
+  transport_email_hostname = {{ graylog_smtp_server }}
+  transport_email_port = {{ graylog_smtp_port }}
+  transport_email_subject_prefix = [GRAYLOG]
+  transport_email_use_auth = false
+  transport_email_use_ssl = false
+  transport_email_use_tls = true
+  transport_email_web_interface_url = https://{{ traefik_address_graylog }}
+  # Performance problems ?
+  inputbuffer_processors = 1
+  inputbuffer_ring_size = 16384
+  inputbuffer_wait_strategy = sleeping
+  output_batch_size = 2000
+  output_fault_count_threshold = 5
+  output_fault_penalty_seconds = 30
+  output_flush_interval = 1
+  outputbuffer_processors = 1
+  processbuffer_processors = 2
+  processor_wait_strategy = sleeping
+  ring_size = 16384
+  server_java_opts = -Xms1024m -Xmx1024m

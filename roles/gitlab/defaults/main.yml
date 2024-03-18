@@ -1,0 +1,32 @@
+---
+# docker images
+docker_apps_image_gitlab: "docker.io/gitlab/gitlab-ce"
+docker_apps_image_gitlab_runner: "docker.io/gitlab/gitlab-runner"
+
+# gitlab server address
+traefik_address_gitlab: "gitlab.{{ docker_apps_domain }}"
+
+mem_limit_gitlab: 4096M
+mem_limit_gitlab_runner: 3072M
+
+# gitlab external ssh port
+gitlab_shell_ssh_port: 2222
+gitlab_ports:
+  - "{{ gitlab_shell_ssh_port }}:22"
+
+# Dockerfile to build the gitlab runner container
+gitlab_runner_dockerfile: |
+  FROM debian:12
+  ENV ANSIBLE_HOST_KEY_CHECKING false
+  ENV ANSIBLE_RETRY_FILES_ENABLED false
+  RUN /usr/bin/apt-get update
+  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -y upgrade
+  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -y dist-upgrade
+  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -y install \
+    --no-install-recommends --no-install-suggests \
+    ansible ansible-lint coreutils curl git jq openssh-client \
+    python3 python3-dev tar wget python3-dnspython python3-netaddr python3-pip
+  RUN /usr/bin/apt-get clean
+  RUN mkdir -p -m 0700 ~/.ssh && echo "StrictHostKeyChecking no\n" > ~/.ssh/config
+  RUN mkdir -p /workdir
+  WORKDIR /workdir

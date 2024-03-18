@@ -1,0 +1,6 @@
+---
+- name: Restart container
+  community.docker.docker_compose:
+    docker_host: "{{ docker_apps_socket }}"
+    project_src: "{{ docker_apps_project }}"
+    restarted: true

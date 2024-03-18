@@ -1,0 +1,113 @@
+---
+version: '2'
+
+volumes:
+  mongo:
+  opensearch:
+  journal:
+  webconfig:
+
+networks:
+  default:
+  traefik_proxy:
+    external: true
+
+services:
+
+  mongo:
+    image: "{{ docker_apps_image_graylog_mongo }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "graylog_mongo"
+    networks:
+      - default
+    mem_limit: 512M
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "mongo:/data/db"
+    labels:
+      traefik.enable: "false"
+
+  opensearch:
+    image: "{{ docker_apps_image_graylog_opensearch }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "graylog_opensearch"
+    networks:
+      - default
+    mem_limit: 2048M
+    environment:
+      TZ: "America/New_York"
+      http.host: "0.0.0.0"
+      transport.host: "localhost"
+      network.host: "0.0.0.0"
+      OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m -Dlog4j2.formatMsgNoLookups=true"
+      discovery.type: "single-node"
+      # access opensearch using http
+      plugins.security.disabled: "true"
+      #reindex.remote.whitelist: "*:9200"
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ graylog_opensearch_admin_pwd }}"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "opensearch:/usr/share/opensearch/data"
+    labels:
+      traefik.enable: "false"
+
+  app:
+    image: "{{ docker_apps_image_graylog }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "graylog_app"
+    networks:
+      - default
+      - traefik_proxy
+    mem_limit: 2048M
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    ports: {{ graylog_ports }}
+    expose:
+      - "80"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "journal:/usr/share/graylog/data/journal"
+      - "webconfig:/usr/share/graylog/data/config"
+      - "./graylog.conf:/usr/share/graylog/data/config/graylog.conf"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.graylog.rule: "Host(`{{ traefik_address_graylog }}`)"
+      traefik.http.routers.graylog.tls.domains[0].main: "{{ traefik_address_graylog }}"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.graylog.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.graylog.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.graylog.tls.domains[0].main: "{{ traefik_address_graylog }}"
+{% endif %}
+    links:
+      - "mongo:mongo"
+      - "opensearch:opensearch"

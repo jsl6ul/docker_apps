@@ -1,0 +1,67 @@
+---
+version: "2.4"
+
+networks:
+  traefik_proxy:
+    external: true
+
+volumes:
+  config:
+  logs:
+  data:
+  runner:
+  registry:
+
+services:
+  app:
+    image: "{{ docker_apps_image_gitlab }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "gitlab"
+    networks:
+      - traefik_proxy
+    ports: {{ gitlab_ports }}
+    mem_limit: {{ mem_limit_gitlab }}
+    environment:
+      TZ: "America/New_York"
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://{{ traefik_address_gitlab }}'
+        gitlab_rails['gitlab_shell_ssh_port'] = {{ gitlab_shell_ssh_port }}
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "config:/etc/gitlab"
+      - "logs:/var/log/gitlab"
+      - "data:/var/opt/gitlab"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.gitlab.entrypoints: "http, https"
+      traefik.http.routers.gitlab.rule: "Host(`{{ traefik_address_gitlab }}`)"
+      traefik.http.services.gitlab.loadbalancer.server.port: "80"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.gitlab.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.gitlab.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.gitlab.tls.domains[0].main: "{{ traefik_address_gitlab }}"
+{% endif %}
+
+  runner:
+    image: "{{ docker_apps_image_gitlab_runner }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "gitlab-runner"
+    mem_limit: {{ mem_limit_gitlab_runner }}
+    environment:
+      TZ: "America/New_York"
+    volumes:
+      - "runner:/etc/gitlab-runner"
+      - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
+    labels:
+      - traefik.enable: "false"

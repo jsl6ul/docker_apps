@@ -1,0 +1,76 @@
+---
+- name: Set project directory
+  ansible.builtin.set_fact:
+    docker_apps_project: "{{ docker_apps_directory }}/{{ role_name }}"
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ docker_apps_project }}"
+    state: directory
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    mode: 0640
+
+- name: Ccopy prometheus.yml
+  ansible.builtin.copy:
+    content: "{{ prometheus_yml }}"
+    dest: "{{ docker_apps_project }}/prometheus.yml"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy prometheus_alerts.yml"
+  ansible.builtin.copy:
+    content: "{{ prometheus_alerts_yml }}"
+    dest: "{{ docker_apps_project }}/prometheus_alerts.yml"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy alertmanager.yml
+  ansible.builtin.copy:
+    content: "{{ alertmanager_yml }}"
+    dest: "{{ docker_apps_project }}/alertmanager.yml"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy blackbox_config.yml
+  ansible.builtin.copy:
+    content: "{{ blackbox_config_yml }}"
+    dest: "{{ docker_apps_project }}/blackbox_config.yml"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy grafana_datasources.yml
+  ansible.builtin.copy:
+    content: "{{ grafana_datasources_yml }}"
+    dest: "{{ docker_apps_project }}/grafana_datasources.yml"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy grafana_providers.yml
+  ansible.builtin.copy:
+    content: "{{ grafana_providers_yml }}"
+    dest: "{{ docker_apps_project }}/grafana_providers.yml"
+    mode: 0644
+  notify: Restart container
+
+- name: Copy grafana dashboards
+  ansible.builtin.copy:
+    src: grafana_dashboards
+    dest: "{{ docker_apps_project }}/"
+  notify: Restart container
+
+- name: Copy grafana.env
+  ansible.builtin.copy:
+    content: "{{ grafana_env }}"
+    dest: "{{ docker_apps_project }}/grafana.env"
+    mode: 0640
+  notify: Restart container
+
+- name: Deployment (add '-e docker_apps_restart=true' to force-restart)
+  community.docker.docker_compose:
+    docker_host: "{{ docker_apps_socket }}"
+    project_src: "{{ docker_apps_project }}"
+    restarted: "{{ docker_apps_restart | default(false) }}"

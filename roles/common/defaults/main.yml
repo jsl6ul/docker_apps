@@ -1,0 +1,35 @@
+---
+# non-root user running the containers
+# generate a hash using 'openssl passwd -6' for a SHA512.
+# docker_rootless_user:
+#   name: dockuser
+#   home: /opt/dockuser
+#   shell: /usr/bin/bash
+#   uid: 2222
+#   pw: < password for reference only, not required by the role >
+#   pwhash: < the password hash used by ansible.builtin.user >
+#   authorized_keys: |
+#     pubkey1 set SSH authorized keys
+#     pubkey2 for this account
+
+# main directory for docker apps project. (relative to docker_rootless_home)
+docker_apps_directory: docker
+
+# The Unix socket path used to connect to the Docker API.
+# docker_apps_socket: unix://var/run/docker.sock
+docker_apps_socket: "unix:///run/user/{{ docker_rootless_user.uid }}/docker.sock"
+
+# dns domain name for traefik rules and let's encrypt certificate management.
+docker_apps_domain: localdomain
+
+# configure traefik with tls and certificates
+docker_apps_traefik_tls: true
+
+# cert resolver for traefik & let's encrypt
+# set to 'none' if you already have your certificate and/or using self-signed certificate.
+docker_apps_traefik_certresolver: none
+
+# for let's encrypt, set the 'certresolver' to something else than 'none'.
+# and look at 'docker_apps/roles/traefik/defaults/main.yml' for an example of
+# how to set a provider from https://go-acme.github.io/lego/dns/
+# docker_apps_traefik_certresolver: mydomain

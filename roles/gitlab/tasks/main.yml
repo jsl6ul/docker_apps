@@ -1,0 +1,32 @@
+---
+- name: Set project directory
+  ansible.builtin.set_fact:
+    docker_apps_project: "{{ docker_apps_directory }}/{{ role_name }}"
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ docker_apps_project }}"
+    state: directory
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    mode: 0640
+
+- name: Deployment (add '-e docker_apps_restart=true' to force-restart)
+  community.docker.docker_compose:
+    docker_host: "{{ docker_apps_socket }}"
+    project_src: "{{ docker_apps_project }}"
+    restarted: "{{ docker_apps_restart | default(false) }}"
+
+- name: Copy gitlab runner register script
+  ansible.builtin.template:
+    src: register-runner.sh
+    dest: "{{ docker_apps_project }}/register-runner.sh"
+    mode: 0755
+
+- name: Copy gitlab runner Dockerfile
+  ansible.builtin.copy:
+    dest: "{{ docker_apps_project }}/Dockerfile"
+    content: "{{ gitlab_runner_dockerfile }}"

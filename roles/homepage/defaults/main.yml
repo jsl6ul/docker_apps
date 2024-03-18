@@ -1,0 +1,48 @@
+---
+# docker image
+docker_apps_image_homepage: "ghcr.io/gethomepage/homepage"
+
+# homepage server address
+traefik_address_homepage: "www.{{ docker_apps_domain }}"
+
+# The homepage documentation is available at https://gethomepage.dev/.
+# icons from https://github.com/walkxcode/dashboard-icons
+
+# homepage settings.yaml file
+homepage_settings_yaml: |
+  ---
+  title: My Awesome Homepage
+
+# homepage bookmarks.yaml file
+homepage_bookmarks_yaml: |
+  ---
+  - Developer:
+      - Github:
+          - abbr: GH
+            href: https://github.com/
+
+  - Social:
+      - Reddit:
+          - icon: reddit.png
+            href: https://reddit.com/
+            description: The front page of the internet
+
+  - Entertainment:
+      - YouTube:
+          - abbr: YT
+            href: https://youtube.com/
+
+# homepage service.yaml file
+homepage_services_yaml: |
+  ---
+  - Group A:
+      - Service A:
+          href: http://localhost/
+
+  - Group B:
+      - Service B:
+          href: http://localhost/
+
+# homepage widgets.yaml file
+homepage_widgets_yaml: |
+  ---

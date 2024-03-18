@@ -1,0 +1,44 @@
+---
+version: "2.4"
+
+networks:
+  traefik_proxy:
+    external: true
+
+volumes:
+  data:
+
+services:
+  app:
+    image: "{{ docker_apps_image_portainer }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "portainer"
+    networks:
+      - traefik_proxy
+    mem_limit: 512M
+    environment:
+      TZ: "America/New_York"
+    # escape $ in password hash with a second $
+    command: --admin-password="{{ portainer_admin_password_hash | regex_replace('\$','$$') }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock:ro"
+      - "data:/data"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.portainer.entrypoints: "http, https"
+      traefik.http.routers.portainer.rule: "Host(`{{ inventory_hostname }}.{{ docker_apps_domain }}`) && PathPrefix(`/portainer`)"
+      traefik.http.middlewares.portainerpstrip.stripprefix.prefixes: "/portainer"
+      traefik.http.routers.portainer.middlewares: "portainerpstrip"
+      traefik.http.services.portainer.loadbalancer.server.port: "9000"
+{% if docker_apps_traefik_tls %}
+      traefik.http.routers.portainer.tls: "true"
+{% endif %}
+{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
+      traefik.http.routers.portainer.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+      traefik.http.routers.portainer.tls.domains[0].main: "{{ inventory_hostname }}.{{ docker_apps_domain }}"
+{% endif %}
