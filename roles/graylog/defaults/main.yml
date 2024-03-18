@@ -21,7 +21,7 @@ graylog_ports:
 # graylog_password_secret: <secret>
 
 # opensearch admin password
-# opensearch_admin_pwd: <secret>
+# graylog_opensearch_admin_pwd: <secret>
 
 # smtp server and port if you want graylog alerts by mail
 graylog_smtp_mailfrom: "graylog@{{ docker_apps_domain }}"
@@ -35,7 +35,7 @@ graylog_conf_file: |
   bin_dir = /usr/share/graylog/bin
   data_dir = /usr/share/graylog/data
   elasticsearch_analyzer = standard
-  elasticsearch_hosts = http://admin:{{ opensearch_admin_pwd }}@opensearch:9200
+  elasticsearch_hosts = http://admin:{{ graylog_opensearch_admin_pwd }}@opensearch:9200
   elasticsearch_index_prefix = graylog
   elasticsearch_max_docs_per_index = 20000000
   elasticsearch_max_number_of_indices = 20

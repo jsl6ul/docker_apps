@@ -53,7 +53,7 @@ services:
       # access opensearch using http
       plugins.security.disabled: "true"
       #reindex.remote.whitelist: "*:9200"
-      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ opensearch_admin_pwd }}"
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ graylog_opensearch_admin_pwd }}"
     ulimits:
       memlock:
         soft: -1
