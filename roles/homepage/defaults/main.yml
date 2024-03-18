@@ -2,6 +2,9 @@
 # docker image
 docker_apps_image_homepage: "ghcr.io/gethomepage/homepage"
 
+# homepage server address
+traefik_address_homepage: "www.{{ docker_apps_domain }}"
+
 # The homepage documentation is available at https://gethomepage.dev/.
 # icons from https://github.com/walkxcode/dashboard-icons
 

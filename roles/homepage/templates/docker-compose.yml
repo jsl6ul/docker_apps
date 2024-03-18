@@ -26,12 +26,12 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.homepage.entrypoints: "http, https"
-      traefik.http.routers.homepage.rule: "Host(`www.{{ docker_apps_domain }}`)"
+      traefik.http.routers.homepage.rule: "Host(`{{ traefik_address_homepage }}`)"
       traefik.http.services.homepage.loadbalancer.server.port: "3000"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.homepage.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.homepage.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.homepage.tls.domains[0].main: "www.{{ docker_apps_domain }}"
+      traefik.http.routers.homepage.tls.domains[0].main: "{{ traefik_address_homepage }}"
 {% endif %}
