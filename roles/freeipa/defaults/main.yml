@@ -43,10 +43,10 @@ freeipa_validate_certs: false
 freeipa_traefik: false
 
 # server name to access freeipa web using traefik & let's encrypt
-freeipa_traefik_https_address: "ipa.{{ docker_apps_domain }}"
+traefik_address_freeipa_https: "ipa.{{ docker_apps_domain }}"
 
 # server name to access freeipa ldaps using traefik & let's encrypt
-freeipa_traefik_ldaps_address: "ldap.{{ docker_apps_domain }}"
+traefik_address_freeipa_ldaps: "ldap.{{ docker_apps_domain }}"
 
 freeipa_ports:
   # dns
