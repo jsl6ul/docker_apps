@@ -39,14 +39,14 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.prometheus.rule: "Host(`prometheus.{{ docker_apps_domain }}`)"
+      traefik.http.routers.prometheus.rule: "Host(`{{ traefik_address_prometheus }}`)"
       traefik.http.services.prometheus.loadbalancer.server.port: "9090"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.prometheus.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.prometheus.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.prometheus.tls.domains[0].main: "prometheus.{{ docker_apps_domain }}"
+      traefik.http.routers.prometheus.tls.domains[0].main: "{{ traefik_address_prometheus }}"
 {% endif %}
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --storage.tsdb.retention.time={{ prometheus_retention_time }}
 
@@ -71,14 +71,14 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.alertmanager.rule: "Host(`alertmanager.{{ docker_apps_domain }}`)"
+      traefik.http.routers.alertmanager.rule: "Host(`{{ traefik_address_alertmanager }}`)"
       traefik.http.services.alertmanager.loadbalancer.server.port: "9093"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.alertmanager.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.alertmanager.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.alertmanager.tls.domains[0].main: "alertmanager.{{ docker_apps_domain }}"
+      traefik.http.routers.alertmanager.tls.domains[0].main: "{{ traefik_address_alertmanager }}"
 {% endif %}
 
   blackbox:
@@ -101,14 +101,14 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.blackbox.rule: "Host(`blackbox.{{ docker_apps_domain }}`)"
+      traefik.http.routers.blackbox.rule: "Host(`{{ traefik_address_blackbox }}`)"
       traefik.http.services.blackbox.loadbalancer.server.port: "9115"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.blackbox.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.blackbox.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.blackbox.tls.domains[0].main: "blackbox.{{ docker_apps_domain }}"
+      traefik.http.routers.blackbox.tls.domains[0].main: "{{ traefik_address_blackbox }}"
 {% endif %}
 
   grafana:
@@ -137,13 +137,13 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.grafana.rule: "Host(`grafana.{{ docker_apps_domain }}`)"
+      traefik.http.routers.grafana.rule: "Host(`{{ traefik_address_grafana }}`)"
       traefik.http.services.grafana.loadbalancer.server.port: "3000"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.grafana.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.grafana.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.grafana.tls.domains[0].main: "grafana.{{ docker_apps_domain }}"
+      traefik.http.routers.grafana.tls.domains[0].main: "{{ traefik_address_grafana }}"
 {% endif %}
     env_file: grafana.env
