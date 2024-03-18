@@ -99,14 +99,14 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.graylog.rule: "Host(`graylog.{{ docker_apps_domain }}`)"
-      traefik.http.routers.graylog.tls.domains[0].main: "graylog.{{ docker_apps_domain }}"
+      traefik.http.routers.graylog.rule: "Host(`{{ traefik_address_graylog }}`)"
+      traefik.http.routers.graylog.tls.domains[0].main: "{{ traefik_address_graylog }}"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.graylog.tls: "true"
 {% endif %}
 {% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
       traefik.http.routers.graylog.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.graylog.tls.domains[0].main: "graylog.{{ docker_apps_domain }}"
+      traefik.http.routers.graylog.tls.domains[0].main: "{{ traefik_address_graylog }}"
 {% endif %}
     links:
       - "mongo:mongo"
