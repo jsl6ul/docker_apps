@@ -47,6 +47,8 @@ mirror_deb_entrypoint: |
     # debian mirror
     # source host
     HOST=debian.mirror.rafal.ca
+    # source directory
+    ROOT=/debian
     # destination directory
     DEST=/var/www/html/mirrors/debian/
     # version(s) to mirror
@@ -58,17 +60,19 @@ mirror_deb_entrypoint: |
     # debmirror command
     logger "debmirror updating ${DEST}"
     debmirror {{ mirror_deb_command_args }} \
-      --method=${METHOD} --host=${HOST} --root=/debian --dist=${DIST} --arch=${ARCH} \
+      --method=${METHOD} --host=${HOST} --root=${ROOT} --dist=${DIST} --arch=${ARCH} \
       --section=main,contrib,non-free,main/debian-installer \
       ${DEST}
 
     # debian-security mirror
     # source host
     HOST=debian.mirror.rafal.ca
+    # source directory
+    ROOT=/debian-security
     # destination directory
     DEST=/var/www/html/mirrors/debian-security/
     # version(s) to mirror
-    DIST=bookworm
+    DIST=bookworm-security
     # architecture
     ARCH=amd64
     # http, ftp or rsync
@@ -76,11 +80,12 @@ mirror_deb_entrypoint: |
     # debmirror command, FIXME remove --dry-run when all is set
     logger "debmirror updating ${DEST}"
     debmirror {{ mirror_deb_command_args }} \
-      --method=${METHOD} --host=${HOST} --root=/debian --dist=${DIST} --arch=${ARCH} \
+      --method=${METHOD} --host=${HOST} --root=${ROOT} --dist=${DIST} --arch=${ARCH} \
       --section=main,contrib,non-free,main/debian-installer \
       ${DEST}
 
     logger "debmirror going to sleep"
+    echo "debmirror going to sleep"
     sleep 6h
   done
 
