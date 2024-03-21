@@ -64,4 +64,4 @@ services:
       - "runner:/etc/gitlab-runner"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
     labels:
-      - traefik.enable: "false"
+      traefik.enable: "false"
