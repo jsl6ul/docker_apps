@@ -21,12 +21,19 @@ services:
     mem_limit: 512M
     environment:
       TZ: "America/New_York"
-    # escape $ in password hash with a second $
+{% if portainer_admin_password is defined %}
+    command: --admin-password-file=/admin.pass
+{% elif portainer_admin_password_hash is defined %}
+    # password hash: escape $ with a second $
     command: --admin-password="{{ portainer_admin_password_hash | regex_replace('\$','$$') }}"
+{% endif %}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock:ro"
       - "data:/data"
+{% if portainer_admin_password is defined %}
+      - "./admin.pass:/admin.pass"
+{% endif %}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
