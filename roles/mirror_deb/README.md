@@ -1,6 +1,6 @@
 # Ansible role for a debian mirror
 
-This container downloads and maintains a partial local Debian mirror using debmirror.
+This container downloads and maintains a partial local Debian/Ubuntu mirror using debmirror.
 
 - Update `defaults/main.yml` according to your needs. (and remove `--dry-run` option when all is set)
 - Distributions will be mirrored in the `mirrors` directory.
