@@ -5,8 +5,46 @@ docker_apps_image_mirror_deb: "localbuild/mirror_deb"
 # service address
 traefik_address_mirror_deb: "mirror.{{ docker_apps_domain }}"
 
-# debmirror command arguments. FIXME remove --dry-run when all is set
-mirror_deb_command_args: --nosource --i18n --passive --cleanup --verbose --dry-run
+# mirror settings (remove '--dry-run' option when all is set)
+mirror_deb_mirrors:
+  - name: debian
+    host: debian.mirror.rafal.ca
+    root: /debian
+    dist: bookworm
+    arch: amd64
+    section: main,contrib,non-free,main/debian-installer
+    dest: /var/www/html/mirrors/debian/
+    method: rsync
+    options: --nosource --i18n --passive --cleanup --verbose --dry-run
+  - name: debian-security
+    host: debian.mirror.rafal.ca
+    root: /debian-security
+    dist: bookworm-security
+    arch: amd64
+    section: main,contrib,non-free,main/debian-installer
+    dest: /var/www/html/mirrors/debian-security/
+    method: rsync
+    options: --nosource --i18n --passive --cleanup --verbose --dry-run
+  - name: ubuntu
+    host: ca.archive.ubuntu.com
+    root: /ubuntu
+    dist: jammy,jammy-security
+    arch: amd64
+    section: main,restricted,universe,multiverse
+    dest: /var/www/html/mirrors/ubuntu/
+    method: rsync
+    options: --nosource --i18n --passive --cleanup --verbose --dry-run
+
+# signing keys
+mirror_deb_signing_keys:
+  - https://ftp-master.debian.org/keys/archive-key-11.asc
+  - https://ftp-master.debian.org/keys/archive-key-11-security.asc
+  - https://ftp-master.debian.org/keys/archive-key-12.asc
+  - https://ftp-master.debian.org/keys/archive-key-12-security.asc
+  - https://ftp-master.debian.org/keys/release-11.asc
+  - https://ftp-master.debian.org/keys/release-12.asc
+  - https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x630239cc130e1a7fd81a27b140976eaf437d05b5 # Ubuntu Archive Automatic Signing Key
+  - https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf6ecb3762474eda9d21b7022871920d1991bc93c # Ubuntu Archive Automatic Signing Key(2018)
 
 # Dockerfile to build the container
 mirror_deb_dockerfile: |
@@ -23,72 +61,39 @@ mirror_deb_dockerfile: |
   EXPOSE 80
   ENTRYPOINT ["/entrypoint.sh"]
 
-# entrypoint.sh file for the container
+# container entrypoint.sh
 mirror_deb_entrypoint: |
   #!/bin/bash
   # start nginx
   nginx
 
-  # install/update debian keys from https://ftp-master.debian.org/keys.html
+  # install/update signing keys
   touch /root/.gnupg/trustedkeys.gpg
   chmod 0600 /root/.gnupg/trustedkeys.gpg
-  curl https://ftp-master.debian.org/keys/archive-key-11.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
-  curl https://ftp-master.debian.org/keys/archive-key-11-security.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
-  curl https://ftp-master.debian.org/keys/archive-key-12.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
-  curl https://ftp-master.debian.org/keys/archive-key-12-security.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
-  curl https://ftp-master.debian.org/keys/release-11.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
-  curl https://ftp-master.debian.org/keys/release-12.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
+  {% for akey in mirror_deb_signing_keys %}
+  curl '{{ akey }}' | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
+  {% endfor %}
 
   # Refresh mirror every 6 hours
   while true; do
     logger "scan local packages"
     cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz
 
-    # debian mirror
-    # source host
-    HOST=debian.mirror.rafal.ca
-    # source directory
-    ROOT=/debian
-    # destination directory
-    DEST=/var/www/html/mirrors/debian/
-    # version(s) to mirror
-    DIST=bookworm
-    # architecture
-    ARCH=amd64
-    # http, ftp or rsync
-    METHOD=rsync
-    # debmirror command
-    logger "debmirror updating ${DEST}"
-    debmirror {{ mirror_deb_command_args }} \
-      --method=${METHOD} --host=${HOST} --root=${ROOT} --dist=${DIST} --arch=${ARCH} \
-      --section=main,contrib,non-free,main/debian-installer \
-      ${DEST}
+  {% for amirror in mirror_deb_mirrors %}
+    logger "debmirror updating {{ amirror.name }}"
+    debmirror {{ amirror.options }} \
+      --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }} \
+      --dist={{ amirror.dist }} --arch={{ amirror.arch }} \
+      --section={{ amirror.section }} {{ amirror.dest }}
 
-    # debian-security mirror
-    # source host
-    HOST=debian.mirror.rafal.ca
-    # source directory
-    ROOT=/debian-security
-    # destination directory
-    DEST=/var/www/html/mirrors/debian-security/
-    # version(s) to mirror
-    DIST=bookworm-security
-    # architecture
-    ARCH=amd64
-    # http, ftp or rsync
-    METHOD=rsync
-    # debmirror command, FIXME remove --dry-run when all is set
-    logger "debmirror updating ${DEST}"
-    debmirror {{ mirror_deb_command_args }} \
-      --method=${METHOD} --host=${HOST} --root=${ROOT} --dist=${DIST} --arch=${ARCH} \
-      --section=main,contrib,non-free,main/debian-installer \
-      ${DEST}
+  {% endfor %}
 
     logger "debmirror going to sleep"
     echo "debmirror going to sleep"
     sleep 6h
   done
 
+# nging configuration file
 mirror_deb_nginx_conf: |
   server {
     listen 80 default_server;
