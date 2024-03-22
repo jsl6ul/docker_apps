@@ -27,10 +27,7 @@ services:
     environment:
       TZ: "America/New_York"
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://{{ traefik_address_gitlab }}'
-        gitlab_rails['gitlab_shell_ssh_port'] = {{ gitlab_shell_ssh_port }}
-        nginx['listen_port'] = 80
-        nginx['listen_https'] = false
+        {{ gitlab_omnibus_config|indent(8) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "config:/etc/gitlab"
