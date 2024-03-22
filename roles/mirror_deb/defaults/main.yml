@@ -64,10 +64,11 @@ mirror_deb_dockerfile: |
 # container entrypoint.sh
 mirror_deb_entrypoint: |
   #!/bin/bash
-  # start nginx
+  echo "start nginx ..."
   nginx
 
   # install/update signing keys
+  echo "update signing keys ..."
   touch /root/.gnupg/trustedkeys.gpg
   chmod 0600 /root/.gnupg/trustedkeys.gpg
   {% for akey in mirror_deb_signing_keys %}
@@ -76,11 +77,11 @@ mirror_deb_entrypoint: |
 
   # Refresh mirror every 6 hours
   while true; do
-    logger "scan local packages"
+    echo "scan local packages ..."
     cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz
 
   {% for amirror in mirror_deb_mirrors %}
-    logger "debmirror updating {{ amirror.name }}"
+    echo "debmirror {{ amirror.name }} ..."
     debmirror {{ amirror.options }} \
       --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }} \
       --dist={{ amirror.dist }} --arch={{ amirror.arch }} \
@@ -88,8 +89,7 @@ mirror_deb_entrypoint: |
 
   {% endfor %}
 
-    logger "debmirror going to sleep"
-    echo "debmirror going to sleep"
+    echo "going to sleep ..."
     sleep 6h
   done
 
