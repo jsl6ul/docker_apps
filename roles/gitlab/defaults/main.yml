@@ -44,8 +44,6 @@ gitlab_omnibus_config: |
     }
   }
 
-
-  
 # Dockerfile to build the gitlab runner container
 gitlab_runner_dockerfile: |
   FROM debian:12
