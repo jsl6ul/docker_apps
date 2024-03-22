@@ -14,6 +14,36 @@ gitlab_shell_ssh_port: 2222
 gitlab_ports:
   - "{{ gitlab_shell_ssh_port }}:22"
 
+# https://docs.gitlab.com/omnibus/settings/logs.html
+# https://docs.gitlab.com/ee/administration/logs/index.html
+gitlab_log_level: ERROR
+
+# Configuration settings using the Omnibus package
+# https://docs.gitlab.com/omnibus/settings/configuration.html
+gitlab_omnibus_config: |
+  external_url 'https://{{ traefik_address_gitlab }}'
+  gitlab_rails['env'] = {
+    "GITLAB_LOG_LEVEL" => "{{ gitlab_log_level }}",
+    "DEBUG" => "{{ gitlab_log_level }}",
+    "VERBOSE" => "{{ gitlab_log_level }}",
+    "EXPORT_DEBUG" => "{{ gitlab_log_level }}",
+    "IMPORT_DEBUG" => "{{ gitlab_log_level }}",
+    "QA_LOG_LEVEL" => "{{ gitlab_log_level }}",
+    "GRPC_LOG_LEVEL" => "{{ gitlab_log_level }}",
+    "LLM_DEBUG" => "{{ gitlab_log_level }}"
+  }
+  gitlab_rails['gitlab_shell_ssh_port'] = {{ gitlab_shell_ssh_port }}
+  gitlab_shell['log_level'] = '{{ gitlab_log_level }}'
+  nginx['listen_https'] = false
+  nginx['listen_port'] = 80
+  registry['log_level'] = '{{ gitlab_log_level }}'
+  sidekiq['metrics_enabled'] = false
+  gitaly['configuration'] = {
+    logging: {
+      level: "{{ gitlab_log_level }}"
+    }
+  }
+
 # Dockerfile to build the gitlab runner container
 gitlab_runner_dockerfile: |
   FROM debian:12
