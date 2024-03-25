@@ -1,13 +1,29 @@
 ---
-- name: Rebuild container
-  community.docker.docker_compose:
-    docker_host: "{{ docker_apps_socket }}"
-    project_src: "{{ docker_apps_project }}"
-    build: true
-    restarted: true
+#- name: Rebuild container
+#  community.docker.docker_compose:
+#    docker_host: "{{ docker_apps_socket }}"
+#    project_src: "{{ docker_apps_project }}"
+#    build: true
+#    restarted: true
+#
+#- name: Restart container
+#  community.docker.docker_compose:
+#    docker_host: "{{ docker_apps_socket }}"
+#    project_src: "{{ docker_apps_project }}"
+#    restarted: true
 
-- name: Restart container
-  community.docker.docker_compose:
-    docker_host: "{{ docker_apps_socket }}"
-    project_src: "{{ docker_apps_project }}"
-    restarted: true
+- name: Build container
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ docker_apps_project }}" build
+
+- name: Stop container
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ docker_apps_project }}" down
+  listen:
+    - "Restart container"
+
+- name: Start container
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ docker_apps_project }}" up -d
+  listen:
+    - "Restart container"
