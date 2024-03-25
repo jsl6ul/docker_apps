@@ -33,22 +33,20 @@
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/Dockerfile"
     content: "{{ mirror_deb_dockerfile }}"
-  #notify: Rebuild container
 
 - name: Copy entrypoint.sh
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/entrypoint.sh"
     content: "{{ mirror_deb_entrypoint }}"
-  #notify: Rebuild container
+  notify: Build container
 
 - name: Copy nginx.conf
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/nginx.conf"
     content: "{{ mirror_deb_nginx_conf }}"
-  #notify: Rebuild container
+  notify: Build container
 
-- name: Deployment (add '-e docker_apps_restart=true' to force-restart)
-  community.docker.docker_compose:
-    docker_host: "{{ docker_apps_socket }}"
-    project_src: "{{ docker_apps_project }}"
-    restarted: "{{ docker_apps_restart | default(false) }}"
+- name: Start container
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ docker_apps_project }}" up -d
+  changed_when: false
