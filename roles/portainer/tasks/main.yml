@@ -20,7 +20,7 @@
     dest: "{{ docker_apps_project }}/admin.pass"
     mode: 0640
   when: portainer_admin_password is defined
-  notify: Restart container
+  notify: Restart containers
 
 - name: Start container
   ansible.builtin.shell: |

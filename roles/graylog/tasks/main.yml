@@ -19,7 +19,7 @@
     dest: "{{ docker_apps_project }}/graylog.conf"
     content: "{{ graylog_conf_file }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Start container
   ansible.builtin.shell: |

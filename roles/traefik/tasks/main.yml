@@ -19,21 +19,21 @@
     dest: "{{ docker_apps_project }}/traefik.env"
     content: "{{ traefik_envvar_file }}"
     mode: 0640
-  notify: Restart container
+  notify: Restart containers
 
 - name: Create traefik serverTransports file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/serversTransports.yml"
     content: "{{ docker_apps_traefik_serversTransports }}"
   when: docker_apps_traefik_serversTransports is defined
-  notify: Restart container
+  notify: Restart containers
 
 - name: Import certificate.yml
   ansible.builtin.import_tasks: certificate.yml
   when:
     - docker_apps_traefik_tls
     - docker_apps_traefik_certresolver == "none"
-  notify: Restart container
+  notify: Restart containers
 
 - name: Start container
   ansible.builtin.shell: |

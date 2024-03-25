@@ -19,28 +19,28 @@
     dest: "{{ docker_apps_project }}/settings.yaml"
     content: "{{ homepage_settings_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Copy bookmarks file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/bookmarks.yaml"
     content: "{{ homepage_bookmarks_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Copy services file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/services.yaml"
     content: "{{ homepage_services_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Copy widgets file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/widgets.yaml"
     content: "{{ homepage_widgets_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Start container
   ansible.builtin.shell: |
