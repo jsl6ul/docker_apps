@@ -1,9 +1,9 @@
 ---
 # docker image
-docker_apps_image_mirror_deb: "localbuild/mirror_deb"
+mirror_deb_docker_image: "localbuild/mirror_deb"
 
 # service address
-traefik_address_mirror_deb: "mirror.{{ common_apps_domain }}"
+mirror_deb_traefik_address: "mirror.{{ common_apps_domain }}"
 
 # mirror settings (remove '--dry-run' option when all is set)
 mirror_deb_mirrors:

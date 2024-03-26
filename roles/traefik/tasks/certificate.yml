@@ -1,7 +1,7 @@
 ---
 - name: Copy certificate files
   ansible.builtin.copy:
-    dest: "{{ docker_apps_project }}/{{ item.name }}"
+    dest: "{{ docker_project_dir }}/{{ item.name }}"
     content: "{{ item.content }}"
     mode: "{{ item.mode }}"
   with_items:
@@ -12,7 +12,7 @@
 
 - name: Copy traefik-tls.yml
   ansible.builtin.copy:
-    dest: "{{ docker_apps_project }}/traefik-tls.yml"
+    dest: "{{ docker_project_dir }}/traefik-tls.yml"
     content: |
       tls:
         stores:

@@ -1,28 +1,28 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_apps_project: "{{ common_apps_directory }}/{{ role_name }}"
+    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_apps_project }}"
+    path: "{{ docker_project_dir }}"
     state: directory
 
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    dest: "{{ docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Copy admin-password file
   ansible.builtin.copy:
     content: "{{ portainer_admin_password }}"
-    dest: "{{ docker_apps_project }}/admin.pass"
+    dest: "{{ docker_project_dir }}/admin.pass"
     mode: 0640
   when: portainer_admin_password is defined
   notify: Restart containers
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_apps_project }}" up -d
+    docker compose --project-directory "{{ docker_project_dir }}" up -d
   changed_when: false

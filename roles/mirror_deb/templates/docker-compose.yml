@@ -9,7 +9,7 @@ networks:
 services:
   app:
     build: "./"
-    image: "{{ docker_apps_image_mirror_deb }}"
+    image: "{{ mirror_deb_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -30,11 +30,11 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.mirror_deb.entrypoints: "http, https"
-      traefik.http.routers.mirror_deb.rule: "Host(`{{ traefik_address_mirror_deb }}`)"
+      traefik.http.routers.mirror_deb.rule: "Host(`{{ mirror_deb_traefik_address }}`)"
 {% if common_traefik_tls %}
       traefik.http.routers.mirror_deb.tls: "true"
 {% endif %}
 {% if common_traefik_tls and common_traefik_certresolver != "none" %}
       traefik.http.routers.mirror_deb.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.mirror_deb.tls.domains[0].main: "{{ traefik_address_mirror_deb }}"
+      traefik.http.routers.mirror_deb.tls.domains[0].main: "{{ mirror_deb_traefik_address }}"
 {% endif %}

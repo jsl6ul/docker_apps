@@ -1,6 +1,6 @@
 ---
 # docker image
-docker_apps_image_traefik: "docker.io/traefik:v2.11"
+traefik_docker_image: "docker.io/traefik:v2.11"
 
 # default trafik ports
 traefik_ports:
@@ -8,7 +8,7 @@ traefik_ports:
   - 443:443
 
 # content of traefik.env file
-traefik_envvar_file: |
+traefik_env_file: |
   # traefik static configuration through envvars
   TRAEFIK_API=true
   TRAEFIK_API_DASHBOARD=true
@@ -28,7 +28,7 @@ traefik_envvar_file: |
   TRAEFIK_ENTRYPOINTS_ldap_ADDRESS=:389
   TRAEFIK_ENTRYPOINTS_ldaps=true
   TRAEFIK_ENTRYPOINTS_ldaps_ADDRESS=:636
-  {% if docker_apps_traefik_serversTransports is defined %}
+  {% if common_traefik_serversTransports is defined %}
   # file provider directory
   TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik
   {% endif %}
@@ -36,14 +36,6 @@ traefik_envvar_file: |
   # cert resolver settings
   {{ traefik_certresolver_settings }}
   {% endif %}
-  
-# You can add Traefik ServersTransport using this.
-# https://doc.traefik.io/traefik/routing/services/#serverstransport_1
-# docker_apps_traefik_serversTransports: |
-#   http:
-#     serversTransports:
-#       mytransport:
-#         serverName: "myhost"
 
 # traefik certificat, insert your certificate here.
 traefik_certificate:

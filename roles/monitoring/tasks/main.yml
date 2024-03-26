@@ -1,75 +1,75 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_apps_project: "{{ common_apps_directory }}/{{ role_name }}"
+    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_apps_project }}"
+    path: "{{ docker_project_dir }}"
     state: directory
 
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    dest: "{{ docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Copy prometheus.yml
   ansible.builtin.copy:
-    content: "{{ prometheus_yml }}"
-    dest: "{{ docker_apps_project }}/prometheus.yml"
+    content: "{{ monitoring_prometheus_yml }}"
+    dest: "{{ docker_project_dir }}/prometheus.yml"
     mode: 0644
   notify: Restart containers
 
-- name: Copy prometheus_alerts.yml"
+- name: Copy prometheus_alerts.yml
   ansible.builtin.copy:
-    content: "{{ prometheus_alerts_yml }}"
-    dest: "{{ docker_apps_project }}/prometheus_alerts.yml"
+    content: "{{ monitoring_prometheus_alerts_yml }}"
+    dest: "{{ docker_project_dir }}/prometheus_alerts.yml"
     mode: 0644
   notify: Restart containers
 
 - name: Copy alertmanager.yml
   ansible.builtin.copy:
-    content: "{{ alertmanager_yml }}"
-    dest: "{{ docker_apps_project }}/alertmanager.yml"
+    content: "{{ monitoring_alertmanager_yml }}"
+    dest: "{{ docker_project_dir }}/alertmanager.yml"
     mode: 0644
   notify: Restart containers
 
 - name: Copy blackbox_config.yml
   ansible.builtin.copy:
-    content: "{{ blackbox_config_yml }}"
-    dest: "{{ docker_apps_project }}/blackbox_config.yml"
+    content: "{{ monitoring_blackbox_config_yml }}"
+    dest: "{{ docker_project_dir }}/blackbox_config.yml"
     mode: 0644
   notify: Restart containers
 
 - name: Copy grafana_datasources.yml
   ansible.builtin.copy:
-    content: "{{ grafana_datasources_yml }}"
-    dest: "{{ docker_apps_project }}/grafana_datasources.yml"
+    content: "{{ monitoring_grafana_datasources_yml }}"
+    dest: "{{ docker_project_dir }}/grafana_datasources.yml"
     mode: 0644
   notify: Restart containers
 
 - name: Copy grafana_providers.yml
   ansible.builtin.copy:
-    content: "{{ grafana_providers_yml }}"
-    dest: "{{ docker_apps_project }}/grafana_providers.yml"
+    content: "{{ monitoring_grafana_providers_yml }}"
+    dest: "{{ docker_project_dir }}/grafana_providers.yml"
     mode: 0644
   notify: Restart containers
 
 - name: Copy grafana dashboards
   ansible.builtin.copy:
     src: grafana_dashboards
-    dest: "{{ docker_apps_project }}/"
+    dest: "{{ docker_project_dir }}/"
   notify: Restart containers
 
 - name: Copy grafana.env
   ansible.builtin.copy:
-    content: "{{ grafana_env }}"
-    dest: "{{ docker_apps_project }}/grafana.env"
+    content: "{{ monitoring_grafana_env }}"
+    dest: "{{ docker_project_dir }}/grafana.env"
     mode: 0640
   notify: Restart containers
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_apps_project }}" up -d
+    docker compose --project-directory "{{ docker_project_dir }}" up -d
   changed_when: false

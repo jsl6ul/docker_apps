@@ -6,7 +6,7 @@ networks:
 services:
 
   app:
-    image: "{{ docker_apps_image_glances }}"
+    image: "{{ glances_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald

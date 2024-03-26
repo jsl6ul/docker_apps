@@ -8,7 +8,7 @@ volumes:
 
 services:
   app:
-    image: "{{ docker_apps_image_portainer }}"
+    image: "{{ portainer_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald

@@ -1,5 +1,5 @@
 ---
-docker_apps_image_freeipa: "docker.io/freeipa/freeipa-server:rocky-9-4.10.1"
+freeipa_docker_image: "docker.io/freeipa/freeipa-server:rocky-9-4.10.1"
 
 freeipa_dns_servers:
   - 1.1.1.1
@@ -43,10 +43,10 @@ freeipa_validate_certs: false
 freeipa_traefik: false
 
 # server name to access freeipa web using traefik & let's encrypt
-traefik_address_freeipa_https: "ipa.{{ common_apps_domain }}"
+freeipa_https_traefik_address: "ipa.{{ common_apps_domain }}"
 
 # server name to access freeipa ldaps using traefik & let's encrypt
-traefik_address_freeipa_ldaps: "ldap.{{ common_apps_domain }}"
+freeipa_ldaps_traefik_address: "ldap.{{ common_apps_domain }}"
 
 freeipa_ports:
   # dns
@@ -70,7 +70,7 @@ freeipa_ports:
 # serversTransports for connection between traefik proxy and freeipa service
 # freeipa forces https so traefik must accept freeipa's selfsigned
 # (or extract the rootCA from freeipa and add it to traefik maybe...?)
-docker_apps_traefik_serversTransports: |
+common_traefik_serversTransports: |
   http:
     serversTransports:
       freeipa:

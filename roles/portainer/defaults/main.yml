@@ -1,6 +1,6 @@
 ---
 # docker image
-docker_apps_image_portainer: "docker.io/portainer/portainer-ce:latest"
+portainer_docker_image: "docker.io/portainer/portainer-ce:latest"
 
 
 # portainer admin password
