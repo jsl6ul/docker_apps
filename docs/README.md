@@ -2,7 +2,8 @@
 
 Pre-configured ansible roles for applications running in Docker containers.
 
-This collection assumes that you use `jsl6ul.docker_rootless_mode` to setup the host and the account to run docker in rootless mode.
+This collection assumes that you use `jsl6ul.docker_rootless_mode` to setup the host and
+the `docker_rootless_user` account to run docker in rootless mode.
 
 
 # Traefik certificate
