@@ -33,6 +33,7 @@
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/Dockerfile"
     content: "{{ mirror_deb_dockerfile }}"
+  notify: Rebuild containers
 
 - name: Copy entrypoint.sh
   ansible.builtin.copy:
