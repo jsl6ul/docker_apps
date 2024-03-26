@@ -35,7 +35,7 @@
     - docker_apps_traefik_certresolver == "none"
   notify: Restart containers
 
-- name: Start container
+- name: Start containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ docker_apps_project }}" up -d
   changed_when: false
