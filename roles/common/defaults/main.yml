@@ -16,3 +16,11 @@ common_traefik_certresolver: none
 # and look at 'docker_apps/roles/traefik/defaults/main.yml' for an example of
 # how to set a provider from https://go-acme.github.io/lego/dns/
 # common_traefik_certresolver: mydomain
+
+# You can add Traefik ServersTransport using this.
+# https://doc.traefik.io/traefik/routing/services/#serverstransport_1
+# common_traefik_serversTransports: |
+#   http:
+#     serversTransports:
+#       mytransport:
+#         serverName: "myhost"
