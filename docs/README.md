@@ -9,7 +9,7 @@ the `docker_rootless_user` account to run docker in rootless mode.
 # Traefik certificate
 
 The default configuration of traefik required a certificate. 
-You can disable TLS using `docker_apps_traefik_tls: false`, you can use a self-signed certificate, or you can use let's encrypt.
+You can disable TLS using `common_traefik_tls: false`, you can use a self-signed certificate, or you can use let's encrypt.
 
 Add your certificate to `traefik_certificate`:
 

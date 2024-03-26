@@ -31,10 +31,10 @@ services:
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.mirror_deb.entrypoints: "http, https"
       traefik.http.routers.mirror_deb.rule: "Host(`{{ traefik_address_mirror_deb }}`)"
-{% if docker_apps_traefik_tls %}
+{% if common_traefik_tls %}
       traefik.http.routers.mirror_deb.tls: "true"
 {% endif %}
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.mirror_deb.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.mirror_deb.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.http.routers.mirror_deb.tls.domains[0].main: "{{ traefik_address_mirror_deb }}"
 {% endif %}

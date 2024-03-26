@@ -1,7 +1,7 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_apps_project: "{{ docker_apps_directory }}/{{ role_name }}"
+    docker_apps_project: "{{ common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
@@ -31,8 +31,8 @@
 - name: Import certificate.yml
   ansible.builtin.import_tasks: certificate.yml
   when:
-    - docker_apps_traefik_tls
-    - docker_apps_traefik_certresolver == "none"
+    - common_traefik_tls
+    - common_traefik_certresolver == "none"
   notify: Restart containers
 
 - name: Start containers

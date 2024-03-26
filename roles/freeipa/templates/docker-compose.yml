@@ -11,7 +11,7 @@ services:
 
   app:
     image: "{{ docker_apps_image_freeipa }}"
-    hostname: "{{ freeipa_hostname }}.{{ docker_apps_domain }}"
+    hostname: "{{ freeipa_hostname }}.{{ common_apps_domain }}"
     sysctls:
       - "net.ipv6.conf.all.disable_ipv6=0"
     tmpfs:
@@ -67,8 +67,8 @@ services:
 {% if docker_apps_traefik_serversTransports is defined %}
       traefik.http.services.freeipa.loadbalancer.serverstransport: "freeipa@file"
 {% endif %}
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.freeipa.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.freeipa.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.http.routers.freeipa.tls.domains[0].main: "{{ traefik_address_freeipa_https }}"
 {% endif %}
 
@@ -78,8 +78,8 @@ services:
       traefik.tcp.routers.ldaps.tls: "true"
       traefik.tcp.routers.ldaps.service: "ldaps"
       traefik.tcp.services.ldaps.loadbalancer.server.port: "389"
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.tcp.routers.ldaps.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.tcp.routers.ldaps.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.tcp.routers.ldaps.tls.domains[0].main: "{{ traefik_address_freeipa_ldaps }}"
 {% endif %}
 

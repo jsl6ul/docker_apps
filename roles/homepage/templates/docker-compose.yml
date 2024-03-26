@@ -27,10 +27,10 @@ services:
       traefik.http.routers.homepage.entrypoints: "http, https"
       traefik.http.routers.homepage.rule: "Host(`{{ traefik_address_homepage }}`)"
       traefik.http.services.homepage.loadbalancer.server.port: "3000"
-{% if docker_apps_traefik_tls %}
+{% if common_traefik_tls %}
       traefik.http.routers.homepage.tls: "true"
 {% endif %}
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.homepage.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.homepage.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.http.routers.homepage.tls.domains[0].main: "{{ traefik_address_homepage }}"
 {% endif %}

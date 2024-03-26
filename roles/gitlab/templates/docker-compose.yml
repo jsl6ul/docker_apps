@@ -37,11 +37,11 @@ services:
       traefik.http.routers.gitlab.entrypoints: "http, https"
       traefik.http.routers.gitlab.rule: "Host(`{{ traefik_address_gitlab }}`)"
       traefik.http.services.gitlab.loadbalancer.server.port: "80"
-{% if docker_apps_traefik_tls %}
+{% if common_traefik_tls %}
       traefik.http.routers.gitlab.tls: "true"
 {% endif %}
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.gitlab.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.gitlab.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.http.routers.gitlab.tls.domains[0].main: "{{ traefik_address_gitlab }}"
 {% endif %}
 

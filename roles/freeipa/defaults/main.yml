@@ -20,15 +20,15 @@ docker_rootless_cgroupv2: false
 
 # The following variables should probably be defined in group_vars/all.yml
 # as they are used in several roles and playbooks.
-freeipa_realm: "{{ docker_apps_domain }}"
-freeipa_domain: "{{ docker_apps_domain }}"
+freeipa_realm: "{{ common_apps_domain }}"
+freeipa_domain: "{{ common_apps_domain }}"
 
-# freeipa_server_master: "ipa1.{{ docker_apps_domain }}"
+# freeipa_server_master: "ipa1.{{ common_apps_domain }}"
 
 # If you have 3 freeipa server, you can define replica1 and
 # replica2 to set Domain & CA replication between them.
-# freeipa_server_replica1: "ipa2.{{ docker_apps_domain }}"
-# freeipa_server_replica2: "ipa3.{{ docker_apps_domain }}"
+# freeipa_server_replica1: "ipa2.{{ common_apps_domain }}"
+# freeipa_server_replica2: "ipa3.{{ common_apps_domain }}"
 
 # freeipa_enroll_principal: enrolluser
 # freeipa_enroll_pwd: <secret>
@@ -43,10 +43,10 @@ freeipa_validate_certs: false
 freeipa_traefik: false
 
 # server name to access freeipa web using traefik & let's encrypt
-traefik_address_freeipa_https: "ipa.{{ docker_apps_domain }}"
+traefik_address_freeipa_https: "ipa.{{ common_apps_domain }}"
 
 # server name to access freeipa ldaps using traefik & let's encrypt
-traefik_address_freeipa_ldaps: "ldap.{{ docker_apps_domain }}"
+traefik_address_freeipa_ldaps: "ldap.{{ common_apps_domain }}"
 
 freeipa_ports:
   # dns
@@ -74,7 +74,7 @@ docker_apps_traefik_serversTransports: |
   http:
     serversTransports:
       freeipa:
-        serverName: "{{ freeipa_hostname }}.{{ docker_apps_domain }}"
+        serverName: "{{ freeipa_hostname }}.{{ common_apps_domain }}"
         insecureSkipVerify: "true"
 
 
@@ -83,7 +83,7 @@ freeipa_command_master: |
   ipa-server-install --admin-password='{{ freeipa_pwd_admin }}' --ds-password='{{ freeipa_pwd_dm }}' --domain={{ freeipa_realm }} --realm={{ freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp
 
 freeipa_command_replica: |
-  ipa-replica-install --admin-password='{{ freeipa_pwd_admin }}' --domain={{ freeipa_domain }} --realm={{ freeipa_realm | upper }} --server={{ freeipa_server_master }} --hostname={{ freeipa_hostname }}.{{ docker_apps_domain }} --unattended --no-ntp --setup-ca
+  ipa-replica-install --admin-password='{{ freeipa_pwd_admin }}' --domain={{ freeipa_domain }} --realm={{ freeipa_realm | upper }} --server={{ freeipa_server_master }} --hostname={{ freeipa_hostname }}.{{ common_apps_domain }} --unattended --no-ntp --setup-ca
 
 # if you have a "real" certificate, you need to add the following parameters to the above commands.
 # (it should works, but I didn't test it)

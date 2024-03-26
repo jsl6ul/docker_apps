@@ -8,14 +8,14 @@ docker_apps_image_monitoring_grafana: "docker.io/grafana/grafana"
 grafana_admin_password: secret
 
 # servers address
-traefik_address_prometheus: "prometheus.{{ docker_apps_domain }}"
-traefik_address_alertmanager: "alertmanager.{{ docker_apps_domain }}"
-traefik_address_blackbox: "blackbox.{{ docker_apps_domain }}"
-traefik_address_grafana: "grafana.{{ docker_apps_domain }}"
+traefik_address_prometheus: "prometheus.{{ common_apps_domain }}"
+traefik_address_alertmanager: "alertmanager.{{ common_apps_domain }}"
+traefik_address_blackbox: "blackbox.{{ common_apps_domain }}"
+traefik_address_grafana: "grafana.{{ common_apps_domain }}"
 
-alertmanager_smtp_smarthost: "smtp.{{ docker_apps_domain }}:25"
-alertmanager_smtp_from: "alertmanager@{{ docker_apps_domain }}"
-alertmanager_main_receiver: "root@{{ docker_apps_domain }}"
+alertmanager_smtp_smarthost: "smtp.{{ common_apps_domain }}:25"
+alertmanager_smtp_from: "alertmanager@{{ common_apps_domain }}"
+alertmanager_main_receiver: "root@{{ common_apps_domain }}"
 
 prometheus_retention_time: "365d"
 

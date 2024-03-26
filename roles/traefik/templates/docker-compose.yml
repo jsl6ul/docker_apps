@@ -29,7 +29,7 @@ services:
 {% if docker_apps_traefik_serversTransports is defined %}
       - "./serversTransports.yml:/etc/traefik/serversTransports.yml"
 {% endif %}
-{% if docker_apps_traefik_certresolver == "none" %}
+{% if common_traefik_certresolver == "none" %}
       - "./traefik-tls.yml:/etc/traefik/tls.yml"
       - "./traefik-cert.crt:/etc/ssl/traefik/cert.crt"
       - "./traefik-cert.key:/etc/ssl/traefik/cert.key"
@@ -37,18 +37,18 @@ services:
     env_file: traefik.env
     labels:
       traefik.enable: "true"
-      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ docker_apps_domain }}`) && PathPrefix(`/api`,`/dashboard`)"
+      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ common_apps_domain }}`) && PathPrefix(`/api`,`/dashboard`)"
       traefik.http.routers.dashboard.entrypoints: "http, https"
       traefik.http.routers.dashboard.service: "api@internal"
 
-{% if docker_apps_traefik_tls %}
+{% if common_traefik_tls %}
       traefik.http.routers.dashboard.tls: "true"
       # redirect all http traffic to https
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       #traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
 {% endif %}
 
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.traefik.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ docker_apps_domain }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.traefik.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ common_apps_domain }}"
 {% endif %}
