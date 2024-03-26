@@ -98,7 +98,6 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.graylog.rule: "Host(`{{ traefik_address_graylog }}`)"
-      traefik.http.routers.graylog.tls.domains[0].main: "{{ traefik_address_graylog }}"
 {% if docker_apps_traefik_tls %}
       traefik.http.routers.graylog.tls: "true"
 {% endif %}
