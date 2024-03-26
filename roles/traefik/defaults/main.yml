@@ -28,8 +28,10 @@ traefik_envvar_file: |
   TRAEFIK_ENTRYPOINTS_ldap_ADDRESS=:389
   TRAEFIK_ENTRYPOINTS_ldaps=true
   TRAEFIK_ENTRYPOINTS_ldaps_ADDRESS=:636
+  {% if docker_apps_traefik_serversTransports is defined %}
   # file provider directory
   TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik
+  {% endif %}
   {% if docker_apps_traefik_certresolver != "none" %}
   # cert resolver settings
   {{ docker_apps_traefik_certresolver_settings }}

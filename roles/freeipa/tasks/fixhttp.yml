@@ -31,7 +31,7 @@
 
 - name: "Waiting for service: httpd (max 15min)"
   ansible.builtin.command: |
-    docker exec freeipa_app_1 /usr/bin/systemctl status httpd
+    docker exec freeipa-app-1 /usr/bin/systemctl status httpd
   register: _httpd
   until: _httpd.rc == 0
   retries: 90
@@ -40,6 +40,6 @@
 
 - name: Reload freeipa webserver
   ansible.builtin.command: |
-    docker exec -t freeipa_app_1 systemctl reload httpd
+    docker exec -t freeipa-app-1 systemctl reload httpd
   when: _fixredirect.changed or _fixreferer.changed or force_reload is defined
   changed_when: false

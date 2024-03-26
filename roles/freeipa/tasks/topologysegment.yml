@@ -2,7 +2,7 @@
 - name: Kinit admin
   ansible.builtin.expect:
     echo: false
-    command: docker exec -it freeipa_app_1 /usr/bin/kinit admin
+    command: docker exec -it freeipa-app-1 /usr/bin/kinit admin
     responses:
       (.*)assword for (.*): "{{ freeipa_pwd_admin }}"
   register: _kinit
@@ -10,7 +10,7 @@
 
 - name: Check current domain topology
   ansible.builtin.command: |
-    docker exec -t freeipa_app_1 /usr/bin/ipa topologysegment-find domain {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }}
+    docker exec -t freeipa-app-1 /usr/bin/ipa topologysegment-find domain {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }}
   register: _topocheckdomain
   ignore_errors: true
   changed_when: false
@@ -18,13 +18,13 @@
 
 - name: Create domain topology between replicas
   ansible.builtin.command: |
-    docker exec -t freeipa_app_1 /usr/bin/ipa topologysegment-add domain {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }} --leftnode={{ freeipa_server_replica1 }} --rightnode={{ freeipa_server_replica2 }}
+    docker exec -t freeipa-app-1 /usr/bin/ipa topologysegment-add domain {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }} --leftnode={{ freeipa_server_replica1 }} --rightnode={{ freeipa_server_replica2 }}
   when: _topocheckdomain.rc != 0
   changed_when: false
 
 - name: Check current ca topology
   ansible.builtin.command: |
-    docker exec -t freeipa_app_1 /usr/bin/ipa topologysegment-find ca {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }}
+    docker exec -t freeipa-app-1 /usr/bin/ipa topologysegment-find ca {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }}
   register: _topocheckca
   ignore_errors: true
   changed_when: false
@@ -32,6 +32,6 @@
 
 - name: Create ca topology between replicas
   ansible.builtin.command: |
-    docker exec -t freeipa_app_1 /usr/bin/ipa topologysegment-add ca {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }} --leftnode={{ freeipa_server_replica1 }} --rightnode={{ freeipa_server_replica2 }}
+    docker exec -t freeipa-app-1 /usr/bin/ipa topologysegment-add ca {{ freeipa_server_replica1 }}-to-{{ freeipa_server_replica2 }} --leftnode={{ freeipa_server_replica1 }} --rightnode={{ freeipa_server_replica2 }}
   when: _topocheckca.rc != 0
   changed_when: false

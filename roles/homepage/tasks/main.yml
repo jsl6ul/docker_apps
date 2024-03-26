@@ -19,31 +19,30 @@
     dest: "{{ docker_apps_project }}/settings.yaml"
     content: "{{ homepage_settings_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Copy bookmarks file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/bookmarks.yaml"
     content: "{{ homepage_bookmarks_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Copy services file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/services.yaml"
     content: "{{ homepage_services_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
 - name: Copy widgets file
   ansible.builtin.copy:
     dest: "{{ docker_apps_project }}/widgets.yaml"
     content: "{{ homepage_widgets_yaml }}"
     mode: 0644
-  notify: Restart container
+  notify: Restart containers
 
-- name: Deployment (add '-e docker_apps_restart=true' to force-restart)
-  community.docker.docker_compose:
-    docker_host: "{{ docker_apps_socket }}"
-    project_src: "{{ docker_apps_project }}"
-    restarted: "{{ docker_apps_restart | default(false) }}"
+- name: Start containers
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ docker_apps_project }}" up -d
+  changed_when: false

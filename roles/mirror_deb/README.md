@@ -11,6 +11,3 @@ This container downloads and maintains a partial local Debian/Ubuntu mirror usin
 - https://manpages.org/debmirror
 - https://salsa.debian.org/debian/debmirror
 
-## Rebuild
-
-The `Rebuild container` handler doesn't seem to work. You should run `docker compose build` manually.
