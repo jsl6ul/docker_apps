@@ -7,6 +7,9 @@ traefik_ports:
   - 80:80
   - 443:443
 
+# redirect http traffic to https
+traefik_https_redirect: true
+
 # content of traefik.env file
 traefik_env_file: |
   # traefik static configuration through envvars
