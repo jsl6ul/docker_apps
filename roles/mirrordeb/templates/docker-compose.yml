@@ -9,12 +9,12 @@ networks:
 services:
   app:
     build: "./"
-    image: "{{ mirror_deb_docker_image }}"
+    image: "{{ mirrordeb_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
       options:
-        tag: "mirror_deb"
+        tag: "mirrordeb"
     networks:
       - traefik_proxy
     mem_limit: 128M
@@ -29,12 +29,12 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.mirror_deb.entrypoints: "http, https"
-      traefik.http.routers.mirror_deb.rule: "Host(`{{ mirror_deb_traefik_address }}`)"
+      traefik.http.routers.mirrordeb.entrypoints: "http, https"
+      traefik.http.routers.mirrordeb.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
 {% if common_traefik_tls %}
-      traefik.http.routers.mirror_deb.tls: "true"
+      traefik.http.routers.mirrordeb.tls: "true"
 {% endif %}
 {% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.mirror_deb.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.mirror_deb.tls.domains[0].main: "{{ mirror_deb_traefik_address }}"
+      traefik.http.routers.mirrordeb.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.mirrordeb.tls.domains[0].main: "{{ mirrordeb_traefik_address }}"
 {% endif %}

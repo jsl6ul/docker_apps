@@ -32,19 +32,19 @@
 - name: Copy Dockerfile
   ansible.builtin.copy:
     dest: "{{ docker_project_dir }}/Dockerfile"
-    content: "{{ mirror_deb_dockerfile }}"
+    content: "{{ mirrordeb_dockerfile }}"
   notify: Rebuild containers
 
 - name: Copy entrypoint.sh
   ansible.builtin.copy:
     dest: "{{ docker_project_dir }}/entrypoint.sh"
-    content: "{{ mirror_deb_entrypoint }}"
+    content: "{{ mirrordeb_entrypoint }}"
   notify: Rebuild containers
 
 - name: Copy nginx.conf
   ansible.builtin.copy:
     dest: "{{ docker_project_dir }}/nginx.conf"
-    content: "{{ mirror_deb_nginx_conf }}"
+    content: "{{ mirrordeb_nginx_conf }}"
   notify: Rebuild containers
 
 - name: Start containers

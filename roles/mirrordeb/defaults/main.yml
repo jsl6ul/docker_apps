@@ -1,12 +1,12 @@
 ---
 # docker image
-mirror_deb_docker_image: "localbuild/mirror_deb"
+mirrordeb_docker_image: "localbuild/mirrordeb"
 
 # service address
-mirror_deb_traefik_address: "mirror.{{ common_apps_domain }}"
+mirrordeb_traefik_address: "mirror.{{ common_apps_domain }}"
 
 # mirror settings (remove '--dry-run' option when all is set)
-mirror_deb_mirrors:
+mirrordeb_mirrors:
   - name: debian
     host: debian.mirror.rafal.ca
     root: /debian
@@ -36,7 +36,7 @@ mirror_deb_mirrors:
     options: --nosource --i18n --passive --cleanup --verbose --dry-run
 
 # signing keys
-mirror_deb_signing_keys:
+mirrordeb_signing_keys:
   - https://ftp-master.debian.org/keys/archive-key-11.asc
   - https://ftp-master.debian.org/keys/archive-key-11-security.asc
   - https://ftp-master.debian.org/keys/archive-key-12.asc
@@ -47,7 +47,7 @@ mirror_deb_signing_keys:
   - https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf6ecb3762474eda9d21b7022871920d1991bc93c # Ubuntu Archive Automatic Signing Key(2018)
 
 # Dockerfile to build the container
-mirror_deb_dockerfile: |
+mirrordeb_dockerfile: |
   FROM debian:stable-slim
   COPY entrypoint.sh /entrypoint.sh
   RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -62,7 +62,7 @@ mirror_deb_dockerfile: |
   ENTRYPOINT ["/entrypoint.sh"]
 
 # container entrypoint.sh
-mirror_deb_entrypoint: |
+mirrordeb_entrypoint: |
   #!/bin/bash
   echo "start nginx ..."
   nginx
@@ -71,7 +71,7 @@ mirror_deb_entrypoint: |
   echo "update signing keys ..."
   touch /root/.gnupg/trustedkeys.gpg
   chmod 0600 /root/.gnupg/trustedkeys.gpg
-  {% for akey in mirror_deb_signing_keys %}
+  {% for akey in mirrordeb_signing_keys %}
   curl '{{ akey }}' | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
   {% endfor %}
 
@@ -80,7 +80,7 @@ mirror_deb_entrypoint: |
     echo "scan local packages ..."
     cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz
 
-  {% for amirror in mirror_deb_mirrors %}
+  {% for amirror in mirrordeb_mirrors %}
     echo "debmirror {{ amirror.name }} ..."
     debmirror {{ amirror.options }} \
       --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }} \
@@ -94,7 +94,7 @@ mirror_deb_entrypoint: |
   done
 
 # nging configuration file
-mirror_deb_nginx_conf: |
+mirrordeb_nginx_conf: |
   server {
     listen 80 default_server;
     listen [::]:80 default_server;
