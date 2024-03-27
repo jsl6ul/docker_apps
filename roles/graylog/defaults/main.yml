@@ -1,11 +1,11 @@
 ---
 # docker image
-docker_apps_image_graylog: "docker.io/graylog/graylog:5.1.6"
-docker_apps_image_graylog_mongo: "docker.io/mongo:5.0.13"
-docker_apps_image_graylog_opensearch: "docker.io/opensearchproject/opensearch:2"
+graylog_docker_image: "docker.io/graylog/graylog:5.1.6"
+graylog_mongo_docker_image: "docker.io/mongo:5.0.13"
+graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2"
 
 # graylog server address
-traefik_address_graylog: "graylog.{{ docker_apps_domain }}"
+graylog_traefik_address: "graylog.{{ common_apps_domain }}"
 
 # graylog listening ports
 graylog_ports:
@@ -24,7 +24,7 @@ graylog_ports:
 # graylog_opensearch_admin_pwd: <secret>
 
 # smtp server and port if you want graylog alerts by mail
-graylog_smtp_mailfrom: "graylog@{{ docker_apps_domain }}"
+graylog_smtp_mailfrom: "graylog@{{ common_apps_domain }}"
 graylog_smtp_server: localhost
 graylog_smtp_port: 25
 
@@ -42,7 +42,7 @@ graylog_conf_file: |
   elasticsearch_replicas = 0
   elasticsearch_shards = 4
   http_bind_address = 0.0.0.0:80
-  http_external_uri = https://{{ traefik_address_graylog }}/
+  http_external_uri = https://{{ graylog_traefik_address }}/
   http_publish_uri = http://localhost/
   is_master = true
   lb_recognition_period_seconds = 3
@@ -69,7 +69,7 @@ graylog_conf_file: |
   transport_email_use_auth = false
   transport_email_use_ssl = false
   transport_email_use_tls = true
-  transport_email_web_interface_url = https://{{ traefik_address_graylog }}
+  transport_email_web_interface_url = https://{{ graylog_traefik_address }}
   # Performance problems ?
   inputbuffer_processors = 1
   inputbuffer_ring_size = 16384

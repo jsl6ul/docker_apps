@@ -2,7 +2,7 @@
 
 #TOKEN=<runner-token>
 RUNNER_CONTAINER=gitlab_runner_1
-GITLAB_URL=https://gitlab.{{ docker_apps_domain }}
+GITLAB_URL=https://gitlab.{{ common_apps_domain }}
 DOCKER_NETWORK=bridge
 
 # register runner

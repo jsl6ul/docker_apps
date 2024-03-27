@@ -1,0 +1,42 @@
+---
+volumes:
+  homeroot:
+
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  app:
+    build: "./"
+    image: "{{ mirrordeb_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "mirrordeb"
+    networks:
+      - traefik_proxy
+    mem_limit: 128M
+    environment:
+      TZ: "America/New_York"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "homeroot:/root"
+      - "./extras:/var/www/html/extras"
+      - "./keys:/var/www/html/keys"
+      - "./mirrors:/var/www/html/mirrors"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.mirrordeb.entrypoints: "http"
+      traefik.http.routers.mirrordeb.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
+{% if common_traefik_tls %}
+      traefik.http.routers.mirrordebs.entrypoints: "https"
+      traefik.http.routers.mirrordebs.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
+      traefik.http.routers.mirrordebs.tls: "true"
+{% endif %}
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.mirrordebs.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.mirrordebs.tls.domains[0].main: "{{ mirrordeb_traefik_address }}"
+{% endif %}

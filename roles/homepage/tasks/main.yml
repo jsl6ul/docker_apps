@@ -1,48 +1,48 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_apps_project: "{{ docker_apps_directory }}/{{ role_name }}"
+    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_apps_project }}"
+    path: "{{ docker_project_dir }}"
     state: directory
 
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_apps_project }}/docker-compose.yml"
+    dest: "{{ docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Copy settings file
   ansible.builtin.copy:
-    dest: "{{ docker_apps_project }}/settings.yaml"
+    dest: "{{ docker_project_dir }}/settings.yaml"
     content: "{{ homepage_settings_yaml }}"
     mode: 0644
   notify: Restart containers
 
 - name: Copy bookmarks file
   ansible.builtin.copy:
-    dest: "{{ docker_apps_project }}/bookmarks.yaml"
+    dest: "{{ docker_project_dir }}/bookmarks.yaml"
     content: "{{ homepage_bookmarks_yaml }}"
     mode: 0644
   notify: Restart containers
 
 - name: Copy services file
   ansible.builtin.copy:
-    dest: "{{ docker_apps_project }}/services.yaml"
+    dest: "{{ docker_project_dir }}/services.yaml"
     content: "{{ homepage_services_yaml }}"
     mode: 0644
   notify: Restart containers
 
 - name: Copy widgets file
   ansible.builtin.copy:
-    dest: "{{ docker_apps_project }}/widgets.yaml"
+    dest: "{{ docker_project_dir }}/widgets.yaml"
     content: "{{ homepage_widgets_yaml }}"
     mode: 0644
   notify: Restart containers
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_apps_project }}" up -d
+    docker compose --project-directory "{{ docker_project_dir }}" up -d
   changed_when: false

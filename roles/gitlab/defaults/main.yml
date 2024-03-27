@@ -1,13 +1,13 @@
 ---
 # docker images
-docker_apps_image_gitlab: "docker.io/gitlab/gitlab-ce"
-docker_apps_image_gitlab_runner: "docker.io/gitlab/gitlab-runner"
+gitlab_docker_image: "docker.io/gitlab/gitlab-ce"
+gitlab_runner_docker_image: "docker.io/gitlab/gitlab-runner"
 
 # gitlab server address
-traefik_address_gitlab: "gitlab.{{ docker_apps_domain }}"
+gitlab_traefik_address: "gitlab.{{ common_apps_domain }}"
 
-mem_limit_gitlab: 4096M
-mem_limit_gitlab_runner: 3072M
+gitlab_mem_limit: 4096M
+gitlab_runner_mem_limit: 3072M
 
 # gitlab external ssh port
 gitlab_shell_ssh_port: 2222
@@ -21,7 +21,7 @@ gitlab_log_level: ERROR
 # Configuration settings using the Omnibus package
 # https://docs.gitlab.com/omnibus/settings/configuration.html
 gitlab_omnibus_config: |
-  external_url 'https://{{ traefik_address_gitlab }}'
+  external_url 'https://{{ gitlab_traefik_address }}'
   gitlab_rails['env'] = {
     "GITLAB_LOG_LEVEL" => "{{ gitlab_log_level }}",
     "DEBUG" => "{{ gitlab_log_level }}",

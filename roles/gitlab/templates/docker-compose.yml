@@ -12,7 +12,7 @@ volumes:
 
 services:
   app:
-    image: "{{ docker_apps_image_gitlab }}"
+    image: "{{ gitlab_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -21,7 +21,7 @@ services:
     networks:
       - traefik_proxy
     ports: {{ gitlab_ports }}
-    mem_limit: {{ mem_limit_gitlab }}
+    mem_limit: {{ gitlab_mem_limit }}
     environment:
       TZ: "America/New_York"
       GITLAB_OMNIBUS_CONFIG: |
@@ -35,24 +35,24 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.gitlab.entrypoints: "http, https"
-      traefik.http.routers.gitlab.rule: "Host(`{{ traefik_address_gitlab }}`)"
+      traefik.http.routers.gitlab.rule: "Host(`{{ gitlab_traefik_address }}`)"
       traefik.http.services.gitlab.loadbalancer.server.port: "80"
-{% if docker_apps_traefik_tls %}
+{% if common_traefik_tls %}
       traefik.http.routers.gitlab.tls: "true"
 {% endif %}
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.gitlab.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.gitlab.tls.domains[0].main: "{{ traefik_address_gitlab }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.gitlab.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.gitlab.tls.domains[0].main: "{{ gitlab_traefik_address }}"
 {% endif %}
 
   runner:
-    image: "{{ docker_apps_image_gitlab_runner }}"
+    image: "{{ gitlab_runner_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
       options:
         tag: "gitlab-runner"
-    mem_limit: {{ mem_limit_gitlab_runner }}
+    mem_limit: {{ gitlab_runner_mem_limit }}
     environment:
       TZ: "America/New_York"
     volumes:

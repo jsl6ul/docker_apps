@@ -1,30 +1,30 @@
 ---
 # docker image
-docker_apps_image_monitoring_prometheus: "docker.io/prom/prometheus"
-docker_apps_image_monitoring_alertmanager: "docker.io/prom/alertmanager"
-docker_apps_image_monitoring_blackbox: "docker.io/prom/blackbox-exporter"
-docker_apps_image_monitoring_grafana: "docker.io/grafana/grafana"
+monitoring_prometheus_docker_image: "docker.io/prom/prometheus"
+monitoring_alertmanager_docker_image: "docker.io/prom/alertmanager"
+monitoring_blackbox_docker_image: "docker.io/prom/blackbox-exporter"
+monitoring_grafana_docker_image: "docker.io/grafana/grafana"
 
-grafana_admin_password: secret
+monitoring_grafana_admin_password: secret
 
 # servers address
-traefik_address_prometheus: "prometheus.{{ docker_apps_domain }}"
-traefik_address_alertmanager: "alertmanager.{{ docker_apps_domain }}"
-traefik_address_blackbox: "blackbox.{{ docker_apps_domain }}"
-traefik_address_grafana: "grafana.{{ docker_apps_domain }}"
+monitoring_prometheus_traefik_address: "prometheus.{{ common_apps_domain }}"
+monitoring_alertmanager_traefik_address: "alertmanager.{{ common_apps_domain }}"
+monitoring_blackbox_traefik_address: "blackbox.{{ common_apps_domain }}"
+monitoring_grafana_traefik_address: "grafana.{{ common_apps_domain }}"
 
-alertmanager_smtp_smarthost: "smtp.{{ docker_apps_domain }}:25"
-alertmanager_smtp_from: "alertmanager@{{ docker_apps_domain }}"
-alertmanager_main_receiver: "root@{{ docker_apps_domain }}"
+monitoring_alertmanager_smtp_smarthost: "smtp.{{ common_apps_domain }}:25"
+monitoring_alertmanager_smtp_from: "alertmanager@{{ common_apps_domain }}"
+monitoring_alertmanager_main_receiver: "root@{{ common_apps_domain }}"
 
-prometheus_retention_time: "365d"
+monitoring_prometheus_retention_time: "365d"
 
 # alertmanager.yml
-alertmanager_yml: |
+monitoring_alertmanager_yml: |
   global:
     # The smarthost and SMTP sender used for mail notifications.
-    smtp_smarthost: "{{ alertmanager_smtp_smarthost }}"
-    smtp_from: "{{ alertmanager_smtp_from }}"
+    smtp_smarthost: "{{ monitoring_alertmanager_smtp_smarthost }}"
+    smtp_from: "{{ monitoring_alertmanager_smtp_from }}"
     smtp_require_tls: false
   route:
     group_by: ['alertname']
@@ -35,7 +35,7 @@ alertmanager_yml: |
   receivers:
   - name: 'main_receiver'
     email_configs:
-    - to: "{{ alertmanager_main_receiver }}"
+    - to: "{{ monitoring_alertmanager_main_receiver }}"
       send_resolved: true
   # Inhibition rules allow to mute a set of alerts given that another alert is firing.
   # We use this to mute any warning-level notifications if the same alert is already critical.
@@ -49,7 +49,7 @@ alertmanager_yml: |
 
 
 # blackbox_config.yml
-blackbox_config_yml: |
+monitoring_blackbox_config_yml: |
   modules:
     http_2xx:
       prober: http
@@ -117,8 +117,8 @@ blackbox_config_yml: |
 
 
 # grafana.env
-grafana_env: |
-  GF_SECURITY_ADMIN_PASSWORD={{ grafana_admin_password }}
+monitoring_grafana_env: |
+  GF_SECURITY_ADMIN_PASSWORD={{ monitoring_grafana_admin_password }}
   GF_SERVER_ROOT_URL=http://localhost:3000
   GF_SMTP_ENABLED=false
   GF_INSTALL_PLUGINS=grafana-piechart-panel,vonage-status-panel
@@ -128,7 +128,7 @@ grafana_env: |
 
 
 # grafana_datasources.yml
-grafana_datasources_yml: |
+monitoring_grafana_datasources_yml: |
   apiVersion: 1
   # list of datasources that should be deleted from the database
   deleteDatasources:
@@ -148,7 +148,7 @@ grafana_datasources_yml: |
 
 
 # grafana_providers.yml
-grafana_providers_yml: |
+monitoring_grafana_providers_yml: |
   apiVersion: 1
   providers:
     - name: dashboards
@@ -166,7 +166,7 @@ grafana_providers_yml: |
 
 
 # prometheus_alerts.yml
-prometheus_alerts_yml: |
+monitoring_prometheus_alerts_yml: |
   groups:
   - name: main
     rules:
@@ -299,7 +299,7 @@ prometheus_alerts_yml: |
 
 
 # prometheus.yml
-prometheus_yml: |
+monitoring_prometheus_yml: |
   # my global config
   global:
     scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.

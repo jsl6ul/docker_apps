@@ -1,6 +1,6 @@
 ---
 # docker image
-docker_apps_image_privatebin: "docker.io/privatebin/nginx-fpm-alpine"
+privatebin_docker_image: "docker.io/privatebin/nginx-fpm-alpine"
 
 # privatebin server address
-traefik_address_privatebin: "privatebin.{{ docker_apps_domain }}"
+privatebin_traefik_address: "privatebin.{{ common_apps_domain }}"

@@ -13,7 +13,7 @@ networks:
 services:
 
   mongo:
-    image: "{{ docker_apps_image_graylog_mongo }}"
+    image: "{{ graylog_mongo_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -32,7 +32,7 @@ services:
       traefik.enable: "false"
 
   opensearch:
-    image: "{{ docker_apps_image_graylog_opensearch }}"
+    image: "{{ graylog_opensearch_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -66,7 +66,7 @@ services:
       traefik.enable: "false"
 
   app:
-    image: "{{ docker_apps_image_graylog }}"
+    image: "{{ graylog_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -97,13 +97,13 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.graylog.rule: "Host(`{{ traefik_address_graylog }}`)"
-{% if docker_apps_traefik_tls %}
+      traefik.http.routers.graylog.rule: "Host(`{{ graylog_traefik_address }}`)"
+{% if common_traefik_tls %}
       traefik.http.routers.graylog.tls: "true"
 {% endif %}
-{% if docker_apps_traefik_tls and docker_apps_traefik_certresolver != "none" %}
-      traefik.http.routers.graylog.tls.certresolver: "{{ docker_apps_traefik_certresolver }}"
-      traefik.http.routers.graylog.tls.domains[0].main: "{{ traefik_address_graylog }}"
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.graylog.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.graylog.tls.domains[0].main: "{{ graylog_traefik_address }}"
 {% endif %}
     links:
       - "mongo:mongo"
