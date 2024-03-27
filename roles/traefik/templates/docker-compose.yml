@@ -43,10 +43,8 @@ services:
 
 {% if common_traefik_tls %}
       traefik.http.routers.dashboard.tls: "true"
-{% if traefik_https_redirect %}
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       #traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
-{% endif %}
 {% endif %}
 
 {% if common_traefik_tls and common_traefik_certresolver != "none" %}
