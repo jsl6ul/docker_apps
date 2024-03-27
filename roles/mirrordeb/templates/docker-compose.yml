@@ -29,12 +29,14 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.mirrordeb.entrypoints: "http, https"
+      traefik.http.routers.mirrordeb.entrypoints: "http"
       traefik.http.routers.mirrordeb.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
 {% if common_traefik_tls %}
-      traefik.http.routers.mirrordeb.tls: "true"
+      traefik.http.routers.mirrordebs.entrypoints: "https"
+      traefik.http.routers.mirrordebs.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
+      traefik.http.routers.mirrordebs.tls: "true"
 {% endif %}
 {% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.mirrordeb.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.mirrordeb.tls.domains[0].main: "{{ mirrordeb_traefik_address }}"
+      traefik.http.routers.mirrordebs.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.mirrordebs.tls.domains[0].main: "{{ mirrordeb_traefik_address }}"
 {% endif %}
