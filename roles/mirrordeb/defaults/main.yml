@@ -10,9 +10,9 @@ mirrordeb_mirrors:
   - name: debian
     host: debian.mirror.rafal.ca
     root: /debian
-    dist: bookworm
+    dist: bookworm,bookworm-updates
     arch: amd64
-    section: main,contrib,non-free,main/debian-installer
+    section: main,contrib,non-free,non-free-firmware,main/debian-installer
     dest: /var/www/html/mirrors/debian/
     method: rsync
     options: --nosource --i18n --passive --cleanup --verbose --dry-run
@@ -21,7 +21,7 @@ mirrordeb_mirrors:
     root: /debian-security
     dist: bookworm-security
     arch: amd64
-    section: main,contrib,non-free,main/debian-installer
+    section: main,contrib,non-free,non-free-firmware,main/debian-installer
     dest: /var/www/html/mirrors/debian-security/
     method: rsync
     options: --nosource --i18n --passive --cleanup --verbose --dry-run
@@ -49,14 +49,14 @@ mirrordeb_signing_keys:
 # Dockerfile to build the container
 mirrordeb_dockerfile: |
   FROM debian:stable-slim
-  COPY entrypoint.sh /entrypoint.sh
   RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get install -y --no-install-recommends debmirror ed gnupg gpgv curl nginx dpkg-dev && \
     apt-get -y upgrade && \
     apt-get autoremove && \
-    rm -rf /var/cache/apt/* && \
-    rm -f /var/www/html/index.nginx-debian.html && \
-    chmod u+x /entrypoint.sh
+    rm -rf /var/cache/apt/*
+  COPY entrypoint.sh /entrypoint.sh
+  RUN chmod u+x /entrypoint.sh && \
+    rm -f /var/www/html/index.nginx-debian.html
   COPY nginx.conf /etc/nginx/sites-enabled/default
   EXPOSE 80
   ENTRYPOINT ["/entrypoint.sh"]
