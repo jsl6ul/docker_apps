@@ -269,7 +269,7 @@ monitoring_prometheus_alerts_yml: |
       annotations:
         summary: "Load average is greater than 5 for more than 30 minutes"
     - alert: "Free swap space less than 50MB"
-      expr: node_memory_SwapFree_bytes < 50000000
+      expr: node_memory_SwapFree_bytes < 50000000 and node_memory_SwapTotal_bytes > 0
       for: 5m
       labels:
         severity: page
