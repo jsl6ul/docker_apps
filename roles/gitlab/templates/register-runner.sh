@@ -1,7 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
 #TOKEN=<runner-token>
-RUNNER_CONTAINER=gitlab_runner_1
+if [ "$TOKEN" == "" ]; then
+    echo "Error, runner authentication token undefined."
+    exit 1
+fi
+
+if [ "$RUNNER_CONTAINER" == "" ]; then
+    RUNNER_CONTAINER=gitlab-runner-1
+fi
+
 GITLAB_URL=https://gitlab.{{ common_apps_domain }}
 DOCKER_NETWORK=bridge
 
@@ -21,6 +29,7 @@ docker exec -it ${RUNNER_CONTAINER} \
        --docker-volumes "/cache" \
        --docker-volumes "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock" \
        --docker-volumes "/tmp/builds:/tmp/builds" \
+       --docker-volumes "{{ docker_rootless_user.home }}/{{ docker_project_dir }}/Dockerfile:/root/Dockerfile" \
        --builds-dir "/tmp/builds"
 
 # Optional, but recommended: Set the builds directory to /tmp/builds, so job
