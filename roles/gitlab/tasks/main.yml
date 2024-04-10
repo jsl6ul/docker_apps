@@ -29,3 +29,7 @@
   ansible.builtin.copy:
     dest: "{{ docker_project_dir }}/Dockerfile"
     content: "{{ gitlab_runner_dockerfile }}"
+    mode: 0600
+
+- name: Flush handlers
+  meta: flush_handlers

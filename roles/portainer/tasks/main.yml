@@ -26,3 +26,6 @@
   ansible.builtin.shell: |
     docker compose --project-directory "{{ docker_project_dir }}" up -d
   changed_when: false
+
+- name: Flush handlers
+  meta: flush_handlers
