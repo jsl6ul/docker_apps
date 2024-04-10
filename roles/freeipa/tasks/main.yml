@@ -23,6 +23,9 @@
     docker compose --project-directory "{{ docker_project_dir }}" up -d
   changed_when: false
 
+- name: Flush handlers
+  meta: flush_handlers
+
 - name: Fix freeipa http on master server
   ansible.builtin.import_tasks: fixhttp.yml
   when: freeipa_role == "master"
