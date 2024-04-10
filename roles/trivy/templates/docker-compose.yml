@@ -1,0 +1,41 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+volumes:
+  cache:
+
+services:
+
+  app:
+    image: "{{ trivy_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "trivy"
+    networks:
+      - traefik_proxy
+    expose:
+      - 80
+    mem_limit: 512M
+    environment:
+      TZ: "America/New_York"
+      PHP_TZ: "America/New_York"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "cache:/root/.cache/trivy"
+    command: server --listen 0.0.0.0:80 --token "{{ trivy_token }}"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.trivy.entrypoints: "http, https"
+      traefik.http.routers.trivy.rule: "Host(`{{ trivy_traefik_address }}`)"
+{% if common_traefik_tls %}
+      traefik.http.routers.trivy.tls: "true"
+{% endif %}
+{% if common_traefik_tls and common_traefik_certresolver != "none" %}
+      traefik.http.routers.trivy.tls.certresolver: "{{ common_traefik_certresolver }}"
+      traefik.http.routers.trivy.tls.domains[0].main: "{{ trivy_traefik_address }}"
+{% endif %}
