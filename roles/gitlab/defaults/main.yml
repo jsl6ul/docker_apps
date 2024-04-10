@@ -44,19 +44,21 @@ gitlab_omnibus_config: |
     }
   }
 
-# Dockerfile to build the gitlab runner container
 gitlab_runner_dockerfile: |
+  # Dockerfile to build the gitlab runner container
   FROM debian:12
-  ENV ANSIBLE_HOST_KEY_CHECKING false
-  ENV ANSIBLE_RETRY_FILES_ENABLED false
-  RUN /usr/bin/apt-get update
-  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -y upgrade
-  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -y dist-upgrade
-  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -y install \
+  ENV DEBIAN_FRONTEND=noninteractive
+  RUN <<EOF
+  /usr/bin/apt-get update
+  /usr/bin/apt-get -y upgrade
+  /usr/bin/apt-get -y dist-upgrade
+  /usr/bin/apt-get -y install \
     --no-install-recommends --no-install-suggests \
     ansible ansible-lint coreutils curl git jq openssh-client \
     python3 python3-dev tar wget python3-dnspython python3-netaddr python3-pip
-  RUN /usr/bin/apt-get clean
-  RUN mkdir -p -m 0700 ~/.ssh && echo "StrictHostKeyChecking no\n" > ~/.ssh/config
-  RUN mkdir -p /workdir
+  /usr/bin/apt-get clean
+  mkdir -p -m 0700 ~/.ssh
+  echo "StrictHostKeyChecking no\n" > ~/.ssh/config
+  mkdir -p /workdir
+  EOF
   WORKDIR /workdir

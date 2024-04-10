@@ -22,3 +22,5 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
 Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml" 
 ```
 
+
+Overwrite `gitlab_runner_dockerfile` to configure your cicd container according to your needs.
