@@ -1,6 +1,6 @@
 ---
 # docker image
-traefik_docker_image: "docker.io/traefik:v2.11"
+traefik_docker_image: "docker.io/traefik"
 
 # default trafik ports
 traefik_ports:
