@@ -24,3 +24,46 @@ Configuration (with the authentication token) was saved in "/etc/gitlab-runner/c
 
 
 Overwrite `gitlab_runner_dockerfile` to configure your cicd container according to your needs.
+
+
+# Simple .gitlab-ci.yml test
+
+The role bind-mount the Dockerfile inside the runner container, in `/root/Dockerfile`, 
+and the build process must use `docker build - --tag cicd:latest < /root/Dockerfile`.
+
+A simple `.gitlab-ci.yml`:
+
+```
+---
+stages:
+  - build
+  - test
+
+variables:
+  DOCKER_DRIVER: overlay2
+  PLAYBOOKS: "playbooks/*.yml"
+  ANSIBLE_CONFIG: "./ansible.cfg"
+  ANSIBLE_VAULT_PASSWORD_FILE: "/root/vault.pass"
+  ANSIBLE_REMOTE_USER: "runner"
+  ANSIBLE_FORCE_COLOR: "true"
+
+build cicd image:
+  stage: build
+  tags:
+    - sometag
+  before_script:
+    - docker info
+    # - docker pull debian:12   # don't pull every time
+  script:
+    - docker build - --tag cicd:latest < /root/Dockerfile
+
+test cicd image:
+  image:
+    name: cicd:latest
+    pull_policy: never   # we never pull, we build. (available: always, if-not-present, never)
+  stage: test
+  tags:
+    - sometag
+  script:
+    - ansible -i hosts.yml all -m ping
+```
