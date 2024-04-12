@@ -9,6 +9,9 @@ gitlab_traefik_address: "gitlab.{{ common_apps_domain }}"
 gitlab_mem_limit: 4096M
 gitlab_runner_mem_limit: 3072M
 
+gitlab_cpus: 2
+gitlab_runner_cpus: 2
+
 # gitlab external ssh port
 gitlab_shell_ssh_port: 2222
 gitlab_ports:
@@ -20,8 +23,18 @@ gitlab_log_level: ERROR
 
 # Configuration settings using the Omnibus package
 # https://docs.gitlab.com/omnibus/settings/configuration.html
+# https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
 gitlab_omnibus_config: |
   external_url 'https://{{ gitlab_traefik_address }}'
+  gitlab_rails['gitlab_shell_ssh_port'] = {{ gitlab_shell_ssh_port }}
+  gitlab_shell['log_level'] = '{{ gitlab_log_level }}'
+  nginx['listen_https'] = false
+  nginx['listen_port'] = 80
+  prometheus_monitoring['enable'] = false
+  puma['worker_processes'] = 0
+  registry['log_level'] = '{{ gitlab_log_level }}'
+  sidekiq['max_concurrency'] = 10
+  sidekiq['metrics_enabled'] = false
   gitlab_rails['env'] = {
     "GITLAB_LOG_LEVEL" => "{{ gitlab_log_level }}",
     "DEBUG" => "{{ gitlab_log_level }}",
@@ -30,18 +43,26 @@ gitlab_omnibus_config: |
     "IMPORT_DEBUG" => "{{ gitlab_log_level }}",
     "QA_LOG_LEVEL" => "{{ gitlab_log_level }}",
     "GRPC_LOG_LEVEL" => "{{ gitlab_log_level }}",
-    "LLM_DEBUG" => "{{ gitlab_log_level }}"
+    "LLM_DEBUG" => "{{ gitlab_log_level }}",
+    "MALLOC_CONF" => "dirty_decay_ms:1000,muzzy_decay_ms:1000"
   }
-  gitlab_rails['gitlab_shell_ssh_port'] = {{ gitlab_shell_ssh_port }}
-  gitlab_shell['log_level'] = '{{ gitlab_log_level }}'
-  nginx['listen_https'] = false
-  nginx['listen_port'] = 80
-  registry['log_level'] = '{{ gitlab_log_level }}'
-  sidekiq['metrics_enabled'] = false
   gitaly['configuration'] = {
+    concurrency: [
+      {
+        'rpc' => "/gitaly.SmartHTTPService/PostReceivePack",
+        'max_per_repo' => 3,
+      }, {
+        'rpc' => "/gitaly.SSHService/SSHUploadPack",
+        'max_per_repo' => 3,
+      },
+    ],
     logging: {
       level: "{{ gitlab_log_level }}"
-    }
+    },
+  }
+  gitaly['env'] = {
+    'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2',
+    'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
   }
 
 gitlab_runner_dockerfile: |
@@ -59,6 +80,4 @@ gitlab_runner_dockerfile: |
   /usr/bin/apt-get clean
   mkdir -p -m 0700 ~/.ssh
   echo "StrictHostKeyChecking no\n" > ~/.ssh/config
-  mkdir -p /workdir
   EOF
-  WORKDIR /workdir
