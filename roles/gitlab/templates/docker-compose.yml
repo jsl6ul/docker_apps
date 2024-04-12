@@ -21,6 +21,7 @@ services:
     networks:
       - traefik_proxy
     ports: {{ gitlab_ports }}
+    cpus: {{ gitlab_cpus }}
     mem_limit: {{ gitlab_mem_limit }}
     environment:
       TZ: "America/New_York"
@@ -52,6 +53,7 @@ services:
       driver: journald
       options:
         tag: "gitlab-runner"
+    cpus: {{ gitlab_runner_cpus }}
     mem_limit: {{ gitlab_runner_mem_limit }}
     environment:
       TZ: "America/New_York"
