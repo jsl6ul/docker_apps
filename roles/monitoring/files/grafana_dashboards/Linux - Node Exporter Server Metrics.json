@@ -1754,14 +1754,14 @@
           },
           "targets": [
             {
-              "expr": "sum(increase(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[$__range]))",
+              "expr": "sum(increase(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[$__range]))",
               "instant": false,
               "intervalFactor": 2,
               "legendFormat": "Download",
               "refId": "A"
             },
             {
-              "expr": "sum(increase(node_network_transmit_bytes_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[$__range]))",
+              "expr": "sum(increase(node_network_transmit_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[$__range]))",
               "instant": false,
               "intervalFactor": 2,
               "legendFormat": "Upload",
@@ -1832,7 +1832,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_transmit_bytes_total{instance=~'$node',device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_bytes_total{instance=~'$node',device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "{{device}}_out",
@@ -1840,7 +1840,7 @@
               "step": 1200
             },
             {
-              "expr": "irate(node_network_receive_bytes_total{instance=~'$node',device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_bytes_total{instance=~'$node',device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "interval": "",
               "intervalFactor": 2,
               "legendFormat": "{{device}}_in",
