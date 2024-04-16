@@ -1557,7 +1557,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+          "expr": "rate(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "recv {{device}}",
@@ -1565,7 +1565,7 @@
           "step": 240
         },
         {
-          "expr": "rate(node_network_transmit_bytes_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+          "expr": "rate(node_network_transmit_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "trans {{device}} ",
@@ -2154,7 +2154,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive",
@@ -2162,7 +2162,7 @@
               "step": 240
             },
             {
-              "expr": "irate(node_network_transmit_bytes_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Transmit",
@@ -12661,7 +12661,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_packets_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_packets_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive",
@@ -12669,7 +12669,7 @@
               "step": 4
             },
             {
-              "expr": "irate(node_network_transmit_packets_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_packets_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Transmit",
@@ -12790,7 +12790,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_errs_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_errs_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive errors",
@@ -12798,7 +12798,7 @@
               "step": 4
             },
             {
-              "expr": "irate(node_network_transmit_errs_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_errs_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Rransmit errors",
@@ -12919,7 +12919,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_drop_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_drop_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive drop",
@@ -12927,7 +12927,7 @@
               "step": 4
             },
             {
-              "expr": "irate(node_network_transmit_drop_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_drop_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Transmit drop",
@@ -13048,7 +13048,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_compressed_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_compressed_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive compressed",
@@ -13056,7 +13056,7 @@
               "step": 4
             },
             {
-              "expr": "irate(node_network_transmit_compressed_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_compressed_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Transmit compressed",
@@ -13177,7 +13177,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_multicast_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_multicast_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive multicast",
@@ -13298,7 +13298,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_fifo_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_fifo_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Receive fifo",
@@ -13306,7 +13306,7 @@
               "step": 4
             },
             {
-              "expr": "irate(node_network_transmit_fifo_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_fifo_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Transmit fifo",
@@ -13427,7 +13427,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_receive_frame_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_receive_frame_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -13537,7 +13537,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_transmit_carrier_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_carrier_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Statistic transmit_carrier",
@@ -13646,7 +13646,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "irate(node_network_transmit_colls_total{instance=~\"$node\",device=~\"(eth|enp).*\"}[5m])",
+              "expr": "irate(node_network_transmit_colls_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{device}} - Transmit colls",

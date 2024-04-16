@@ -1148,7 +1148,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=~'$node',device=~\"(eth|enp).*\"}[30m])",
+          "expr": "irate(node_network_receive_bytes_total{instance=~'$node',device=~\"(eth|en|ib|sl|wl|ww).*\"}[30m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}_{{device}}_receive",
@@ -1156,7 +1156,7 @@
           "step": 4
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=~'$node',device=~\"(eth|enp).*\"}[30m])",
+          "expr": "irate(node_network_transmit_bytes_total{instance=~'$node',device=~\"(eth|en|ib|sl|wl|ww).*\"}[30m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}_{{device}}_transmit",
