@@ -65,6 +65,31 @@ gitlab_omnibus_config: |
     'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'
   }
 
+# GitLab integrates with LDAP to support user authentication.
+# https://docs.gitlab.com/ee/administration/auth/ldap/
+# gitlab_omnibus_config_ldap: |
+#   gitlab_rails['ldap_enabled'] = true
+#   gitlab_rails['ldap_servers'] = {
+#     'main' => {
+#       'label' => 'LDAP',
+#       'host' =>  'ldap.mydomain.com',
+#       'port' => 636,
+#       'uid' => 'sAMAccountName',
+#       'bind_dn' => 'CN=Gitlab,OU=Users,DC=domain,DC=com',
+#       'password' => '<bind_user_password>',
+#       'encryption' => 'simple_tls',
+#       'verify_certificates' => true,
+#       'timeout' => 10,
+#       'active_directory' => false,
+#       'user_filter' => '(employeeType=developer)',
+#       'base' => 'dc=example,dc=com',
+#       'lowercase_usernames' => 'false',
+#       'retry_empty_result_with_codes' => [80],
+#       'allow_username_or_email_login' => false,
+#       'block_auto_created_users' => false
+#     }
+#   }
+
 gitlab_runner_dockerfile: |
   # Dockerfile to build the gitlab runner container
   FROM debian:12
