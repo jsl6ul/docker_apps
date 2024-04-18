@@ -56,6 +56,14 @@
     mode: 0644
   notify: Restart containers
 
+- name: Copy grafana_ldap.toml
+  ansible.builtin.copy:
+    content: "{{ monitoring_grafana_ldap_toml }}"
+    dest: "{{ docker_project_dir }}/grafana_ldap.toml"
+    mode: 0640
+  when: monitoring_grafana_ldap_toml is defined
+  notify: Restart containers
+
 - name: Copy grafana dashboards
   ansible.builtin.copy:
     src: grafana_dashboards

@@ -126,6 +126,9 @@ services:
       - "grafana_plugins:/var/lib/grafana/plugins/"
       - "./grafana_providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
       - "./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+{% if monitoring_grafana_ldap_toml is defined %}
+      - "./grafana_ldap.toml:/etc/grafana/ldap.toml"
+{% endif %}
       - "./grafana_dashboards:/var/lib/grafana/dashboards/ansible/"
     environment:
       TZ: "America/New_York"

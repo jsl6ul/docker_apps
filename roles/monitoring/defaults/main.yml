@@ -125,7 +125,8 @@ monitoring_grafana_env: |
   GF_AUTH_ANONYMOUS_ENABLED=true
   GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
   GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
-
+  GF_AUTH_LDAP_ENABLED={{ true if monitoring_grafana_ldap_toml is defined else false }}
+  GF_AUTH_LDAP_CONFIG_FILE=/etc/grafana/ldap.toml
 
 # grafana_datasources.yml
 monitoring_grafana_datasources_yml: |
@@ -163,6 +164,48 @@ monitoring_grafana_providers_yml: |
       options:
         path: /var/lib/grafana/dashboards
         foldersFromFilesStructure: true
+
+
+# grafana_ldap.toml
+# monitoring_grafana_ldap_toml: |
+#   # https://grafana.com/docs/grafana/latest/auth/ldap/
+# 
+#   [[servers]]
+#   host = "ldap.example.com"
+#   port = 636
+#   use_ssl = true
+#   start_tls = false
+#   ssl_skip_verify = false
+#   bind_dn = "uid=bender,cn=users,cn=accounts,dc=example,dc=com"
+#   bind_password = "secret"
+#   search_filter = "(uid=%s)"
+#   search_base_dns = ["cn=users,cn=accounts,dc=example,dc=com"]
+# 
+#   [servers.attributes]
+#   name = "givenName"
+#   surname = "sn"
+#   username = "uid"
+#   member_of = "memberOf"
+#   email =  "mail"
+# 
+#   # group mapping
+#   [[servers.group_mappings]]
+#   group_dn = "cn=admin,cn=groups,cn=accounts,dc=example,dc=com"
+#   org_role = "Admin"
+#   grafana_admin = true
+#   org_id = 1
+# 
+#   [[servers.group_mappings]]
+#   group_dn = "cn=editor,cn=groups,cn=accounts,dc=example,dc=com"
+#   org_role = "Editor"
+#   grafana_admin = false
+#   org_id = 1
+# 
+#   [[servers.group_mappings]]
+#   group_dn = "cn=viewer,cn=groups,cn=accounts,dc=example,dc=com"
+#   org_role = "Viewer"
+#   grafana_admin = false
+#   org_id = 1
 
 
 # prometheus_alerts.yml
