@@ -27,6 +27,9 @@ services:
       TZ: "America/New_York"
       GITLAB_OMNIBUS_CONFIG: |
         {{ gitlab_omnibus_config|indent(8) }}
+{% if gitlab_omnibus_config_ldap is defined %}
+        {{ gitlab_omnibus_config_ldap|indent(8) }}
+{% endif %}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "config:/etc/gitlab"
