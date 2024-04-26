@@ -30,6 +30,7 @@
     dest: "{{ docker_project_dir }}/Dockerfile"
     content: "{{ gitlab_runner_dockerfile }}"
     mode: 0600
+  when: gitlab_runner_dockerfile is defined
 
 - name: Flush handlers
   meta: flush_handlers

@@ -6,8 +6,10 @@ https://docs.gitlab.com/ee/install/docker.html#install-gitlab-using-docker-engin
 
 # Gitlab runner
 
-Create a gitlab runner for your project, menu: `Project settings, CI/CD, Runners, New project runner, Create runner`,
-copy token and run `register-runner.sh`.
+A second container, for Gitlab Runner, will be created if you define a variable: `gitlab_runner_dockerfile`.
+
+Then create a gitlab runner for your project: `Project settings, CI/CD, Runners, New project runner, Create runner`,
+copy the token and run `register-runner.sh`.
 
 ```
 $ ssh dockeruser@host
@@ -21,9 +23,6 @@ Verifying runner... is valid
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml" 
 ```
-
-
-Overwrite `gitlab_runner_dockerfile` to configure your cicd container according to your needs.
 
 
 # Simple .gitlab-ci.yml test
