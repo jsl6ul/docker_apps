@@ -49,6 +49,7 @@ services:
       traefik.http.routers.gitlab.tls.domains[0].main: "{{ gitlab_traefik_address }}"
 {% endif %}
 
+{% if gitlab_runner_dockerfile is defined %}
   runner:
     image: "{{ gitlab_runner_docker_image }}"
     restart: unless-stopped
@@ -65,3 +66,4 @@ services:
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
     labels:
       traefik.enable: "false"
+{% endif %}
