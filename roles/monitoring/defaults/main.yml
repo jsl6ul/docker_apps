@@ -19,6 +19,14 @@ monitoring_alertmanager_main_receiver: "root@{{ common_apps_domain }}"
 
 monitoring_prometheus_retention_time: "365d"
 
+# Prometheus basic authentication using traefik.
+# Passwords must be hashed using MD5, SHA1, or BCrypt.
+# monitoring_prometheus_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+
+# Alert manager basic authentication using traefik.
+# Passwords must be hashed using MD5, SHA1, or BCrypt.
+# monitoring_alertmanager_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+
 # alertmanager.yml
 monitoring_alertmanager_yml: |
   global:
