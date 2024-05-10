@@ -23,9 +23,9 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "homeroot:/root"
-      - "./extras:/var/www/html/extras"
-      - "./keys:/var/www/html/keys"
-      - "./mirrors:/var/www/html/mirrors"
+      - "{{ mirrordeb_directory_extras }}:/var/www/html/extras"
+      - "{{ mirrordeb_directory_keys }}:/var/www/html/keys"
+      - "{{ mirrordeb_directory_mirrors }}:/var/www/html/mirrors"
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
