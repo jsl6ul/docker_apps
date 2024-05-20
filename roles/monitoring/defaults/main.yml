@@ -27,6 +27,28 @@ monitoring_prometheus_retention_time: "365d"
 # Passwords must be hashed using MD5, SHA1, or BCrypt.
 # monitoring_alertmanager_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
 
+# Volumes
+monitoring_prometheus_volumes:
+  - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+  - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
+  - "prometheus:/prometheus"
+
+monitoring_alertmanager_volumes:
+  - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+  - "alertmanager:/alertmanager"
+
+monitoring_blackbox_volumes:
+  - "./blackbox_config.yml:/etc/blackbox_exporter/config.yml"
+
+monitoring_grafana_volumes:
+  - "./grafana_dashboards:/var/lib/grafana/dashboards/"
+  - "./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+  - "./grafana_providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
+  - "grafana_plugins:/var/lib/grafana/plugins/"
+
+# Grafana plugins to install
+monitoring_grafana_install_plugins: "grafana-piechart-panel,vonage-status-panel"
+
 # alertmanager.yml
 monitoring_alertmanager_yml: |
   global:
@@ -129,7 +151,7 @@ monitoring_grafana_env: |
   GF_SECURITY_ADMIN_PASSWORD={{ monitoring_grafana_admin_password }}
   GF_SERVER_ROOT_URL=http://localhost:3000
   GF_SMTP_ENABLED=false
-  GF_INSTALL_PLUGINS=grafana-piechart-panel,vonage-status-panel
+  GF_INSTALL_PLUGINS={{ monitoring_grafana_install_plugins }}
   GF_AUTH_ANONYMOUS_ENABLED=true
   GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
   GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer

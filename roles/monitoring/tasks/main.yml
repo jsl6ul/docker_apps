@@ -66,8 +66,8 @@
 
 - name: Copy grafana dashboards
   ansible.builtin.copy:
-    src: grafana_dashboards
-    dest: "{{ docker_project_dir }}/"
+    src: grafana_dashboards/
+    dest: "{{ docker_project_dir }}/grafana_dashboards/ansible"
   notify: Restart containers
 
 - name: Copy grafana.env
