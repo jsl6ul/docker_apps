@@ -1,13 +1,11 @@
 ---
-freeipa_docker_image: "docker.io/freeipa/freeipa-server:rocky-9-4.10.1"
+# freeipa_docker_image: "docker.io/freeipa/freeipa-server:rocky-9-4.10.1"
+freeipa_docker_image: "docker.io/freeipa/freeipa-server:almalinux-9-4.11.0"
 
 freeipa_dns_servers:
   - 1.1.1.1
   - 8.8.8.8
   - 9.9.9.9
-
-# disable cgroup v2 pour freeipa
-docker_rootless_cgroupv2: false
 
 # freeipa directory server/manager password
 # freeipa_pwd_dm: <secret>
@@ -80,10 +78,10 @@ common_traefik_serversTransports: |
 
 # freeipa installation commands
 freeipa_command_master: |
-  ipa-server-install --admin-password='{{ freeipa_pwd_admin }}' --ds-password='{{ freeipa_pwd_dm }}' --domain={{ freeipa_realm }} --realm={{ freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp
+  ipa-server-install --admin-password='{{ freeipa_pwd_admin }}' --ds-password='{{ freeipa_pwd_dm }}' --domain={{ freeipa_realm }} --realm={{ freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check
 
 freeipa_command_replica: |
-  ipa-replica-install --admin-password='{{ freeipa_pwd_admin }}' --domain={{ freeipa_domain }} --realm={{ freeipa_realm | upper }} --server={{ freeipa_server_master }} --hostname={{ freeipa_hostname }}.{{ common_apps_domain }} --unattended --no-ntp --setup-ca
+  ipa-replica-install --admin-password='{{ freeipa_pwd_admin }}' --domain={{ freeipa_domain }} --realm={{ freeipa_realm | upper }} --server={{ freeipa_server_master }} --hostname={{ freeipa_hostname }}.{{ common_apps_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
 
 # if you have a "real" certificate, you need to add the following parameters to the above commands.
 # (it should works, but I didn't test it)

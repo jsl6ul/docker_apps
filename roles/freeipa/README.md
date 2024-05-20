@@ -7,12 +7,19 @@ Thanks to https://leo.leung.xyz/wiki/FreeIPA
 
 *(while freeipa replica servers accept the self-signed certificate of the master freeipa server, they will not accept a self-signed certificate from traefik. When using traefik, you must have a certificate from a valid authority provider.)*
 
+## Rootless container with systemd service and cgroup v2
 
-## Docker host on Debian 12
+The freeipa container uses a systemd service, and for it to work in rootless mode with cgroup v2, I had to do this:
 
-This role has been tested, and works perfectly with Debian-11, but something has changed with Debian-12, in rootless mode, 
-the container doesn't work because of a systemd-inside-docker-error. This needs to be investigated.
+- Create a systemd slice on the host. *(in `jsl6ul.docker_rootless_mode.roles`)*
+- Keep `docker_rootless_cgroupv2: true`
+- Add `--skip-mem-check` to the `freeipa_command_master` and `freeipa_command_replica`
+- Update docker-compose.yml
+  - Add `cgroup: host`
+  - Add `/sys/fs/cgroup/user.slice/user-nnnn.slice/user@nnnn.service:/sys/fs/cgroup/user.slice/user-nnnn.slice/user@nnnn.service:rw` read-write
+  - And keep `/sys/fs/cgroup:/sys/fs/cgroup:ro` read-only
 
+This configuration works with Debian 11 and Debian 12.
 
 ## Server role and alias
 
@@ -38,14 +45,12 @@ I don't know why, dns cache? old volumes/config?
 Removing volume and/or waiting 2 minutes before reinstalling seems to make the error disappear.
 Running `docker-compose up` manually seems to work every time.
 
-
 ## Freeipa & traefik
 
 You can use freeipa with traefik + let's encrypt. Only the web interface will be functional, realm clients will not be able to use this route to join the realm. Labels for traefik define a passthrough router for realm clients, and a second routers that use let's encrypt certificates.
 
 There are hard-coded redirects in freeipa that make it impossible to use the web interface via a proxy.
 This role patch `ipa-rewrite.conf` and `rpcserver.py` to give you this option. See the task file: `fixhttp.yml`
-
 
 ### Let's encrypt & passthrough
 If you're using other containers on the same host, you may have trouble configuring traefik + let's encrypt + passthrough.
@@ -55,7 +60,6 @@ The tldr is: **make sure that the name of the host running docker is not the nam
 
 So, using `ipahost1` in ansible inventory for the host running docker (ie. the dns A record) 
 and `ipa1` (a cname) as the `freeipa_hostname`, this will be the hostname "inside" the freeipa container, shoudl be fine.
-
 
 ## More information about freeipa behind proxy
 
