@@ -23,10 +23,27 @@ graylog_ports:
 # opensearch admin password
 # graylog_opensearch_admin_pwd: <secret>
 
+graylog_volumes:
+  - "./graylog.conf:/usr/share/graylog/data/config/graylog.conf"
+  - "journal:/usr/share/graylog/data/journal"
+  - "webconfig:/usr/share/graylog/data/config"
+
+graylog_mongo_volumes:
+  - "mongo:/data/db"
+
+graylog_opensearch_volumes:
+  - "opensearch:/usr/share/opensearch/data"
+
 # smtp server and port if you want graylog alerts by mail
 graylog_smtp_mailfrom: "graylog@{{ common_apps_domain }}"
-graylog_smtp_server: localhost
+graylog_smtp_server: "intranet.{{ common_apps_domain }}"
 graylog_smtp_port: 25
+graylog_smtp_enabled: false
+graylog_smtp_auth_username: nobody
+graylog_smtp_auth_password: secret
+graylog_smtp_use_auth: false
+graylog_smtp_use_ssl: false
+graylog_smtp_use_tls: false
 
 # graylog.conf file
 graylog_conf_file: |
@@ -59,16 +76,16 @@ graylog_conf_file: |
   root_timezone = Canada/Eastern
   root_username = admin
   rotation_strategy = count
-  transport_email_auth_password = secret
-  transport_email_auth_username = nobody
-  transport_email_enabled = false
+  transport_email_auth_password = {{ graylog_smtp_auth_password }}
+  transport_email_auth_username = {{ graylog_smtp_auth_username }}
+  transport_email_enabled = {{ graylog_smtp_enabled }}
   transport_email_from_email = {{ graylog_smtp_mailfrom }}
   transport_email_hostname = {{ graylog_smtp_server }}
   transport_email_port = {{ graylog_smtp_port }}
   transport_email_subject_prefix = [GRAYLOG]
-  transport_email_use_auth = false
-  transport_email_use_ssl = false
-  transport_email_use_tls = true
+  transport_email_use_auth = {{ graylog_smtp_use_auth }}
+  transport_email_use_ssl = {{ graylog_smtp_use_ssl }}
+  transport_email_use_tls = {{ graylog_smtp_use_tls }}
   transport_email_web_interface_url = https://{{ graylog_traefik_address }}
   # Performance problems ?
   inputbuffer_processors = 1
