@@ -27,7 +27,7 @@ services:
       PHP_TZ: "America/New_York"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "mongo:/data/db"
+      {{ graylog_mongo_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "false"
 
@@ -61,7 +61,7 @@ services:
         hard: 65536
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "opensearch:/usr/share/opensearch/data"
+      {{ graylog_opensearch_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "false"
 
@@ -91,9 +91,7 @@ services:
         hard: 65536
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "journal:/usr/share/graylog/data/journal"
-      - "webconfig:/usr/share/graylog/data/config"
-      - "./graylog.conf:/usr/share/graylog/data/config/graylog.conf"
+      {{ graylog_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
