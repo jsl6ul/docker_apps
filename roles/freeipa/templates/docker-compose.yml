@@ -28,6 +28,7 @@ services:
     dns: {{ freeipa_dns_servers }}
     ports: {{ freeipa_ports }}
     mem_limit: 2048M
+    cgroup: host
     environment:
       TZ: "America/New_York"
       PHP_TZ: "America/New_York"
@@ -37,6 +38,7 @@ services:
       - "data:/data"
       - "python:/usr/lib/python3.9/site-packages/ipaserver"
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - "/sys/fs/cgroup/user.slice/user-{{ docker_rootless_user.uid }}.slice/user@{{ docker_rootless_user.uid }}.service:/sys/fs/cgroup/user.slice/user-{{ docker_rootless_user.uid }}.slice/user@{{ docker_rootless_user.uid }}.service:rw"
       - "/etc/localtime:/etc/localtime:ro"
 {% if freeipa_cert is defined %}
       - "./freeipa_cert.crt:/etc/pki/CA/certs/freeipa_cert.crt:ro"

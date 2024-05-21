@@ -1,8 +1,4 @@
 ---
-- name: "Check required cgroup v1 (failed? set docker_rootless_cgroupv2: false, run docker_rootless_mode & reboot)"
-  ansible.builtin.shell: fgrep cgroup_hierarchy=0 /proc/cmdline
-  changed_when: false
-
 - name: Set project directory
   ansible.builtin.set_fact:
     docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
