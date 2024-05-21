@@ -36,7 +36,7 @@ graylog_opensearch_volumes:
 
 # smtp server and port if you want graylog alerts by mail
 graylog_smtp_mailfrom: "graylog@{{ common_apps_domain }}"
-graylog_smtp_server: "intranet.{{ common_apps_domain }}"
+graylog_smtp_server: "mail.{{ common_apps_domain }}"
 graylog_smtp_port: 25
 graylog_smtp_enabled: false
 graylog_smtp_auth_username: nobody
