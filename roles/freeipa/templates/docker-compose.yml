@@ -22,7 +22,7 @@ services:
     logging:
       driver: journald
       options:
-        tag: "freeipa"
+        tag: "freeipa-{{ freeipa_hostname }}"
     networks:
       - traefik_proxy
     dns: {{ freeipa_dns_servers }}
@@ -48,6 +48,7 @@ services:
 
     labels:
       traefik.enable: "{{ freeipa_traefik }}"
+{% if freeipa_traefik %}
       traefik.docker.network: "traefik_proxy"
 
       # https for realm clients, (ie. passthrough)
@@ -91,3 +92,4 @@ services:
       traefik.tcp.routers.ldapspt.tls.passthrough: "true"
       traefik.tcp.routers.ldapspt.service: "ldapspt"
       traefik.tcp.services.ldapspt.loadbalancer.server.port: "636"
+{% endif %}

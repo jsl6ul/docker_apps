@@ -32,6 +32,10 @@ vm2  freeipa_role=replica freeipa_hostname=ipa2
 vm3  freeipa_role=replica freeipa_hostname=ipa3
 ```
 
+In a multimaster topology, if you need to reinstall the master node, don't forget to modify these variables before running the playbook.
+- swap the `freeipa_role`, master/replica, with another vm
+- swap `freeipa_server_master` and `freeipa_server_replica1` or `freeipa_server_replica2`
+
 ## Another instance may already exist
 
 You may get this error when reinstalling
@@ -47,16 +51,29 @@ Running `docker-compose up` manually seems to work every time.
 
 ## Freeipa & traefik
 
-You can use freeipa with traefik + let's encrypt. Only the web interface will be functional, realm clients will not be able to use this route to join the realm. Labels for traefik define a passthrough router for realm clients, and a second routers that use let's encrypt certificates.
+You can use freeipa with traefik & let's encrypt. *(set `freeipa_traefik: true`)*
+
+Only the web interface will be functional, realm clients will not be able to use this route to join the realm. 
+Labels for traefik define a passthrough router for realm clients, and a second router that use let's encrypt 
+certificates for web ui and ldaps.
 
 There are hard-coded redirects in freeipa that make it impossible to use the web interface via a proxy.
 This role patch `ipa-rewrite.conf` and `rpcserver.py` to give you this option. See the task file: `fixhttp.yml`
 
+**WARNING** Even if it works for now, with freeipa 4.10 and 4.11, the regexg-replace that `fixhttp.yml` does will eventually 
+be a problem, needing to be updated to follow the freeipa code. It's just a bad solution that works for now. 
+(not to mention the fact that these two changes (removal of redirects and referer checks) reduce freeipa's security.)
+
+*These errors are symptoms indicating that the regular expression probably needs to be modified:
+'Login failed due to an unknown reason', 'ERROR: Rejecting request with bad Referer', 'HTTP Error 400: Bad Request'.*
+
 ### Let's encrypt & passthrough
 If you're using other containers on the same host, you may have trouble configuring traefik + let's encrypt + passthrough.
-The tldr is: **make sure that the name of the host running docker is not the name used for the freeipa container**, and you should be fine.
+The tldr is: **make sure that the name of the host running docker is not the name used for the freeipa container**, 
+and you should be fine.
 
-*(if the host running freeipa is also running other containers, such as glances or portainer, then let's encrypt certs for glances (using the hostname) will be reused for freeipa, and this will probably prevent your 'passthrough route' from working properly.)*
+*(if the host running freeipa is also running other containers, such as glances or portainer, then let's encrypt certs for 
+glances (using the hostname) will be reused for freeipa, and this will probably prevent your 'passthrough route' from working properly.)*
 
 So, using `ipahost1` in ansible inventory for the host running docker (ie. the dns A record) 
 and `ipa1` (a cname) as the `freeipa_hostname`, this will be the hostname "inside" the freeipa container, shoudl be fine.

@@ -22,17 +22,21 @@
 - name: Flush handlers
   meta: flush_handlers
 
-- name: Fix freeipa http on master server
+- name: Patch freeipa for traefik on master server
   ansible.builtin.import_tasks: fixhttp.yml
-  when: freeipa_role == "master"
+  when:
+    - freeipa_role == "master"
+    - freeipa_traefik
 
-- name: Fix freeipa http on replica servers
+- name: Patch freeipa for traefik on replica servers
   ansible.builtin.import_tasks: fixhttp.yml
-  when: freeipa_role == "replica"
+  when:
+    - freeipa_role == "replica"
+    - freeipa_traefik
 
 - name: Set replication between servers
   ansible.builtin.import_tasks: topologysegment.yml
+  run_once: true
   when:
     - freeipa_server_replica1 is defined
     - freeipa_server_replica2 is defined
-    - freeipa_role == "master"
