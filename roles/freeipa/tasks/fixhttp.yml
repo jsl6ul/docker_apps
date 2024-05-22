@@ -11,10 +11,14 @@
     replace: "{{ item.replace }}"
     backup: true
   with_items:
-    - { regexp: ^(RewriteRule \^/\$) (https://.*)(/ipa/ui.*)$, replace: \1 \3 }
-    - { regexp: ^(RewriteRule \^\/ipa\/\(.*)$, replace: "#\\1" }
-    - { regexp: ^(RewriteRule \^\/\(.*)$, replace: "#\\1" }
-    - { regexp: ^(RewriteCond .*)$, replace: "#\\1" }
+    - regexp: ^(RewriteRule \^/\$) (https://.*)(/ipa/ui.*)$
+      replace: \1 \3
+    - regexp: ^(RewriteRule \^\/ipa\/\(.*)$
+      replace: "#\\1"
+    - regexp: ^(RewriteRule \^\/\(.*)$
+      replace: "#\\1"
+    - regexp: ^(RewriteCond .*)$
+      replace: "#\\1"
   register: _fixredirect
 
 - name: "Waiting for file: rpcserver.py (max 15min)"
@@ -22,11 +26,18 @@
     path: "{{ ansible_env.HOME }}/.local/share/docker/volumes/freeipa_python/_data/rpcserver.py"
     timeout: 900
 
-- name: Deactivate HTTP RefererError
+- name: Disable HTTP referer checks
   ansible.builtin.replace:
     path: "{{ ansible_env.HOME }}/.local/share/docker/volumes/freeipa_python/_data/rpcserver.py"
-    regexp: ^([ ]*)(return self.marshal\(result, RefererError\(referer.*)$
-    replace: "\\1pass  # \\2"
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - regexp: ^([ ]*)(return self.marshal\(result\, RefererError\(referer.*)$
+      replace: "\\1pass  # \\2"
+    - regexp: ^([ ]*)(if not self.check_referer\(environ\)\:)$
+      replace: "\\1# \\2"
+    - regexp: ^([ ]*)(return self.bad_request\(environ\, start_response\, 'denied'\))$
+      replace: "\\1# \\2"
   register: _fixreferer
 
 - name: "Waiting for service: httpd (max 15min)"

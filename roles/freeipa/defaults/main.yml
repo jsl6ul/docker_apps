@@ -1,5 +1,4 @@
 ---
-# freeipa_docker_image: "docker.io/freeipa/freeipa-server:rocky-9-4.10.1"
 freeipa_docker_image: "docker.io/freeipa/freeipa-server:almalinux-9-4.11.0"
 
 freeipa_dns_servers:
