@@ -51,3 +51,7 @@ services:
       traefik.http.routers.traefik.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ common_apps_domain }}"
 {% endif %}
+
+{% if traefik_custom_labels is defined %}
+      {{ traefik_custom_labels|indent(6) }}
+{% endif %}

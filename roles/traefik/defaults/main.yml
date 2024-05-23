@@ -81,3 +81,6 @@ traefik_certresolver_settings: ""
 #   EASYDNS_PROPAGATION_TIMEOUT=3600
 #   # The TTL of the TXT record used for the DNS challenge
 #   EASYDNS_TTL=3601
+
+# If you need additional traefik labels, you can add them here.
+# traefik_custom_labels: ""
