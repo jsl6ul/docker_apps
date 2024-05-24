@@ -17,9 +17,9 @@ common_traefik_certresolver: none
 # how to set a provider from https://go-acme.github.io/lego/dns/
 # common_traefik_certresolver: mydomain
 
-# You can add Traefik ServersTransport using this.
-# https://doc.traefik.io/traefik/routing/services/#serverstransport_1
-# common_traefik_serversTransports: |
+# You can add Traefik configuration using file provider.
+# https://doc.traefik.io/traefik/providers/file/
+# common_traefik_file_provider: |
 #   http:
 #     serversTransports:
 #       mytransport:

@@ -26,8 +26,8 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
       - "data:/data"
-{% if common_traefik_serversTransports is defined %}
-      - "./serversTransports.yml:/etc/traefik/serversTransports.yml"
+{% if common_traefik_file_provider is defined %}
+      - "./file_provider.yml:/etc/traefik/file_provider.yml"
 {% endif %}
 {% if common_traefik_certresolver == "none" %}
       - "./traefik-tls.yml:/etc/traefik/tls.yml"
@@ -50,4 +50,8 @@ services:
 {% if common_traefik_tls and common_traefik_certresolver != "none" %}
       traefik.http.routers.traefik.tls.certresolver: "{{ common_traefik_certresolver }}"
       traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ common_apps_domain }}"
+{% endif %}
+
+{% if traefik_custom_labels is defined %}
+      {{ traefik_custom_labels|indent(6) }}
 {% endif %}
