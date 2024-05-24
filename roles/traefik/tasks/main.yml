@@ -8,24 +8,24 @@
     path: "{{ docker_project_dir }}"
     state: directory
 
-- name: Copy docker-compose file
+- name: Copy docker-compose.yml
   ansible.builtin.template:
     src: docker-compose.yml
     dest: "{{ docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
-- name: Create docker environment file
+- name: Copy traefik.env
   ansible.builtin.copy:
     dest: "{{ docker_project_dir }}/traefik.env"
     content: "{{ traefik_env_file }}"
     mode: 0640
   notify: Restart containers
 
-- name: Create traefik serverTransports file
+- name: Copy file_provider.yml
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/serversTransports.yml"
-    content: "{{ common_traefik_serversTransports }}"
-  when: common_traefik_serversTransports is defined
+    dest: "{{ docker_project_dir }}/file_provider.yml"
+    content: "{{ common_traefik_file_provider }}"
+  when: common_traefik_file_provider is defined
   notify: Restart containers
 
 - name: Import certificate.yml

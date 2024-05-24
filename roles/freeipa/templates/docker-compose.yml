@@ -67,7 +67,7 @@ services:
       traefik.http.services.freeipa.loadbalancer.server.port: "443"
       traefik.http.routers.freeipa.service: "freeipa"
       traefik.http.services.freeipa.loadbalancer.server.scheme: "https"
-{% if common_traefik_serversTransports is defined %}
+{% if common_traefik_file_provider is defined %}
       traefik.http.services.freeipa.loadbalancer.serverstransport: "freeipa@file"
 {% endif %}
 {% if common_traefik_tls and common_traefik_certresolver != "none" %}

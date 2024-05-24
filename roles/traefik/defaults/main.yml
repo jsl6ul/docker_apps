@@ -28,7 +28,7 @@ traefik_env_file: |
   TRAEFIK_ENTRYPOINTS_ldap_ADDRESS=:389
   TRAEFIK_ENTRYPOINTS_ldaps=true
   TRAEFIK_ENTRYPOINTS_ldaps_ADDRESS=:636
-  {% if common_traefik_serversTransports is defined %}
+  {% if common_traefik_file_provider is defined %}
   # file provider directory
   TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik
   {% endif %}
