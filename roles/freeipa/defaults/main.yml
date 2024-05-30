@@ -1,51 +1,51 @@
 ---
-freeipa_docker_image: "docker.io/freeipa/freeipa-server:almalinux-9-4.11.0"
+dapp_freeipa_docker_image: "docker.io/freeipa/freeipa-server:almalinux-9-4.11.0"
 
-freeipa_dns_servers:
+dapp_freeipa_dns_servers:
   - 1.1.1.1
   - 8.8.8.8
   - 9.9.9.9
 
 # freeipa directory server/manager password
-# freeipa_pwd_dm: <secret>
+# dapp_freeipa_pwd_dm: <secret>
 
 # freeipa admin password
-# freeipa_pwd_admin: <secret>
+# dapp_freeipa_pwd_admin: <secret>
 
 # freeipa certificate pin
-# freeipa_crt_pin: <secret>
+# dapp_freeipa_crt_pin: <secret>
 
 # The following variables should probably be defined in group_vars/all.yml
 # as they are used in several roles and playbooks.
-freeipa_realm: "{{ common_apps_domain }}"
-freeipa_domain: "{{ common_apps_domain }}"
+dapp_freeipa_realm: "{{ dapp_common_apps_domain }}"
+dapp_freeipa_domain: "{{ dapp_common_apps_domain }}"
 
-# freeipa_server_master: "ipa1.{{ common_apps_domain }}"
+# dapp_freeipa_server_master: "ipa1.{{ dapp_common_apps_domain }}"
 
 # If you have 3 freeipa server, you can define replica1 and
 # replica2 to set Domain & CA replication between them.
-# freeipa_server_replica1: "ipa2.{{ common_apps_domain }}"
-# freeipa_server_replica2: "ipa3.{{ common_apps_domain }}"
+# dapp_freeipa_server_replica1: "ipa2.{{ dapp_common_apps_domain }}"
+# dapp_freeipa_server_replica2: "ipa3.{{ dapp_common_apps_domain }}"
 
-# freeipa_enroll_principal: enrolluser
-# freeipa_enroll_pwd: <secret>
+# dapp_freeipa_enroll_principal: enrolluser
+# dapp_freeipa_enroll_pwd: <secret>
 
-# freeipa_bldap_principal: bindldapuser
-# freeipa_bldap_pwd: <secret>
+# dapp_freeipa_bldap_principal: bindldapuser
+# dapp_freeipa_bldap_pwd: <secret>
 
 # do not validate self-signed certificates
-freeipa_validate_certs: false
+dapp_freeipa_validate_certs: false
 
 # configure freeipa with traefik proxy
-freeipa_traefik: false
+dapp_freeipa_traefik: false
 
 # server name to access freeipa web using traefik & let's encrypt
-freeipa_https_traefik_address: "ipa.{{ common_apps_domain }}"
+dapp_freeipa_https_traefik_address: "ipa.{{ dapp_common_apps_domain }}"
 
 # server name to access freeipa ldaps using traefik & let's encrypt
-freeipa_ldaps_traefik_address: "ldap.{{ common_apps_domain }}"
+dapp_freeipa_ldaps_traefik_address: "ldap.{{ dapp_common_apps_domain }}"
 
-freeipa_ports:
+dapp_freeipa_ports:
   # dns
   #- "53:53/tcp"     # if you want freeipa as dns server
   #- "53:53/udp"
@@ -66,27 +66,27 @@ freeipa_ports:
 
 # Use file provider to add a serversTransports for connection between traefik proxy
 # and freeipa service. freeipa forces https so traefik must accept freeipa's selfsigned certificate.
-common_traefik_file_provider: |
+dapp_common_traefik_file_provider: |
   http:
     serversTransports:
       freeipa:
-        serverName: "{{ freeipa_hostname }}.{{ common_apps_domain }}"
+        serverName: "{{ dapp_freeipa_hostname }}.{{ dapp_common_apps_domain }}"
         insecureSkipVerify: "true"
 
 
 # freeipa installation commands
-freeipa_command_master: |
-  ipa-server-install --admin-password='{{ freeipa_pwd_admin }}' --ds-password='{{ freeipa_pwd_dm }}' --domain={{ freeipa_realm }} --realm={{ freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check
+dapp_freeipa_command_master: |
+  ipa-server-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --ds-password='{{ dapp_freeipa_pwd_dm }}' --domain={{ dapp_freeipa_realm }} --realm={{ dapp_freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check
 
-freeipa_command_replica: |
-  ipa-replica-install --admin-password='{{ freeipa_pwd_admin }}' --domain={{ freeipa_domain }} --realm={{ freeipa_realm | upper }} --server={{ freeipa_server_master }} --hostname={{ freeipa_hostname }}.{{ common_apps_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
+dapp_freeipa_command_replica: |
+  ipa-replica-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --domain={{ dapp_freeipa_domain }} --realm={{ dapp_freeipa_realm | upper }} --server={{ dapp_freeipa_server_master }} --hostname={{ dapp_freeipa_hostname }}.{{ dapp_common_apps_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
 
 # if you have a "real" certificate, you need to add the following parameters to the above commands.
 # (it should works, but I didn't test it)
 
-# --no-pkinit --http-pin {{ freeipa_crt_pin }} --dirsrv-pin {{ freeipa_crt_pin }} --http-cert-file /etc/pki/CA/certs/freeipa_cert.crt --http-cert-file /etc/pki/CA/private/freeipa_cert.key --dirsrv-cert-file /etc/pki/CA/certs/freeipa_cert.crt --dirsrv-cert-file /etc/pki/CA/private/freeipa_cert.key
+# --no-pkinit --http-pin {{ dapp_freeipa_crt_pin }} --dirsrv-pin {{ dapp_freeipa_crt_pin }} --http-cert-file /etc/pki/CA/certs/freeipa_cert.crt --http-cert-file /etc/pki/CA/private/freeipa_cert.key --dirsrv-cert-file /etc/pki/CA/certs/freeipa_cert.crt --dirsrv-cert-file /etc/pki/CA/private/freeipa_cert.key
 
 # certificat for ldaps & https. not used, using freeipa self-signed certificate.
-# freeipa_cert:
+# dapp_freeipa_cert:
 #   crt: <fixme>
 #   key: <secret>

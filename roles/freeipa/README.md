@@ -13,7 +13,7 @@ The freeipa container uses a systemd service, and for it to work in rootless mod
 
 - Create a systemd slice on the host. *(in `jsl6ul.docker_rootless_mode.roles`)*
 - Keep `docker_rootless_cgroupv2: true`
-- Add `--skip-mem-check` to the `freeipa_command_master` and `freeipa_command_replica`
+- Add `--skip-mem-check` to the `dapp_freeipa_command_master` and `dapp_freeipa_command_replica`
 - Update docker-compose.yml
   - Add `cgroup: host`
   - Add `/sys/fs/cgroup/user.slice/user-nnnn.slice/user@nnnn.service:/sys/fs/cgroup/user.slice/user-nnnn.slice/user@nnnn.service:rw` read-write
@@ -23,18 +23,18 @@ This configuration works with Debian 11 and Debian 12.
 
 ## Server role and alias
 
-You have to set a `freeipa_role` and `freeipa_hostname` for each host.
+You have to set a `dapp_freeipa_role` and `dapp_freeipa_hostname` for each host.
 
 ```
 [freeipa]
-vm1  freeipa_role=master  freeipa_hostname=ipa1
-vm2  freeipa_role=replica freeipa_hostname=ipa2
-vm3  freeipa_role=replica freeipa_hostname=ipa3
+vm1  dapp_freeipa_role=master  dapp_freeipa_hostname=ipa1
+vm2  dapp_freeipa_role=replica dapp_freeipa_hostname=ipa2
+vm3  dapp_freeipa_role=replica dapp_freeipa_hostname=ipa3
 ```
 
 In a multimaster topology, if you need to reinstall the master node, don't forget to modify these variables before running the playbook.
-- swap the `freeipa_role`, master/replica, with another vm
-- swap `freeipa_server_master` and `freeipa_server_replica1` or `freeipa_server_replica2`
+- swap the `dapp_freeipa_role`, master/replica, with another vm
+- swap `dapp_freeipa_server_master` and `dapp_freeipa_server_replica1` or `dapp_freeipa_server_replica2`
 
 ## Another instance may already exist
 
@@ -51,7 +51,7 @@ Running `docker-compose up` manually seems to work every time.
 
 ## Freeipa & traefik
 
-You can use freeipa with traefik & let's encrypt. *(set `freeipa_traefik: true`)*
+You can use freeipa with traefik & let's encrypt. *(set `dapp_freeipa_traefik: true`)*
 
 Only the web interface will be functional, realm clients will not be able to use this route to join the realm. 
 Labels for traefik define a passthrough router for realm clients, and a second router that use let's encrypt 
@@ -76,7 +76,7 @@ and you should be fine.
 glances (using the hostname) will be reused for freeipa, and this will probably prevent your 'passthrough route' from working properly.)*
 
 So, using `ipahost1` in ansible inventory for the host running docker (ie. the dns A record) 
-and `ipa1` (a cname) as the `freeipa_hostname`, this will be the hostname "inside" the freeipa container, shoudl be fine.
+and `ipa1` (a cname) as the `dapp_freeipa_hostname`, this will be the hostname "inside" the freeipa container, shoudl be fine.
 
 ## More information about freeipa behind proxy
 
