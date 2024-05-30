@@ -1,0 +1,28 @@
+---
+# These tasks have not been tested.
+- name: Copy certificate
+  ansible.builtin.copy:
+    content: |
+      {{ dapp_freeipa_cert.crt }}
+    dest: "{{ _docker_project_dir }}/freeipa_cert.crt"
+
+- name: Copy certificate key
+  ansible.builtin.copy:
+    content: |
+      {{ dapp_freeipa_cert.key }}
+    dest: "{{ _docker_project_dir }}/freeipa_cert.key.tmp"
+  changed_when: false
+
+- name: Encrypt certificate key using pin
+  ansible.builtin.shell: "cat {{ _docker_project_dir }}/freeipa_cert.key.tmp | openssl rsa -aes256 -out {{ _docker_project_dir }}/freeipa_cert.key -passout env:openssl_pw"
+  args:
+    creates: "{{ _docker_project_dir }}/freeipa_cert.key"
+  environment:
+    openssl_pw: "{{ dapp_freeipa_crt_pin }}"
+  changed_when: false
+
+- name: Remove temporary file
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}/freeipa_cert.key.tmp"
+    state: absent
+  changed_when: false
