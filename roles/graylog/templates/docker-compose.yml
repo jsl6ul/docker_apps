@@ -13,7 +13,7 @@ networks:
 services:
 
   mongo:
-    image: "{{ graylog_mongo_docker_image }}"
+    image: "{{ dapp_graylog_mongo_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -27,12 +27,12 @@ services:
       PHP_TZ: "America/New_York"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ graylog_mongo_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_graylog_mongo_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "false"
 
   opensearch:
-    image: "{{ graylog_opensearch_docker_image }}"
+    image: "{{ dapp_graylog_opensearch_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -51,7 +51,7 @@ services:
       # access opensearch using http
       plugins.security.disabled: "true"
       #reindex.remote.whitelist: "*:9200"
-      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ graylog_opensearch_admin_pwd }}"
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ dapp_graylog_opensearch_admin_pwd }}"
     ulimits:
       memlock:
         soft: -1
@@ -61,12 +61,12 @@ services:
         hard: 65536
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ graylog_opensearch_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_graylog_opensearch_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "false"
 
   app:
-    image: "{{ graylog_docker_image }}"
+    image: "{{ dapp_graylog_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -79,7 +79,7 @@ services:
     environment:
       TZ: "America/New_York"
       PHP_TZ: "America/New_York"
-    ports: {{ graylog_ports }}
+    ports: {{ dapp_graylog_ports }}
     expose:
       - "80"
     ulimits:
@@ -91,17 +91,17 @@ services:
         hard: 65536
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ graylog_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_graylog_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-      traefik.http.routers.graylog.rule: "Host(`{{ graylog_traefik_address }}`)"
-{% if common_traefik_tls %}
+      traefik.http.routers.graylog.rule: "Host(`{{ dapp_graylog_traefik_address }}`)"
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.graylog.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.graylog.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.graylog.tls.domains[0].main: "{{ graylog_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.graylog.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.graylog.tls.domains[0].main: "{{ dapp_graylog_traefik_address }}"
 {% endif %}
     links:
       - "mongo:mongo"

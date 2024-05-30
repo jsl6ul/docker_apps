@@ -9,7 +9,7 @@ networks:
 services:
 
   app:
-    image: "{{ traefik_docker_image }}"
+    image: "{{ dapp_traefik_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -18,7 +18,7 @@ services:
     networks:
       - proxy
     mem_limit: 512M
-    ports: {{ traefik_ports }}
+    ports: {{ dapp_traefik_ports }}
     environment:
       TZ: "America/New_York"
       PHP_TZ: "America/New_York"
@@ -26,10 +26,10 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
       - "data:/data"
-{% if common_traefik_file_provider is defined %}
+{% if dapp_common_traefik_file_provider is defined %}
       - "./file_provider.yml:/etc/traefik/file_provider.yml"
 {% endif %}
-{% if common_traefik_certresolver == "none" %}
+{% if dapp_common_traefik_certresolver == "none" %}
       - "./traefik-tls.yml:/etc/traefik/tls.yml"
       - "./traefik-cert.crt:/etc/ssl/traefik/cert.crt"
       - "./traefik-cert.key:/etc/ssl/traefik/cert.key"
@@ -37,21 +37,21 @@ services:
     env_file: traefik.env
     labels:
       traefik.enable: "true"
-      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ common_apps_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_apps_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       traefik.http.routers.dashboard.entrypoints: "http, https"
       traefik.http.routers.dashboard.service: "api@internal"
 
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.dashboard.tls: "true"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
       #traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
 {% endif %}
 
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.traefik.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ common_apps_domain }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.traefik.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_apps_domain }}"
 {% endif %}
 
-{% if traefik_custom_labels is defined %}
-      {{ traefik_custom_labels|indent(6) }}
+{% if dapp_traefik_custom_labels is defined %}
+      {{ dapp_traefik_custom_labels|indent(6) }}
 {% endif %}

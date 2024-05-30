@@ -1,25 +1,25 @@
 ---
 # main directory for docker apps project. (relative to docker_rootless_home)
-common_apps_directory: docker
+dapp_common_apps_directory: docker
 
 # dns domain name for traefik rules and let's encrypt certificate management.
-common_apps_domain: localdomain
+dapp_common_apps_domain: localdomain
 
 # configure traefik with tls and certificates
-common_traefik_tls: true
+dapp_common_traefik_tls: true
 
 # cert resolver for traefik & let's encrypt
 # set to 'none' if you already have your certificate and/or using self-signed certificate.
-common_traefik_certresolver: none
+dapp_common_traefik_certresolver: none
 
 # for let's encrypt, set the 'certresolver' to something else than 'none'.
 # and look at 'docker_apps/roles/traefik/defaults/main.yml' for an example of
 # how to set a provider from https://go-acme.github.io/lego/dns/
-# common_traefik_certresolver: mydomain
+# dapp_common_traefik_certresolver: mydomain
 
 # You can add Traefik configuration using file provider.
 # https://doc.traefik.io/traefik/providers/file/
-# common_traefik_file_provider: |
+# dapp_common_traefik_file_provider: |
 #   http:
 #     serversTransports:
 #       mytransport:

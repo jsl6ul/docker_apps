@@ -1,22 +1,22 @@
 ---
 # docker image
-mirrordeb_docker_image: "localbuild/mirrordeb"
+dapp_mirrordeb_docker_image: "localbuild/mirrordeb"
 
 # service address
-mirrordeb_traefik_address: "mirror.{{ common_apps_domain }}"
+dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_apps_domain }}"
 
-# You can modify the following 'mirrordeb_directory_*' variables, but if you do,
+# You can modify the following 'dapp_mirrordeb_directory_*' variables, but if you do,
 # you'll have to create the directories yourself; this role won't do it.
 
 # main directory for debmirror destination
-mirrordeb_directory_mirrors: "./mirrors"
+dapp_mirrordeb_directory_mirrors: "./mirrors"
 # directory for 'extras' packages
-mirrordeb_directory_extras: "./extras"
+dapp_mirrordeb_directory_extras: "./extras"
 # directory for key files
-mirrordeb_directory_keys: "./keys"
+dapp_mirrordeb_directory_keys: "./keys"
 
 # mirror settings (remove '--dry-run' option when all is set)
-mirrordeb_mirrors:
+dapp_mirrordeb_mirrors:
   - name: debian
     host: debian.mirror.rafal.ca
     root: /debian
@@ -46,7 +46,7 @@ mirrordeb_mirrors:
     options: --nosource --i18n --passive --cleanup --verbose --dry-run
 
 # signing keys
-mirrordeb_signing_keys:
+dapp_mirrordeb_signing_keys:
   - https://ftp-master.debian.org/keys/archive-key-11.asc
   - https://ftp-master.debian.org/keys/archive-key-11-security.asc
   - https://ftp-master.debian.org/keys/archive-key-12.asc
@@ -57,7 +57,7 @@ mirrordeb_signing_keys:
   - https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf6ecb3762474eda9d21b7022871920d1991bc93c # Ubuntu Archive Automatic Signing Key(2018)
 
 # Dockerfile to build the container
-mirrordeb_dockerfile: |
+dapp_mirrordeb_dockerfile: |
   FROM debian:stable-slim
   RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get install -y --no-install-recommends debmirror ed gnupg gpgv curl nginx dpkg-dev && \
@@ -72,7 +72,7 @@ mirrordeb_dockerfile: |
   ENTRYPOINT ["/entrypoint.sh"]
 
 # container entrypoint.sh
-mirrordeb_entrypoint: |
+dapp_mirrordeb_entrypoint: |
   #!/bin/bash
   echo "start nginx ..."
   nginx
@@ -81,7 +81,7 @@ mirrordeb_entrypoint: |
   echo "update signing keys ..."
   touch /root/.gnupg/trustedkeys.gpg
   chmod 0600 /root/.gnupg/trustedkeys.gpg
-  {% for akey in mirrordeb_signing_keys %}
+  {% for akey in dapp_mirrordeb_signing_keys %}
   curl '{{ akey }}' | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
   {% endfor %}
 
@@ -90,7 +90,7 @@ mirrordeb_entrypoint: |
     echo "scan local packages ..."
     cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz
 
-  {% for amirror in mirrordeb_mirrors %}
+  {% for amirror in dapp_mirrordeb_mirrors %}
     echo "debmirror {{ amirror.name }} ..."
     debmirror {{ amirror.options }} \
       --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }} \
@@ -104,7 +104,7 @@ mirrordeb_entrypoint: |
   done
 
 # nging configuration file
-mirrordeb_nginx_conf: |
+dapp_mirrordeb_nginx_conf: |
   server {
     listen 80 default_server;
     listen [::]:80 default_server;

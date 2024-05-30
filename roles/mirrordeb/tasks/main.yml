@@ -1,55 +1,55 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
+    _docker_project_dir: "{{ dapp_common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}"
+    path: "{{ _docker_project_dir }}"
     state: directory
 
 - name: Create mirrors directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}/mirrors"
+    path: "{{ _docker_project_dir }}/mirrors"
     state: directory
 
 - name: Create extras directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}/extras"
+    path: "{{ _docker_project_dir }}/extras"
     state: directory
 
 - name: Create keys directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}/keys"
+    path: "{{ _docker_project_dir }}/keys"
     state: directory
 
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_project_dir }}/docker-compose.yml"
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Copy Dockerfile
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/Dockerfile"
-    content: "{{ mirrordeb_dockerfile }}"
+    dest: "{{ _docker_project_dir }}/Dockerfile"
+    content: "{{ dapp_mirrordeb_dockerfile }}"
   notify: Rebuild containers
 
 - name: Copy entrypoint.sh
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/entrypoint.sh"
-    content: "{{ mirrordeb_entrypoint }}"
+    dest: "{{ _docker_project_dir }}/entrypoint.sh"
+    content: "{{ dapp_mirrordeb_entrypoint }}"
   notify: Rebuild containers
 
 - name: Copy nginx.conf
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/nginx.conf"
-    content: "{{ mirrordeb_nginx_conf }}"
+    dest: "{{ _docker_project_dir }}/nginx.conf"
+    content: "{{ dapp_mirrordeb_nginx_conf }}"
   notify: Rebuild containers
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_project_dir }}" up -d
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
   changed_when: false
 
 - name: Flush handlers

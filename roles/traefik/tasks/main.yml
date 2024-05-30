@@ -1,43 +1,43 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
+    _docker_project_dir: "{{ dapp_common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}"
+    path: "{{ _docker_project_dir }}"
     state: directory
 
 - name: Copy docker-compose.yml
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_project_dir }}/docker-compose.yml"
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Copy traefik.env
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/traefik.env"
-    content: "{{ traefik_env_file }}"
+    dest: "{{ _docker_project_dir }}/traefik.env"
+    content: "{{ dapp_traefik_env_file }}"
     mode: 0640
   notify: Restart containers
 
 - name: Copy file_provider.yml
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/file_provider.yml"
-    content: "{{ common_traefik_file_provider }}"
-  when: common_traefik_file_provider is defined
+    dest: "{{ _docker_project_dir }}/file_provider.yml"
+    content: "{{ dapp_common_traefik_file_provider }}"
+  when: dapp_common_traefik_file_provider is defined
   notify: Restart containers
 
 - name: Import certificate.yml
   ansible.builtin.import_tasks: certificate.yml
   when:
-    - common_traefik_tls
-    - common_traefik_certresolver == "none"
+    - dapp_common_traefik_tls
+    - dapp_common_traefik_certresolver == "none"
   notify: Restart containers
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_project_dir }}" up -d
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
   changed_when: false
 
 - name: Flush handlers

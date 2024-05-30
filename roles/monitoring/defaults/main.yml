@@ -1,60 +1,60 @@
 ---
 # docker image
-monitoring_prometheus_docker_image: "docker.io/prom/prometheus"
-monitoring_alertmanager_docker_image: "docker.io/prom/alertmanager"
-monitoring_blackbox_docker_image: "docker.io/prom/blackbox-exporter"
-monitoring_grafana_docker_image: "docker.io/grafana/grafana"
+dapp_monitoring_prometheus_docker_image: "docker.io/prom/prometheus"
+dapp_monitoring_alertmanager_docker_image: "docker.io/prom/alertmanager"
+dapp_monitoring_blackbox_docker_image: "docker.io/prom/blackbox-exporter"
+dapp_monitoring_grafana_docker_image: "docker.io/grafana/grafana"
 
-monitoring_grafana_admin_password: secret
+dapp_monitoring_grafana_admin_password: secret
 
 # servers address
-monitoring_prometheus_traefik_address: "prometheus.{{ common_apps_domain }}"
-monitoring_alertmanager_traefik_address: "alertmanager.{{ common_apps_domain }}"
-monitoring_blackbox_traefik_address: "blackbox.{{ common_apps_domain }}"
-monitoring_grafana_traefik_address: "grafana.{{ common_apps_domain }}"
+dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_apps_domain }}"
+dapp_monitoring_alertmanager_traefik_address: "alertmanager.{{ dapp_common_apps_domain }}"
+dapp_monitoring_blackbox_traefik_address: "blackbox.{{ dapp_common_apps_domain }}"
+dapp_monitoring_grafana_traefik_address: "grafana.{{ dapp_common_apps_domain }}"
 
-monitoring_alertmanager_smtp_smarthost: "smtp.{{ common_apps_domain }}:25"
-monitoring_alertmanager_smtp_from: "alertmanager@{{ common_apps_domain }}"
-monitoring_alertmanager_main_receiver: "root@{{ common_apps_domain }}"
+dapp_monitoring_alertmanager_smtp_smarthost: "smtp.{{ dapp_common_apps_domain }}:25"
+dapp_monitoring_alertmanager_smtp_from: "alertmanager@{{ dapp_common_apps_domain }}"
+dapp_monitoring_alertmanager_main_receiver: "root@{{ dapp_common_apps_domain }}"
 
-monitoring_prometheus_retention_time: "365d"
+dapp_monitoring_prometheus_retention_time: "365d"
 
 # Prometheus basic authentication using traefik.
 # Passwords must be hashed using MD5, SHA1, or BCrypt.
-# monitoring_prometheus_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+# dapp_monitoring_prometheus_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
 
 # Alert manager basic authentication using traefik.
 # Passwords must be hashed using MD5, SHA1, or BCrypt.
-# monitoring_alertmanager_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+# dapp_monitoring_alertmanager_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
 
 # Volumes
-monitoring_prometheus_volumes:
+dapp_monitoring_prometheus_volumes:
   - "./prometheus.yml:/etc/prometheus/prometheus.yml"
   - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
   - "prometheus:/prometheus"
 
-monitoring_alertmanager_volumes:
+dapp_monitoring_alertmanager_volumes:
   - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
   - "alertmanager:/alertmanager"
 
-monitoring_blackbox_volumes:
+dapp_monitoring_blackbox_volumes:
   - "./blackbox_config.yml:/etc/blackbox_exporter/config.yml"
 
-monitoring_grafana_volumes:
+dapp_monitoring_grafana_volumes:
   - "./grafana_dashboards:/var/lib/grafana/dashboards/"
   - "./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
   - "./grafana_providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
   - "grafana_plugins:/var/lib/grafana/plugins/"
 
 # Grafana plugins to install
-monitoring_grafana_install_plugins: "grafana-piechart-panel,vonage-status-panel"
+dapp_monitoring_grafana_install_plugins: "grafana-piechart-panel,vonage-status-panel"
 
 # alertmanager.yml
-monitoring_alertmanager_yml: |
+dapp_monitoring_alertmanager_yml: |
   global:
     # The smarthost and SMTP sender used for mail notifications.
-    smtp_smarthost: "{{ monitoring_alertmanager_smtp_smarthost }}"
-    smtp_from: "{{ monitoring_alertmanager_smtp_from }}"
+    smtp_smarthost: "{{ dapp_monitoring_alertmanager_smtp_smarthost }}"
+    smtp_from: "{{ dapp_monitoring_alertmanager_smtp_from }}"
     smtp_require_tls: false
   route:
     group_by: ['alertname']
@@ -65,7 +65,7 @@ monitoring_alertmanager_yml: |
   receivers:
   - name: 'main_receiver'
     email_configs:
-    - to: "{{ monitoring_alertmanager_main_receiver }}"
+    - to: "{{ dapp_monitoring_alertmanager_main_receiver }}"
       send_resolved: true
   # Inhibition rules allow to mute a set of alerts given that another alert is firing.
   # We use this to mute any warning-level notifications if the same alert is already critical.
@@ -79,7 +79,7 @@ monitoring_alertmanager_yml: |
 
 
 # blackbox_config.yml
-monitoring_blackbox_config_yml: |
+dapp_monitoring_blackbox_config_yml: |
   modules:
     http_2xx:
       prober: http
@@ -147,19 +147,19 @@ monitoring_blackbox_config_yml: |
 
 
 # grafana.env
-monitoring_grafana_env: |
-  GF_SECURITY_ADMIN_PASSWORD={{ monitoring_grafana_admin_password }}
+dapp_monitoring_grafana_env: |
+  GF_SECURITY_ADMIN_PASSWORD={{ dapp_monitoring_grafana_admin_password }}
   GF_SERVER_ROOT_URL=http://localhost:3000
   GF_SMTP_ENABLED=false
-  GF_INSTALL_PLUGINS={{ monitoring_grafana_install_plugins }}
+  GF_INSTALL_PLUGINS={{ dapp_monitoring_grafana_install_plugins }}
   GF_AUTH_ANONYMOUS_ENABLED=true
   GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
   GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
-  GF_AUTH_LDAP_ENABLED={{ true if monitoring_grafana_ldap_toml is defined else false }}
+  GF_AUTH_LDAP_ENABLED={{ true if dapp_monitoring_grafana_ldap_toml is defined else false }}
   GF_AUTH_LDAP_CONFIG_FILE=/etc/grafana/ldap.toml
 
 # grafana_datasources.yml
-monitoring_grafana_datasources_yml: |
+dapp_monitoring_grafana_datasources_yml: |
   apiVersion: 1
   # list of datasources that should be deleted from the database
   deleteDatasources:
@@ -179,7 +179,7 @@ monitoring_grafana_datasources_yml: |
 
 
 # grafana_providers.yml
-monitoring_grafana_providers_yml: |
+dapp_monitoring_grafana_providers_yml: |
   apiVersion: 1
   providers:
     - name: dashboards
@@ -197,7 +197,7 @@ monitoring_grafana_providers_yml: |
 
 
 # grafana_ldap.toml
-# monitoring_grafana_ldap_toml: |
+# dapp_monitoring_grafana_ldap_toml: |
 #   # https://grafana.com/docs/grafana/latest/auth/ldap/
 # 
 #   [[servers]]
@@ -239,7 +239,7 @@ monitoring_grafana_providers_yml: |
 
 
 # prometheus_alerts.yml
-monitoring_prometheus_alerts_yml: |
+dapp_monitoring_prometheus_alerts_yml: |
   groups:
   - name: main
     rules:
@@ -372,7 +372,7 @@ monitoring_prometheus_alerts_yml: |
 
 
 # prometheus.yml
-monitoring_prometheus_yml: |
+dapp_monitoring_prometheus_yml: |
   # my global config
   global:
     scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.

@@ -1,15 +1,15 @@
 ---
 # docker image
-portainer_docker_image: "docker.io/portainer/portainer-ce:latest"
+dapp_portainer_docker_image: "docker.io/portainer/portainer-ce:latest"
 
 
 # portainer admin password
 #
 # 1. you can define a password (which will be added to a password file)
-# portainer_admin_password: secret
+# dapp_portainer_admin_password: secret
 #
 # 2. or a bcrypt hashed password (which will be added to the command line)
-# portainer_admin_password_hash: $2y$05$jftWaLxBEh9SjZ4mH3UU3uhviWpO3VootEEGbycLZpL15OjyXv.Im
+# dapp_portainer_admin_password_hash: $2y$05$jftWaLxBEh9SjZ4mH3UU3uhviWpO3VootEEGbycLZpL15OjyXv.Im
 #
 # bcrypt hashed created with htpasswd:
 # $ docker run --rm httpd:2.4-alpine htpasswd -nbB admin <password> | cut -d ":" -f 2

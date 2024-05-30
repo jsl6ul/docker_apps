@@ -1,36 +1,36 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
+    _docker_project_dir: "{{ dapp_common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}"
+    path: "{{ _docker_project_dir }}"
     state: directory
 
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_project_dir }}/docker-compose.yml"
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_project_dir }}" up -d
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
   changed_when: false
 
 - name: Copy gitlab runner register script
   ansible.builtin.template:
     src: register-runner.sh
-    dest: "{{ docker_project_dir }}/register-runner.sh"
+    dest: "{{ _docker_project_dir }}/register-runner.sh"
     mode: 0755
 
 - name: Copy gitlab runner Dockerfile
   ansible.builtin.copy:
-    dest: "{{ docker_project_dir }}/Dockerfile"
-    content: "{{ gitlab_runner_dockerfile }}"
+    dest: "{{ _docker_project_dir }}/Dockerfile"
+    content: "{{ dapp_gitlab_runner_dockerfile }}"
     mode: 0600
-  when: gitlab_runner_dockerfile is defined
+  when: dapp_gitlab_runner_dockerfile is defined
 
 - name: Flush handlers
   meta: flush_handlers

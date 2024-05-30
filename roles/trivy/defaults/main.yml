@@ -1,4 +1,4 @@
 ---
-trivy_docker_image: aquasec/trivy
-trivy_traefik_address: "trivy.{{ common_apps_domain }}"
-trivy_token: abc123
+dapp_trivy_docker_image: aquasec/trivy
+dapp_trivy_traefik_address: "trivy.{{ dapp_common_apps_domain }}"
+dapp_trivy_token: abc123
