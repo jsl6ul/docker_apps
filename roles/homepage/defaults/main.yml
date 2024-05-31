@@ -3,7 +3,7 @@
 dapp_homepage_docker_image: "ghcr.io/gethomepage/homepage"
 
 # homepage server address
-dapp_homepage_traefik_address: "www.{{ dapp_common_apps_domain }}"
+dapp_homepage_traefik_address: "www.{{ dapp_common_domain }}"
 
 # The homepage documentation is available at https://gethomepage.dev/.
 # icons from https://github.com/walkxcode/dashboard-icons

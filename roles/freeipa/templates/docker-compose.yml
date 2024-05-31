@@ -11,7 +11,7 @@ services:
 
   app:
     image: "{{ dapp_freeipa_docker_image }}"
-    hostname: "{{ dapp_freeipa_hostname }}.{{ dapp_common_apps_domain }}"
+    hostname: "{{ dapp_freeipa_hostname }}.{{ dapp_common_domain }}"
     sysctls:
       - "net.ipv6.conf.all.disable_ipv6=0"
     tmpfs:

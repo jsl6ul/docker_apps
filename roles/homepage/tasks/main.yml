@@ -1,7 +1,7 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    _docker_project_dir: "{{ dapp_common_apps_directory }}/{{ role_name }}"
+    _docker_project_dir: "{{ dapp_common_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:

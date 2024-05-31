@@ -3,7 +3,7 @@
 dapp_mirrordeb_docker_image: "localbuild/mirrordeb"
 
 # service address
-dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_apps_domain }}"
+dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_domain }}"
 
 # You can modify the following 'dapp_mirrordeb_directory_*' variables, but if you do,
 # you'll have to create the directories yourself; this role won't do it.

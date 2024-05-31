@@ -17,15 +17,15 @@ dapp_freeipa_dns_servers:
 
 # The following variables should probably be defined in group_vars/all.yml
 # as they are used in several roles and playbooks.
-dapp_freeipa_realm: "{{ dapp_common_apps_domain }}"
-dapp_freeipa_domain: "{{ dapp_common_apps_domain }}"
+dapp_freeipa_realm: "{{ dapp_common_domain }}"
+dapp_freeipa_domain: "{{ dapp_common_domain }}"
 
-# dapp_freeipa_server_master: "ipa1.{{ dapp_common_apps_domain }}"
+# dapp_freeipa_server_master: "ipa1.{{ dapp_common_domain }}"
 
 # If you have 3 freeipa server, you can define replica1 and
 # replica2 to set Domain & CA replication between them.
-# dapp_freeipa_server_replica1: "ipa2.{{ dapp_common_apps_domain }}"
-# dapp_freeipa_server_replica2: "ipa3.{{ dapp_common_apps_domain }}"
+# dapp_freeipa_server_replica1: "ipa2.{{ dapp_common_domain }}"
+# dapp_freeipa_server_replica2: "ipa3.{{ dapp_common_domain }}"
 
 # dapp_freeipa_enroll_principal: enrolluser
 # dapp_freeipa_enroll_pwd: <secret>
@@ -40,10 +40,10 @@ dapp_freeipa_validate_certs: false
 dapp_freeipa_traefik: false
 
 # server name to access freeipa web using traefik & let's encrypt
-dapp_freeipa_https_traefik_address: "ipa.{{ dapp_common_apps_domain }}"
+dapp_freeipa_https_traefik_address: "ipa.{{ dapp_common_domain }}"
 
 # server name to access freeipa ldaps using traefik & let's encrypt
-dapp_freeipa_ldaps_traefik_address: "ldap.{{ dapp_common_apps_domain }}"
+dapp_freeipa_ldaps_traefik_address: "ldap.{{ dapp_common_domain }}"
 
 dapp_freeipa_ports:
   # dns
@@ -70,7 +70,7 @@ dapp_common_traefik_file_provider: |
   http:
     serversTransports:
       freeipa:
-        serverName: "{{ dapp_freeipa_hostname }}.{{ dapp_common_apps_domain }}"
+        serverName: "{{ dapp_freeipa_hostname }}.{{ dapp_common_domain }}"
         insecureSkipVerify: "true"
 
 
@@ -79,7 +79,7 @@ dapp_freeipa_command_master: |
   ipa-server-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --ds-password='{{ dapp_freeipa_pwd_dm }}' --domain={{ dapp_freeipa_realm }} --realm={{ dapp_freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check
 
 dapp_freeipa_command_replica: |
-  ipa-replica-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --domain={{ dapp_freeipa_domain }} --realm={{ dapp_freeipa_realm | upper }} --server={{ dapp_freeipa_server_master }} --hostname={{ dapp_freeipa_hostname }}.{{ dapp_common_apps_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
+  ipa-replica-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --domain={{ dapp_freeipa_domain }} --realm={{ dapp_freeipa_realm | upper }} --server={{ dapp_freeipa_server_master }} --hostname={{ dapp_freeipa_hostname }}.{{ dapp_common_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
 
 # if you have a "real" certificate, you need to add the following parameters to the above commands.
 # (it should works, but I didn't test it)

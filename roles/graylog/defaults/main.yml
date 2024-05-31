@@ -5,7 +5,7 @@ dapp_graylog_mongo_docker_image: "docker.io/mongo:5.0.13"
 dapp_graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2"
 
 # graylog server address
-dapp_graylog_traefik_address: "graylog.{{ dapp_common_apps_domain }}"
+dapp_graylog_traefik_address: "graylog.{{ dapp_common_domain }}"
 
 # graylog listening ports
 dapp_graylog_ports:
@@ -35,8 +35,8 @@ dapp_graylog_opensearch_volumes:
   - "opensearch:/usr/share/opensearch/data"
 
 # smtp server and port if you want graylog alerts by mail
-dapp_graylog_smtp_mailfrom: "graylog@{{ dapp_common_apps_domain }}"
-dapp_graylog_smtp_server: "mail.{{ dapp_common_apps_domain }}"
+dapp_graylog_smtp_mailfrom: "graylog@{{ dapp_common_domain }}"
+dapp_graylog_smtp_server: "mail.{{ dapp_common_domain }}"
 dapp_graylog_smtp_port: 25
 dapp_graylog_smtp_enabled: false
 dapp_graylog_smtp_auth_username: nobody

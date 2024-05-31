@@ -3,4 +3,4 @@
 dapp_privatebin_docker_image: "docker.io/privatebin/nginx-fpm-alpine"
 
 # privatebin server address
-dapp_privatebin_traefik_address: "privatebin.{{ dapp_common_apps_domain }}"
+dapp_privatebin_traefik_address: "privatebin.{{ dapp_common_domain }}"
