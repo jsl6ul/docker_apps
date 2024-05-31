@@ -1,9 +1,9 @@
 ---
 # main directory for docker apps project. (relative to docker_rootless_home)
-dapp_common_apps_directory: docker
+dapp_common_directory: docker
 
 # dns domain name for traefik rules and let's encrypt certificate management.
-dapp_common_apps_domain: localdomain
+dapp_common_domain: localdomain
 
 # configure traefik with tls and certificates
 dapp_common_traefik_tls: true
