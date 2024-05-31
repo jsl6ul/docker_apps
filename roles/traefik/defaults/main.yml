@@ -1,14 +1,14 @@
 ---
 # docker image
-traefik_docker_image: "docker.io/traefik"
+dapp_traefik_docker_image: "docker.io/traefik"
 
 # default trafik ports
-traefik_ports:
+dapp_traefik_ports:
   - 80:80
   - 443:443
 
 # content of traefik.env file
-traefik_env_file: |
+dapp_traefik_env_file: |
   # traefik static configuration through envvars
   TRAEFIK_API=true
   TRAEFIK_API_DASHBOARD=true
@@ -28,28 +28,28 @@ traefik_env_file: |
   TRAEFIK_ENTRYPOINTS_ldap_ADDRESS=:389
   TRAEFIK_ENTRYPOINTS_ldaps=true
   TRAEFIK_ENTRYPOINTS_ldaps_ADDRESS=:636
-  {% if common_traefik_file_provider is defined %}
+  {% if dapp_common_traefik_file_provider is defined %}
   # file provider directory
   TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik
   {% endif %}
-  {% if common_traefik_certresolver != "none" %}
+  {% if dapp_common_traefik_certresolver != "none" %}
   # cert resolver settings
-  {{ traefik_certresolver_settings }}
+  {{ dapp_traefik_certresolver_settings }}
   {% endif %}
 
 # traefik certificat, insert your certificate here.
-traefik_certificate:
+dapp_traefik_certificate:
   crt: ""
   key: ""
 
-# no settings required with common_traefik_certresolver: none
+# no settings required with dapp_common_traefik_certresolver: none
 # defined in docker_apps/roles/common/defaults/main.yml
-traefik_certresolver_settings: ""
+dapp_traefik_certresolver_settings: ""
 
 # An example of how to setup traefik with a let's encrypt providers. https://go-acme.github.io/lego/dns/
-# 'traefik_certresolver_settings' will be append to the traefik.env template
-# common_traefik_certresolver: mydomain
-# traefik_certresolver_settings: |
+# 'dapp_traefik_certresolver_settings' will be append to the traefik.env template
+# dapp_common_traefik_certresolver: mydomain
+# dapp_traefik_certresolver_settings: |
 #   TRAEFIK_CERTIFICATESRESOLVERS_mydomain=true
 #   # caServer - staging
 #   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory
@@ -83,4 +83,4 @@ traefik_certresolver_settings: ""
 #   EASYDNS_TTL=3601
 
 # If you need additional traefik labels, you can add them here.
-# traefik_custom_labels: ""
+# dapp_traefik_custom_labels: ""

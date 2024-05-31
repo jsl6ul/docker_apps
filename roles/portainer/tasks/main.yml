@@ -1,30 +1,30 @@
 ---
 - name: Set project directory
   ansible.builtin.set_fact:
-    docker_project_dir: "{{ common_apps_directory }}/{{ role_name }}"
+    _docker_project_dir: "{{ dapp_common_apps_directory }}/{{ role_name }}"
 
 - name: Create project directory
   ansible.builtin.file:
-    path: "{{ docker_project_dir }}"
+    path: "{{ _docker_project_dir }}"
     state: directory
 
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
-    dest: "{{ docker_project_dir }}/docker-compose.yml"
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
 - name: Copy admin-password file
   ansible.builtin.copy:
-    content: "{{ portainer_admin_password }}"
-    dest: "{{ docker_project_dir }}/admin.pass"
+    content: "{{ dapp_portainer_admin_password }}"
+    dest: "{{ _docker_project_dir }}/admin.pass"
     mode: 0640
-  when: portainer_admin_password is defined
+  when: dapp_portainer_admin_password is defined
   notify: Restart containers
 
 - name: Start containers
   ansible.builtin.shell: |
-    docker compose --project-directory "{{ docker_project_dir }}" up -d
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
   changed_when: false
 
 - name: Flush handlers

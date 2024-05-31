@@ -9,7 +9,7 @@ networks:
 services:
   app:
     build: "./"
-    image: "{{ mirrordeb_docker_image }}"
+    image: "{{ dapp_mirrordeb_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -23,20 +23,20 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "homeroot:/root"
-      - "{{ mirrordeb_directory_extras }}:/var/www/html/extras"
-      - "{{ mirrordeb_directory_keys }}:/var/www/html/keys"
-      - "{{ mirrordeb_directory_mirrors }}:/var/www/html/mirrors"
+      - "{{ dapp_mirrordeb_directory_extras }}:/var/www/html/extras"
+      - "{{ dapp_mirrordeb_directory_keys }}:/var/www/html/keys"
+      - "{{ dapp_mirrordeb_directory_mirrors }}:/var/www/html/mirrors"
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.mirrordeb.entrypoints: "http"
-      traefik.http.routers.mirrordeb.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
-{% if common_traefik_tls %}
+      traefik.http.routers.mirrordeb.rule: "Host(`{{ dapp_mirrordeb_traefik_address }}`)"
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.mirrordebs.entrypoints: "https"
-      traefik.http.routers.mirrordebs.rule: "Host(`{{ mirrordeb_traefik_address }}`)"
+      traefik.http.routers.mirrordebs.rule: "Host(`{{ dapp_mirrordeb_traefik_address }}`)"
       traefik.http.routers.mirrordebs.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.mirrordebs.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.mirrordebs.tls.domains[0].main: "{{ mirrordeb_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.mirrordebs.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.mirrordebs.tls.domains[0].main: "{{ dapp_mirrordeb_traefik_address }}"
 {% endif %}

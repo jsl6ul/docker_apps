@@ -6,7 +6,7 @@ networks:
 services:
 
   app:
-    image: "{{ glances_docker_image }}"
+    image: "{{ dapp_glances_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -27,13 +27,13 @@ services:
       traefik.docker.network: "traefik_proxy"
       traefik.port: "61208"
       traefik.http.routers.glances.entrypoints: "http, https"
-      traefik.http.routers.glances.rule: "Host(`{{ inventory_hostname }}.{{ common_apps_domain }}`) && PathPrefix(`/glances`)"
+      traefik.http.routers.glances.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_apps_domain }}`) && PathPrefix(`/glances`)"
       traefik.http.middlewares.glancespstrip.stripprefix.prefixes: "/glances"
       traefik.http.routers.glances.middlewares: "glancespstrip"
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.glances.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.glances.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.glances.tls.domains[0].main: "{{ inventory_hostname }}.{{ common_apps_domain }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.glances.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.glances.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_apps_domain }}"
 {% endif %}

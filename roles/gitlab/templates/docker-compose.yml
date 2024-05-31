@@ -12,7 +12,7 @@ volumes:
 
 services:
   app:
-    image: "{{ gitlab_docker_image }}"
+    image: "{{ dapp_gitlab_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -20,15 +20,15 @@ services:
         tag: "gitlab"
     networks:
       - traefik_proxy
-    ports: {{ gitlab_ports }}
-    cpus: {{ gitlab_cpus }}
-    mem_limit: {{ gitlab_mem_limit }}
+    ports: {{ dapp_gitlab_ports }}
+    cpus: {{ dapp_gitlab_cpus }}
+    mem_limit: {{ dapp_gitlab_mem_limit }}
     environment:
       TZ: "America/New_York"
       GITLAB_OMNIBUS_CONFIG: |
-        {{ gitlab_omnibus_config|indent(8) }}
-{% if gitlab_omnibus_config_ldap is defined %}
-        {{ gitlab_omnibus_config_ldap|indent(8) }}
+        {{ dapp_gitlab_omnibus_config|indent(8) }}
+{% if dapp_gitlab_omnibus_config_ldap is defined %}
+        {{ dapp_gitlab_omnibus_config_ldap|indent(8) }}
 {% endif %}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -39,26 +39,26 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.gitlab.entrypoints: "http, https"
-      traefik.http.routers.gitlab.rule: "Host(`{{ gitlab_traefik_address }}`)"
+      traefik.http.routers.gitlab.rule: "Host(`{{ dapp_gitlab_traefik_address }}`)"
       traefik.http.services.gitlab.loadbalancer.server.port: "80"
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.gitlab.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.gitlab.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.gitlab.tls.domains[0].main: "{{ gitlab_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.gitlab.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.gitlab.tls.domains[0].main: "{{ dapp_gitlab_traefik_address }}"
 {% endif %}
 
-{% if gitlab_runner_dockerfile is defined %}
+{% if dapp_gitlab_runner_dockerfile is defined %}
   runner:
-    image: "{{ gitlab_runner_docker_image }}"
+    image: "{{ dapp_gitlab_runner_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
       options:
         tag: "gitlab-runner"
-    cpus: {{ gitlab_runner_cpus }}
-    mem_limit: {{ gitlab_runner_mem_limit }}
+    cpus: {{ dapp_gitlab_runner_cpus }}
+    mem_limit: {{ dapp_gitlab_runner_mem_limit }}
     environment:
       TZ: "America/New_York"
     volumes:

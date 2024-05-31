@@ -8,7 +8,7 @@ volumes:
 
 services:
   app:
-    image: "{{ portainer_docker_image }}"
+    image: "{{ dapp_portainer_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -19,31 +19,31 @@ services:
     mem_limit: 512M
     environment:
       TZ: "America/New_York"
-{% if portainer_admin_password is defined %}
+{% if dapp_portainer_admin_password is defined %}
     command: --admin-password-file=/admin.pass
-{% elif portainer_admin_password_hash is defined %}
+{% elif dapp_portainer_admin_password_hash is defined %}
     # password hash: escape $ with a second $
-    command: --admin-password="{{ portainer_admin_password_hash | regex_replace('\$','$$') }}"
+    command: --admin-password="{{ dapp_portainer_admin_password_hash | regex_replace('\$','$$') }}"
 {% endif %}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock:ro"
       - "data:/data"
-{% if portainer_admin_password is defined %}
+{% if dapp_portainer_admin_password is defined %}
       - "./admin.pass:/admin.pass"
 {% endif %}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.portainer.entrypoints: "http, https"
-      traefik.http.routers.portainer.rule: "Host(`{{ inventory_hostname }}.{{ common_apps_domain }}`) && PathPrefix(`/portainer`)"
+      traefik.http.routers.portainer.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_apps_domain }}`) && PathPrefix(`/portainer`)"
       traefik.http.middlewares.portainerpstrip.stripprefix.prefixes: "/portainer"
       traefik.http.routers.portainer.middlewares: "portainerpstrip"
       traefik.http.services.portainer.loadbalancer.server.port: "9000"
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.portainer.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.portainer.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.portainer.tls.domains[0].main: "{{ inventory_hostname }}.{{ common_apps_domain }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.portainer.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.portainer.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_apps_domain }}"
 {% endif %}

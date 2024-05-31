@@ -12,7 +12,7 @@ networks:
 services:
 
   prometheus:
-    image: "{{ monitoring_prometheus_docker_image }}"
+    image: "{{ dapp_monitoring_prometheus_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -24,7 +24,7 @@ services:
     mem_limit: 512M
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
     environment:
       TZ: "America/New_York"
       PHP_TZ: "America/New_York"
@@ -35,24 +35,24 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.prometheus.entrypoints: "http, https"
-      traefik.http.routers.prometheus.rule: "Host(`{{ monitoring_prometheus_traefik_address }}`)"
+      traefik.http.routers.prometheus.rule: "Host(`{{ dapp_monitoring_prometheus_traefik_address }}`)"
       traefik.http.services.prometheus.loadbalancer.server.port: "9090"
-{% if monitoring_prometheus_basicauth is defined %}
+{% if dapp_monitoring_prometheus_basicauth is defined %}
       # password hash: escape $ with a second $
-      traefik.http.middlewares.prometheusauth.basicauth.users: "{{ monitoring_prometheus_basicauth | regex_replace('\$','$$') }}"
+      traefik.http.middlewares.prometheusauth.basicauth.users: "{{ dapp_monitoring_prometheus_basicauth | regex_replace('\$','$$') }}"
       traefik.http.routers.prometheus.middlewares: "prometheusauth"
 {% endif %}
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.prometheus.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.prometheus.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.prometheus.tls.domains[0].main: "{{ monitoring_prometheus_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.prometheus.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.prometheus.tls.domains[0].main: "{{ dapp_monitoring_prometheus_traefik_address }}"
 {% endif %}
-    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --storage.tsdb.retention.time={{ monitoring_prometheus_retention_time }}
+    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --storage.tsdb.retention.time={{ dapp_monitoring_prometheus_retention_time }}
 
   alertmanager:
-    image: "{{ monitoring_alertmanager_docker_image }}"
+    image: "{{ dapp_monitoring_alertmanager_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -64,7 +64,7 @@ services:
     mem_limit: 512M
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
     environment:
       TZ: "America/New_York"
       PHP_TZ: "America/New_York"
@@ -72,23 +72,23 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.alertmanager.entrypoints: "http, https"
-      traefik.http.routers.alertmanager.rule: "Host(`{{ monitoring_alertmanager_traefik_address }}`)"
+      traefik.http.routers.alertmanager.rule: "Host(`{{ dapp_monitoring_alertmanager_traefik_address }}`)"
       traefik.http.services.alertmanager.loadbalancer.server.port: "9093"
-{% if monitoring_alertmanager_basicauth is defined %}
+{% if dapp_monitoring_alertmanager_basicauth is defined %}
       # password hash: escape $ with a second $
-      traefik.http.middlewares.alertmanagerauth.basicauth.users: "{{ monitoring_alertmanager_basicauth | regex_replace('\$','$$') }}"
+      traefik.http.middlewares.alertmanagerauth.basicauth.users: "{{ dapp_monitoring_alertmanager_basicauth | regex_replace('\$','$$') }}"
       traefik.http.routers.alertmanager.middlewares: "alertmanagerauth"
 {% endif %}
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.alertmanager.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.alertmanager.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.alertmanager.tls.domains[0].main: "{{ monitoring_alertmanager_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.alertmanager.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.alertmanager.tls.domains[0].main: "{{ dapp_monitoring_alertmanager_traefik_address }}"
 {% endif %}
 
   blackbox:
-    image: "{{ monitoring_blackbox_docker_image }}"
+    image: "{{ dapp_monitoring_blackbox_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -100,7 +100,7 @@ services:
     mem_limit: 512M
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ monitoring_blackbox_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_monitoring_blackbox_volumes|to_nice_yaml|indent(6) }}
     environment:
       TZ: "America/New_York"
       PHP_TZ: "America/New_York"
@@ -108,18 +108,18 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.blackbox.entrypoints: "http, https"
-      traefik.http.routers.blackbox.rule: "Host(`{{ monitoring_blackbox_traefik_address }}`)"
+      traefik.http.routers.blackbox.rule: "Host(`{{ dapp_monitoring_blackbox_traefik_address }}`)"
       traefik.http.services.blackbox.loadbalancer.server.port: "9115"
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.blackbox.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.blackbox.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.blackbox.tls.domains[0].main: "{{ monitoring_blackbox_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.blackbox.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.blackbox.tls.domains[0].main: "{{ dapp_monitoring_blackbox_traefik_address }}"
 {% endif %}
 
   grafana:
-    image: "{{ monitoring_grafana_docker_image }}"
+    image: "{{ dapp_monitoring_grafana_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -131,8 +131,8 @@ services:
     mem_limit: 512M
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      {{ monitoring_grafana_volumes|to_nice_yaml|indent(6) }}
-{% if monitoring_grafana_ldap_toml is defined %}
+      {{ dapp_monitoring_grafana_volumes|to_nice_yaml|indent(6) }}
+{% if dapp_monitoring_grafana_ldap_toml is defined %}
       - "./grafana_ldap.toml:/etc/grafana/ldap.toml"
 {% endif %}
     environment:
@@ -144,13 +144,13 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.grafana.entrypoints: "http, https"
-      traefik.http.routers.grafana.rule: "Host(`{{ monitoring_grafana_traefik_address }}`)"
+      traefik.http.routers.grafana.rule: "Host(`{{ dapp_monitoring_grafana_traefik_address }}`)"
       traefik.http.services.grafana.loadbalancer.server.port: "3000"
-{% if common_traefik_tls %}
+{% if dapp_common_traefik_tls %}
       traefik.http.routers.grafana.tls: "true"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.grafana.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.grafana.tls.domains[0].main: "{{ monitoring_grafana_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.grafana.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.grafana.tls.domains[0].main: "{{ dapp_monitoring_grafana_traefik_address }}"
 {% endif %}
     env_file: grafana.env

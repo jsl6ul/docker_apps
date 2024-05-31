@@ -1,49 +1,49 @@
 ---
 # docker images
-gitlab_docker_image: "docker.io/gitlab/gitlab-ce"
-gitlab_runner_docker_image: "docker.io/gitlab/gitlab-runner"
+dapp_gitlab_docker_image: "docker.io/gitlab/gitlab-ce"
+dapp_gitlab_runner_docker_image: "docker.io/gitlab/gitlab-runner"
 
 # gitlab server address
-gitlab_traefik_address: "gitlab.{{ common_apps_domain }}"
+dapp_gitlab_traefik_address: "gitlab.{{ dapp_common_apps_domain }}"
 
-gitlab_mem_limit: 4096M
-gitlab_runner_mem_limit: 3072M
+dapp_gitlab_mem_limit: 4096M
+dapp_gitlab_runner_mem_limit: 3072M
 
-gitlab_cpus: 2
-gitlab_runner_cpus: 2
+dapp_gitlab_cpus: 2
+dapp_gitlab_runner_cpus: 2
 
 # gitlab external ssh port
-gitlab_shell_ssh_port: 2222
-gitlab_ports:
-  - "{{ gitlab_shell_ssh_port }}:22"
+dapp_gitlab_shell_ssh_port: 2222
+dapp_gitlab_ports:
+  - "{{ dapp_gitlab_shell_ssh_port }}:22"
 
 # https://docs.gitlab.com/omnibus/settings/logs.html
 # https://docs.gitlab.com/ee/administration/logs/index.html
-gitlab_log_level: ERROR
+dapp_gitlab_log_level: ERROR
 
 # Configuration settings using the Omnibus package
 # https://docs.gitlab.com/omnibus/settings/configuration.html
 # https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
-gitlab_omnibus_config: |
-  external_url 'https://{{ gitlab_traefik_address }}'
-  gitlab_rails['gitlab_shell_ssh_port'] = {{ gitlab_shell_ssh_port }}
-  gitlab_shell['log_level'] = '{{ gitlab_log_level }}'
+dapp_gitlab_omnibus_config: |
+  external_url 'https://{{ dapp_gitlab_traefik_address }}'
+  gitlab_rails['gitlab_shell_ssh_port'] = {{ dapp_gitlab_shell_ssh_port }}
+  gitlab_shell['log_level'] = '{{ dapp_gitlab_log_level }}'
   nginx['listen_https'] = false
   nginx['listen_port'] = 80
   prometheus_monitoring['enable'] = false
   puma['worker_processes'] = 0
-  registry['log_level'] = '{{ gitlab_log_level }}'
+  registry['log_level'] = '{{ dapp_gitlab_log_level }}'
   sidekiq['max_concurrency'] = 10
   sidekiq['metrics_enabled'] = false
   gitlab_rails['env'] = {
-    "GITLAB_LOG_LEVEL" => "{{ gitlab_log_level }}",
-    "DEBUG" => "{{ gitlab_log_level }}",
-    "VERBOSE" => "{{ gitlab_log_level }}",
-    "EXPORT_DEBUG" => "{{ gitlab_log_level }}",
-    "IMPORT_DEBUG" => "{{ gitlab_log_level }}",
-    "QA_LOG_LEVEL" => "{{ gitlab_log_level }}",
-    "GRPC_LOG_LEVEL" => "{{ gitlab_log_level }}",
-    "LLM_DEBUG" => "{{ gitlab_log_level }}",
+    "GITLAB_LOG_LEVEL" => "{{ dapp_gitlab_log_level }}",
+    "DEBUG" => "{{ dapp_gitlab_log_level }}",
+    "VERBOSE" => "{{ dapp_gitlab_log_level }}",
+    "EXPORT_DEBUG" => "{{ dapp_gitlab_log_level }}",
+    "IMPORT_DEBUG" => "{{ dapp_gitlab_log_level }}",
+    "QA_LOG_LEVEL" => "{{ dapp_gitlab_log_level }}",
+    "GRPC_LOG_LEVEL" => "{{ dapp_gitlab_log_level }}",
+    "LLM_DEBUG" => "{{ dapp_gitlab_log_level }}",
     "MALLOC_CONF" => "dirty_decay_ms:1000,muzzy_decay_ms:1000"
   }
   gitaly['configuration'] = {
@@ -57,7 +57,7 @@ gitlab_omnibus_config: |
       },
     ],
     logging: {
-      level: "{{ gitlab_log_level }}"
+      level: "{{ dapp_gitlab_log_level }}"
     },
   }
   gitaly['env'] = {
@@ -67,7 +67,7 @@ gitlab_omnibus_config: |
 
 # GitLab integrates with LDAP to support user authentication.
 # https://docs.gitlab.com/ee/administration/auth/ldap/
-# gitlab_omnibus_config_ldap: |
+# dapp_gitlab_omnibus_config_ldap: |
 #   gitlab_rails['ldap_enabled'] = true
 #   gitlab_rails['ldap_servers'] = {
 #     'main' => {
@@ -90,8 +90,8 @@ gitlab_omnibus_config: |
 #     }
 #   }
 
-# Define a 'gitlab_runner_dockerfile' to run a gitlab-runner container.
-# gitlab_runner_dockerfile: |
+# Define a 'dapp_gitlab_runner_dockerfile' to run a gitlab-runner container.
+# dapp_gitlab_runner_dockerfile: |
 #   # Dockerfile to build the gitlab runner container
 #   FROM debian:12
 #   ENV DEBIAN_FRONTEND=noninteractive

@@ -10,8 +10,8 @@ volumes:
 services:
 
   app:
-    image: "{{ freeipa_docker_image }}"
-    hostname: "{{ freeipa_hostname }}.{{ common_apps_domain }}"
+    image: "{{ dapp_freeipa_docker_image }}"
+    hostname: "{{ dapp_freeipa_hostname }}.{{ dapp_common_apps_domain }}"
     sysctls:
       - "net.ipv6.conf.all.disable_ipv6=0"
     tmpfs:
@@ -22,11 +22,11 @@ services:
     logging:
       driver: journald
       options:
-        tag: "freeipa-{{ freeipa_hostname }}"
+        tag: "freeipa-{{ dapp_freeipa_hostname }}"
     networks:
       - traefik_proxy
-    dns: {{ freeipa_dns_servers }}
-    ports: {{ freeipa_ports }}
+    dns: {{ dapp_freeipa_dns_servers }}
+    ports: {{ dapp_freeipa_ports }}
     mem_limit: 2048M
     cgroup: host
     environment:
@@ -40,15 +40,15 @@ services:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
       - "/sys/fs/cgroup/user.slice/user-{{ docker_rootless_user.uid }}.slice/user@{{ docker_rootless_user.uid }}.service:/sys/fs/cgroup/user.slice/user-{{ docker_rootless_user.uid }}.slice/user@{{ docker_rootless_user.uid }}.service:rw"
       - "/etc/localtime:/etc/localtime:ro"
-{% if freeipa_cert is defined %}
+{% if dapp_freeipa_cert is defined %}
       - "./freeipa_cert.crt:/etc/pki/CA/certs/freeipa_cert.crt:ro"
       - "./freeipa_cert.key:/etc/pki/CA/private/freeipa_cert.key:ro"
 {% endif %}
-    command: {% if freeipa_role == 'master' %}{{ freeipa_command_master }}{% elif freeipa_role == 'replica' %}{{ freeipa_command_replica }}{% endif %}
+    command: {% if dapp_freeipa_role == 'master' %}{{ dapp_freeipa_command_master }}{% elif dapp_freeipa_role == 'replica' %}{{ dapp_freeipa_command_replica }}{% endif %}
 
     labels:
-      traefik.enable: "{{ freeipa_traefik }}"
-{% if freeipa_traefik %}
+      traefik.enable: "{{ dapp_freeipa_traefik }}"
+{% if dapp_freeipa_traefik %}
       traefik.docker.network: "traefik_proxy"
 
       # https for realm clients, (ie. passthrough)
@@ -61,29 +61,29 @@ services:
       traefik.tcp.services.freeipapt.loadbalancer.server.port: "443"
 
       # web gui through traefik and letsencrypt
-      traefik.http.routers.freeipa.rule: "Host(`{{ freeipa_https_traefik_address }}`)"
+      traefik.http.routers.freeipa.rule: "Host(`{{ dapp_freeipa_https_traefik_address }}`)"
       traefik.http.routers.freeipa.entrypoints: "http, https"
       traefik.http.routers.freeipa.tls: "true"
       traefik.http.services.freeipa.loadbalancer.server.port: "443"
       traefik.http.routers.freeipa.service: "freeipa"
       traefik.http.services.freeipa.loadbalancer.server.scheme: "https"
-{% if common_traefik_file_provider is defined %}
+{% if dapp_common_traefik_file_provider is defined %}
       traefik.http.services.freeipa.loadbalancer.serverstransport: "freeipa@file"
 {% endif %}
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.http.routers.freeipa.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.http.routers.freeipa.tls.domains[0].main: "{{ freeipa_https_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.freeipa.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.freeipa.tls.domains[0].main: "{{ dapp_freeipa_https_traefik_address }}"
 {% endif %}
 
       # ldaps on port 636 (not tls 389)
-      traefik.tcp.routers.ldaps.rule: "HostSNI(`{{ freeipa_ldaps_traefik_address }}`)"
+      traefik.tcp.routers.ldaps.rule: "HostSNI(`{{ dapp_freeipa_ldaps_traefik_address }}`)"
       traefik.tcp.routers.ldaps.entrypoints: "ldaps"
       traefik.tcp.routers.ldaps.tls: "true"
       traefik.tcp.routers.ldaps.service: "ldaps"
       traefik.tcp.services.ldaps.loadbalancer.server.port: "389"
-{% if common_traefik_tls and common_traefik_certresolver != "none" %}
-      traefik.tcp.routers.ldaps.tls.certresolver: "{{ common_traefik_certresolver }}"
-      traefik.tcp.routers.ldaps.tls.domains[0].main: "{{ freeipa_ldaps_traefik_address }}"
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.tcp.routers.ldaps.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.tcp.routers.ldaps.tls.domains[0].main: "{{ dapp_freeipa_ldaps_traefik_address }}"
 {% endif %}
 
       # passthrough ldaps for realm clients

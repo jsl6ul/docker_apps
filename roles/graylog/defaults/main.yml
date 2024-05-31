@@ -1,65 +1,65 @@
 ---
 # docker image
-graylog_docker_image: "docker.io/graylog/graylog:5.1.6"
-graylog_mongo_docker_image: "docker.io/mongo:5.0.13"
-graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2"
+dapp_graylog_docker_image: "docker.io/graylog/graylog:5.1.6"
+dapp_graylog_mongo_docker_image: "docker.io/mongo:5.0.13"
+dapp_graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2"
 
 # graylog server address
-graylog_traefik_address: "graylog.{{ common_apps_domain }}"
+dapp_graylog_traefik_address: "graylog.{{ dapp_common_apps_domain }}"
 
 # graylog listening ports
-graylog_ports:
+dapp_graylog_ports:
   - "514:514/tcp" # syslog
   - "514:514/udp" # syslog
   - "5555:5555"   # raw4json
 
 # admin password hash as sha256sum.
 # echo -n "Enter Password: " && head -1 </dev/stdin | tr -d '\n' | sha256sum | cut -d" " -f1
-# graylog_root_password_sha2: <secret>
+# dapp_graylog_root_password_sha2: <secret>
 
 # a secret that is used for password encryption and salting.
-# graylog_password_secret: <secret>
+# dapp_graylog_password_secret: <secret>
 
 # opensearch admin password
-# graylog_opensearch_admin_pwd: <secret>
+# dapp_graylog_opensearch_admin_pwd: <secret>
 
-graylog_volumes:
+dapp_graylog_volumes:
   - "./graylog.conf:/usr/share/graylog/data/config/graylog.conf"
   - "journal:/usr/share/graylog/data/journal"
   - "webconfig:/usr/share/graylog/data/config"
 
-graylog_mongo_volumes:
+dapp_graylog_mongo_volumes:
   - "mongo:/data/db"
 
-graylog_opensearch_volumes:
+dapp_graylog_opensearch_volumes:
   - "opensearch:/usr/share/opensearch/data"
 
 # smtp server and port if you want graylog alerts by mail
-graylog_smtp_mailfrom: "graylog@{{ common_apps_domain }}"
-graylog_smtp_server: "mail.{{ common_apps_domain }}"
-graylog_smtp_port: 25
-graylog_smtp_enabled: false
-graylog_smtp_auth_username: nobody
-graylog_smtp_auth_password: secret
-graylog_smtp_use_auth: false
-graylog_smtp_use_ssl: false
-graylog_smtp_use_tls: false
+dapp_graylog_smtp_mailfrom: "graylog@{{ dapp_common_apps_domain }}"
+dapp_graylog_smtp_server: "mail.{{ dapp_common_apps_domain }}"
+dapp_graylog_smtp_port: 25
+dapp_graylog_smtp_enabled: false
+dapp_graylog_smtp_auth_username: nobody
+dapp_graylog_smtp_auth_password: secret
+dapp_graylog_smtp_use_auth: false
+dapp_graylog_smtp_use_ssl: false
+dapp_graylog_smtp_use_tls: false
 
 # graylog.conf file
-graylog_conf_file: |
+dapp_graylog_conf_file: |
   allow_highlighting = false
   allow_leading_wildcard_searches = false
   bin_dir = /usr/share/graylog/bin
   data_dir = /usr/share/graylog/data
   elasticsearch_analyzer = standard
-  elasticsearch_hosts = http://admin:{{ graylog_opensearch_admin_pwd }}@opensearch:9200
+  elasticsearch_hosts = http://admin:{{ dapp_graylog_opensearch_admin_pwd }}@opensearch:9200
   elasticsearch_index_prefix = graylog
   elasticsearch_max_docs_per_index = 20000000
   elasticsearch_max_number_of_indices = 20
   elasticsearch_replicas = 0
   elasticsearch_shards = 4
   http_bind_address = 0.0.0.0:80
-  http_external_uri = https://{{ graylog_traefik_address }}/
+  http_external_uri = https://{{ dapp_graylog_traefik_address }}/
   http_publish_uri = http://localhost/
   is_master = true
   lb_recognition_period_seconds = 3
@@ -69,24 +69,24 @@ graylog_conf_file: |
   mongodb_threads_allowed_to_block_multiplier = 5
   mongodb_uri = mongodb://mongo/graylog
   node_id_file = /usr/share/graylog/data/config/node-id
-  password_secret = {{ graylog_password_secret }}
+  password_secret = {{ dapp_graylog_password_secret }}
   plugin_dir = /usr/share/graylog/plugin
   retention_strategy = delete
-  root_password_sha2 = {{ graylog_root_password_sha2 }}
+  root_password_sha2 = {{ dapp_graylog_root_password_sha2 }}
   root_timezone = Canada/Eastern
   root_username = admin
   rotation_strategy = count
-  transport_email_auth_password = {{ graylog_smtp_auth_password }}
-  transport_email_auth_username = {{ graylog_smtp_auth_username }}
-  transport_email_enabled = {{ graylog_smtp_enabled }}
-  transport_email_from_email = {{ graylog_smtp_mailfrom }}
-  transport_email_hostname = {{ graylog_smtp_server }}
-  transport_email_port = {{ graylog_smtp_port }}
+  transport_email_auth_password = {{ dapp_graylog_smtp_auth_password }}
+  transport_email_auth_username = {{ dapp_graylog_smtp_auth_username }}
+  transport_email_enabled = {{ dapp_graylog_smtp_enabled }}
+  transport_email_from_email = {{ dapp_graylog_smtp_mailfrom }}
+  transport_email_hostname = {{ dapp_graylog_smtp_server }}
+  transport_email_port = {{ dapp_graylog_smtp_port }}
   transport_email_subject_prefix = [GRAYLOG]
-  transport_email_use_auth = {{ graylog_smtp_use_auth }}
-  transport_email_use_ssl = {{ graylog_smtp_use_ssl }}
-  transport_email_use_tls = {{ graylog_smtp_use_tls }}
-  transport_email_web_interface_url = https://{{ graylog_traefik_address }}
+  transport_email_use_auth = {{ dapp_graylog_smtp_use_auth }}
+  transport_email_use_ssl = {{ dapp_graylog_smtp_use_ssl }}
+  transport_email_use_tls = {{ dapp_graylog_smtp_use_tls }}
+  transport_email_web_interface_url = https://{{ dapp_graylog_traefik_address }}
   # Performance problems ?
   inputbuffer_processors = 1
   inputbuffer_ring_size = 16384
