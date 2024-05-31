@@ -8,14 +8,14 @@ dapp_monitoring_grafana_docker_image: "docker.io/grafana/grafana"
 dapp_monitoring_grafana_admin_password: secret
 
 # servers address
-dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_apps_domain }}"
-dapp_monitoring_alertmanager_traefik_address: "alertmanager.{{ dapp_common_apps_domain }}"
-dapp_monitoring_blackbox_traefik_address: "blackbox.{{ dapp_common_apps_domain }}"
-dapp_monitoring_grafana_traefik_address: "grafana.{{ dapp_common_apps_domain }}"
+dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_domain }}"
+dapp_monitoring_alertmanager_traefik_address: "alertmanager.{{ dapp_common_domain }}"
+dapp_monitoring_blackbox_traefik_address: "blackbox.{{ dapp_common_domain }}"
+dapp_monitoring_grafana_traefik_address: "grafana.{{ dapp_common_domain }}"
 
-dapp_monitoring_alertmanager_smtp_smarthost: "smtp.{{ dapp_common_apps_domain }}:25"
-dapp_monitoring_alertmanager_smtp_from: "alertmanager@{{ dapp_common_apps_domain }}"
-dapp_monitoring_alertmanager_main_receiver: "root@{{ dapp_common_apps_domain }}"
+dapp_monitoring_alertmanager_smtp_smarthost: "smtp.{{ dapp_common_domain }}:25"
+dapp_monitoring_alertmanager_smtp_from: "alertmanager@{{ dapp_common_domain }}"
+dapp_monitoring_alertmanager_main_receiver: "root@{{ dapp_common_domain }}"
 
 dapp_monitoring_prometheus_retention_time: "365d"
 

@@ -37,7 +37,7 @@ services:
     env_file: traefik.env
     labels:
       traefik.enable: "true"
-      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_apps_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       traefik.http.routers.dashboard.entrypoints: "http, https"
       traefik.http.routers.dashboard.service: "api@internal"
 
@@ -49,7 +49,7 @@ services:
 
 {% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
       traefik.http.routers.traefik.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
-      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_apps_domain }}"
+      traefik.http.routers.traefik.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_domain }}"
 {% endif %}
 
 {% if dapp_traefik_custom_labels is defined %}

@@ -10,7 +10,7 @@ if [ "$RUNNER_CONTAINER" == "" ]; then
     RUNNER_CONTAINER=gitlab-runner-1
 fi
 
-GITLAB_URL=https://gitlab.{{ dapp_common_apps_domain }}
+GITLAB_URL=https://gitlab.{{ dapp_common_domain }}
 DOCKER_NETWORK=bridge
 
 # register runner

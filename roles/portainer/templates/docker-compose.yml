@@ -36,7 +36,7 @@ services:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.portainer.entrypoints: "http, https"
-      traefik.http.routers.portainer.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_apps_domain }}`) && PathPrefix(`/portainer`)"
+      traefik.http.routers.portainer.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_domain }}`) && PathPrefix(`/portainer`)"
       traefik.http.middlewares.portainerpstrip.stripprefix.prefixes: "/portainer"
       traefik.http.routers.portainer.middlewares: "portainerpstrip"
       traefik.http.services.portainer.loadbalancer.server.port: "9000"
@@ -45,5 +45,5 @@ services:
 {% endif %}
 {% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
       traefik.http.routers.portainer.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
-      traefik.http.routers.portainer.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_apps_domain }}"
+      traefik.http.routers.portainer.tls.domains[0].main: "{{ inventory_hostname }}.{{ dapp_common_domain }}"
 {% endif %}
