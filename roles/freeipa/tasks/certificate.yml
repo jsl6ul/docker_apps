@@ -20,6 +20,7 @@
   environment:
     openssl_pw: "{{ dapp_freeipa_crt_pin }}"
   changed_when: false
+  when: dapp_freeipa_crt_pin is defined
 
 - name: Remove temporary file
   ansible.builtin.file:

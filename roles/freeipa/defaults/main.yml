@@ -12,7 +12,7 @@ dapp_freeipa_dns_servers:
 # freeipa admin password
 # dapp_freeipa_pwd_admin: <secret>
 
-# freeipa certificate pin
+# Optional password to encrypt HTTP server and Directory server certificate files
 # dapp_freeipa_crt_pin: <secret>
 
 # The following variables should probably be defined in group_vars/all.yml
