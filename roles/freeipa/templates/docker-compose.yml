@@ -1,7 +1,9 @@
 ---
+{% if dapp_freeipa_traefik %}
 networks:
   traefik_proxy:
     external: true
+{% endif %}
 
 volumes:
   data:
@@ -23,8 +25,10 @@ services:
       driver: journald
       options:
         tag: "freeipa-{{ dapp_freeipa_hostname }}"
+{% if dapp_freeipa_traefik %}
     networks:
       - traefik_proxy
+{% endif %}
     dns: {{ dapp_freeipa_dns_servers }}
     ports: {{ dapp_freeipa_ports }}
     mem_limit: 2048M
