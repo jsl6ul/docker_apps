@@ -12,8 +12,12 @@ dapp_freeipa_dns_servers:
 # freeipa admin password
 # dapp_freeipa_pwd_admin: <secret>
 
-# Optional password to encrypt HTTP server and Directory server certificate files
-# dapp_freeipa_crt_pin: <secret>
+# Optional certificate for HTTP and Directory server
+# 'pin' is the password to encrypt the HTTP and Directory server private key
+# dapp_freeipa_cert:
+#   crt: <changeme>
+#   key: <secret>
+#   pin: <secret>
 
 # The following variables should probably be defined in group_vars/all.yml
 # as they are used in several roles and playbooks.
@@ -26,12 +30,6 @@ dapp_freeipa_domain: "{{ dapp_common_domain }}"
 # replica2 to set Domain & CA replication between them.
 # dapp_freeipa_server_replica1: "ipa2.{{ dapp_common_domain }}"
 # dapp_freeipa_server_replica2: "ipa3.{{ dapp_common_domain }}"
-
-# dapp_freeipa_enroll_principal: enrolluser
-# dapp_freeipa_enroll_pwd: <secret>
-
-# dapp_freeipa_bldap_principal: bindldapuser
-# dapp_freeipa_bldap_pwd: <secret>
 
 # do not validate self-signed certificates
 dapp_freeipa_validate_certs: false
@@ -73,7 +71,6 @@ dapp_common_traefik_file_provider: |
         serverName: "{{ dapp_freeipa_hostname }}.{{ dapp_common_domain }}"
         insecureSkipVerify: "true"
 
-
 # freeipa installation commands
 dapp_freeipa_command_master: |
   ipa-server-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --ds-password='{{ dapp_freeipa_pwd_dm }}' --domain={{ dapp_freeipa_realm }} --realm={{ dapp_freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check
@@ -81,12 +78,5 @@ dapp_freeipa_command_master: |
 dapp_freeipa_command_replica: |
   ipa-replica-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --domain={{ dapp_freeipa_domain }} --realm={{ dapp_freeipa_realm | upper }} --server={{ dapp_freeipa_server_master }} --hostname={{ dapp_freeipa_hostname }}.{{ dapp_common_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
 
-# if you have a "real" certificate, you need to add the following parameters to the above commands.
-# (it should works, but I didn't test it)
-
-# --no-pkinit --http-pin {{ dapp_freeipa_crt_pin }} --dirsrv-pin {{ dapp_freeipa_crt_pin }} --http-cert-file /etc/pki/CA/certs/freeipa_cert.crt --http-cert-file /etc/pki/CA/private/freeipa_cert.key --dirsrv-cert-file /etc/pki/CA/certs/freeipa_cert.crt --dirsrv-cert-file /etc/pki/CA/private/freeipa_cert.key
-
-# certificat for ldaps & https. not used, using freeipa self-signed certificate.
-# dapp_freeipa_cert:
-#   crt: <fixme>
-#   key: <secret>
+# If you have defined a certificate in 'dapp_freeipa_cert', you must add the following parameters to the above commands.
+# --no-pkinit --http-pin {{ dapp_freeipa_cert.pin }} --dirsrv-pin {{ dapp_freeipa_cert.pin }} --http-cert-file /etc/pki/CA/certs/freeipa_cert.crt --http-cert-file /etc/pki/CA/private/freeipa_cert.key --dirsrv-cert-file /etc/pki/CA/certs/freeipa_cert.crt --dirsrv-cert-file /etc/pki/CA/private/freeipa_cert.key
