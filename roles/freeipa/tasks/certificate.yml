@@ -1,0 +1,30 @@
+---
+- name: Copy certificate
+  ansible.builtin.copy:
+    content: |
+      {{ dapp_freeipa_cert.crt }}
+    dest: "{{ _docker_project_dir }}/freeipa_cert.crt"
+
+- name: Check that freeipa_cert.key exists
+  ansible.builtin.stat:
+    path: "{{ _docker_project_dir }}/freeipa_cert.key"
+  register: _keyfile
+
+- name: Copy unencrypted private key
+  ansible.builtin.copy:
+    content: |
+      {{ dapp_freeipa_cert.key }}
+    dest: "{{ _docker_project_dir }}/freeipa_cert.key.tmp"
+  when: not _keyfile.stat.exists
+
+- name: Encrypt private key
+  ansible.builtin.shell: "cat {{ _docker_project_dir }}/freeipa_cert.key.tmp | openssl rsa -aes256 -out {{ _docker_project_dir }}/freeipa_cert.key -passout env:openssl_pw"
+  args:
+    creates: "{{ _docker_project_dir }}/freeipa_cert.key"
+  environment:
+    openssl_pw: "{{ dapp_freeipa_cert.pin }}"
+
+- name: Remove unencrypted private key
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}/freeipa_cert.key.tmp"
+    state: absent
