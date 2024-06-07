@@ -14,10 +14,9 @@
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
 
-# certificate.yml not tested
-# - name: Manage own certificate
-#   ansible.builtin.import_tasks: certificate.yml
-#   when: dapp_freeipa_cert is defined
+- name: Manage certificate
+  ansible.builtin.import_tasks: certificate.yml
+  when: dapp_freeipa_cert is defined
 
 - name: Start containers
   ansible.builtin.shell: |
