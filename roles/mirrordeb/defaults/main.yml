@@ -5,6 +5,10 @@ dapp_mirrordeb_docker_image: "localbuild/mirrordeb"
 # service address
 dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_domain }}"
 
+# Delay between automatic mirror update.
+# No auto-update if not defined.
+# dapp_mirrordeb_update_delay: 6h
+
 # You can modify the following 'dapp_mirrordeb_directory_*' variables, but if you do,
 # you'll have to create the directories yourself; this role won't do it.
 
@@ -65,7 +69,35 @@ dapp_mirrordeb_dockerfile: |
     apt-get autoremove && \
     rm -rf /var/cache/apt/*
   COPY entrypoint.sh /entrypoint.sh
+
+  # bash file to run dpkg-scanpackages on /var/www/html/extras/
+  RUN echo "#!/bin/bash\ncd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz" > /run-extras-scanpackages.sh
+
+  # bash file to run debmirror
+  RUN echo '#!/bin/bash\n\
+  {% for amirror in dapp_mirrordeb_mirrors %}
+  echo "debmirror {{ amirror.name }} ..."\n\
+  debmirror {{ amirror.options }}\\\n\
+    --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }}\\\n\
+    --dist={{ amirror.dist }} --arch={{ amirror.arch }}\\\n\
+    --section={{ amirror.section }} {{ amirror.dest }}\n\
+  \n\
+  {% endfor %}\n'\
+  >> /run-debmirror.sh
+
+  # bash file to download signing keys
+  RUN echo '#!/bin/bash\n\
+  touch /root/.gnupg/trustedkeys.gpg\n\
+  chmod 0600 /root/.gnupg/trustedkeys.gpg\n\
+  {% for akey in dapp_mirrordeb_signing_keys %}
+  curl --silent "{{ akey }}" | gpg --no-default-keyring --keyring trustedkeys.gpg --import -\n\
+  {% endfor %}\n'\
+  >> /run-signing-keys.sh
+
   RUN chmod u+x /entrypoint.sh && \
+    chmod u+x /run-extras-scanpackages.sh && \
+    chmod u+x /run-debmirror.sh && \
+    chmod u+x /run-signing-keys.sh && \
     rm -f /var/www/html/index.nginx-debian.html
   COPY nginx.conf /etc/nginx/sites-enabled/default
   EXPOSE 80
@@ -74,34 +106,21 @@ dapp_mirrordeb_dockerfile: |
 # container entrypoint.sh
 dapp_mirrordeb_entrypoint: |
   #!/bin/bash
-  echo "start nginx ..."
+  {% if dapp_mirrordeb_update_delay is defined %}
+  echo "starting nginx"
   nginx
-
-  # install/update signing keys
-  echo "update signing keys ..."
-  touch /root/.gnupg/trustedkeys.gpg
-  chmod 0600 /root/.gnupg/trustedkeys.gpg
-  {% for akey in dapp_mirrordeb_signing_keys %}
-  curl '{{ akey }}' | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
-  {% endfor %}
-
-  # Refresh mirror every 6 hours
+  # Auto update mirror
   while true; do
-    echo "scan local packages ..."
-    cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz
-
-  {% for amirror in dapp_mirrordeb_mirrors %}
-    echo "debmirror {{ amirror.name }} ..."
-    debmirror {{ amirror.options }} \
-      --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }} \
-      --dist={{ amirror.dist }} --arch={{ amirror.arch }} \
-      --section={{ amirror.section }} {{ amirror.dest }}
-
-  {% endfor %}
-
+    /run-signing-keys.sh
+    /run-extras-scanpackages.sh
+    /run-debmirror.sh
     echo "going to sleep ..."
-    sleep 6h
+    sleep {{ dapp_mirrordeb_update_delay }}
   done
+  {% else %}
+  echo "starting nginx"
+  nginx -g 'daemon off;'
+  {% endif %}
 
 # nging configuration file
 dapp_mirrordeb_nginx_conf: |
