@@ -5,9 +5,9 @@ dapp_mirrordeb_docker_image: "localbuild/mirrordeb"
 # service address
 dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_domain }}"
 
-# Delay between automatic mirror update.
-# No auto-update if not defined.
-# dapp_mirrordeb_update_delay: 6h
+# Define 'dapp_mirrordeb_run_delay' to execute commands
+# automatically according to the specified delay.
+# dapp_mirrordeb_run_delay: 6h
 
 # You can modify the following 'dapp_mirrordeb_directory_*' variables, but if you do,
 # you'll have to create the directories yourself; this role won't do it.
@@ -106,7 +106,7 @@ dapp_mirrordeb_dockerfile: |
 # container entrypoint.sh
 dapp_mirrordeb_entrypoint: |
   #!/bin/bash
-  {% if dapp_mirrordeb_update_delay is defined %}
+  {% if dapp_mirrordeb_run_delay is defined %}
   echo "starting nginx"
   nginx
   # Auto update mirror
@@ -115,7 +115,7 @@ dapp_mirrordeb_entrypoint: |
     /run-extras-scanpackages.sh
     /run-debmirror.sh
     echo "going to sleep ..."
-    sleep {{ dapp_mirrordeb_update_delay }}
+    sleep {{ dapp_mirrordeb_run_delay }}
   done
   {% else %}
   echo "starting nginx"
