@@ -15,16 +15,16 @@ This container downloads and maintains a partial local Debian/Ubuntu mirror usin
 
 In addition to the nginx service, there are three other commands in this container:
 
-- `/run-debmirror.sh`, to mirror the repositories.
-- `/run-extras-scanpackages.sh`, to build the `Packages.gz` for the `extras` directory.
-- `/run-signing-keys.sh`, to update the mirror signing keys.
+- `/run_debmirror.sh`, to mirror the repositories.
+- `/run_scanpackages_extras.sh`, to build the `Packages.gz` for the `extras` directory.
+- `/run_download_signing_keys.sh`, to update the mirror signing keys.
 
 Define `dapp_mirrordeb_run_delay: 6h` to run theses commands every 6 hours,
 otherwise, you have to manually run theme:
 
-- `$ docker exec mirrordeb-app-1 /run-signing-keys.sh`
-- `$ docker exec mirrordeb-app-1 /run-extras-scanpackages.sh`
-- `$ docker exec mirrordeb-app-1 /run-debmirror.sh`
+- `$ docker exec mirrordeb-app-1 /run_download_signing_keys.sh`
+- `$ docker exec mirrordeb-app-1 /run_scanpackages_extras.sh`
+- `$ docker exec mirrordeb-app-1 /run_debmirror.sh`
 
 
 # gpgv: can't allocate lock for

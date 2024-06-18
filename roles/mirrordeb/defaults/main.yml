@@ -71,7 +71,7 @@ dapp_mirrordeb_dockerfile: |
   COPY entrypoint.sh /entrypoint.sh
 
   # bash file to run dpkg-scanpackages on /var/www/html/extras/
-  RUN echo "#!/bin/bash\ncd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz" > /run-extras-scanpackages.sh
+  RUN echo "#!/bin/bash\ncd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz" > /run_scanpackages_extras.sh
 
   # bash file to run debmirror
   RUN echo '#!/bin/bash\n\
@@ -83,7 +83,7 @@ dapp_mirrordeb_dockerfile: |
     --section={{ amirror.section }} {{ amirror.dest }}\n\
   \n\
   {% endfor %}\n'\
-  >> /run-debmirror.sh
+  >> /run_debmirror.sh
 
   # bash file to download signing keys
   RUN echo '#!/bin/bash\n\
@@ -92,12 +92,12 @@ dapp_mirrordeb_dockerfile: |
   {% for akey in dapp_mirrordeb_signing_keys %}
   curl --silent "{{ akey }}" | gpg --no-default-keyring --keyring trustedkeys.gpg --import -\n\
   {% endfor %}\n'\
-  >> /run-signing-keys.sh
+  >> /run_download_signing_keys.sh
 
   RUN chmod u+x /entrypoint.sh && \
-    chmod u+x /run-extras-scanpackages.sh && \
-    chmod u+x /run-debmirror.sh && \
-    chmod u+x /run-signing-keys.sh && \
+    chmod u+x /run_scanpackages_extras.sh && \
+    chmod u+x /run_debmirror.sh && \
+    chmod u+x /run_download_signing_keys.sh && \
     rm -f /var/www/html/index.nginx-debian.html
   COPY nginx.conf /etc/nginx/sites-enabled/default
   EXPOSE 80
@@ -111,9 +111,9 @@ dapp_mirrordeb_entrypoint: |
   nginx
   # Auto update mirror
   while true; do
-    /run-signing-keys.sh
-    /run-extras-scanpackages.sh
-    /run-debmirror.sh
+    /run_download_signing_keys.sh
+    /run_scanpackages_extras.sh
+    /run_debmirror.sh
     echo "going to sleep ..."
     sleep {{ dapp_mirrordeb_run_delay }}
   done
