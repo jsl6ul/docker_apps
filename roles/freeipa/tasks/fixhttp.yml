@@ -35,9 +35,9 @@
     - regexp: ^([ ]*)(return self.marshal\(result\, RefererError\(referer.*)$
       replace: "\\1pass  # \\2"
     - regexp: ^([ ]*)(if not self.check_referer\(environ\)\:)$
-      replace: "\\1# \\2"
+      replace: \1# \2
     - regexp: ^([ ]*)(return self.bad_request\(environ\, start_response\, 'denied'\))$
-      replace: "\\1# \\2"
+      replace: \1# \2
   register: _fixreferer
 
 - name: "Waiting for service: httpd (max 15min)"

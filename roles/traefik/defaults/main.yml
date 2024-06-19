@@ -1,6 +1,6 @@
 ---
 # docker image
-dapp_traefik_docker_image: "docker.io/traefik"
+dapp_traefik_docker_image: docker.io/traefik
 
 # default trafik ports
 dapp_traefik_ports:
@@ -55,7 +55,7 @@ dapp_traefik_certresolver_settings: ""
 #   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory
 #   # caServer - production
 #   #TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_CASERVER=https://acme-v02.api.letsencrypt.org/directory
-# 
+#
 #   # ACME certificates can be stored in a JSON file that needs to have a 600 file mode.
 #   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_STORAGE=/data/acme.json
 #   # Use a DNS-01 ACME challenge rather than HTTP-01 challenge.
@@ -70,7 +70,7 @@ dapp_traefik_certresolver_settings: ""
 #   #TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_DNSCHALLENGE_DELAYBEFORECHECK=10
 #   # mail address used for registration. pour changer: `certbot update_account --email new@email.org`
 #   TRAEFIK_CERTIFICATESRESOLVERS_mydomain_ACME_EMAIL=me@example.com
-# 
+#
 #   # easydns stuff
 #   EASYDNS_TOKEN={{ easydns_mydomain_api_token }}
 #   EASYDNS_KEY={{ easydns_mydomain_api_key }}

@@ -1,5 +1,5 @@
 ---
-dapp_freeipa_docker_image: "docker.io/freeipa/freeipa-server:almalinux-9-4.11.0"
+dapp_freeipa_docker_image: docker.io/freeipa/freeipa-server:almalinux-9-4.11.0
 
 dapp_freeipa_dns_servers:
   - 1.1.1.1
@@ -38,29 +38,28 @@ dapp_freeipa_validate_certs: false
 dapp_freeipa_traefik: false
 
 # server name to access freeipa web using traefik & let's encrypt
-dapp_freeipa_https_traefik_address: "ipa.{{ dapp_common_domain }}"
+dapp_freeipa_https_traefik_address: ipa.{{ dapp_common_domain }}
 
 # server name to access freeipa ldaps using traefik & let's encrypt
-dapp_freeipa_ldaps_traefik_address: "ldap.{{ dapp_common_domain }}"
+dapp_freeipa_ldaps_traefik_address: ldap.{{ dapp_common_domain }}
 
 dapp_freeipa_ports:
   # dns
-  #- "53:53/tcp"     # if you want freeipa as dns server
-  #- "53:53/udp"
+  # - "53:53/tcp"     # if you want freeipa as dns server
+  # - "53:53/udp"
   # web
-  - "80:80/tcp"      # if your using traefik, open 80 in traefik container instead
-  - "443:443/tcp"    # if your using traefik, open 443 in traefik container instead
+  - 80:80/tcp # if your using traefik, open 80 in traefik container instead
+  - 443:443/tcp # if your using traefik, open 443 in traefik container instead
   # kerberos
-  - "88:88/tcp"
-  - "88:88/udp"
-  - "464:464/tcp"
-  - "464:464/udp"
+  - 88:88/tcp
+  - 88:88/udp
+  - 464:464/tcp
+  - 464:464/udp
   # ntp
-  #- "123:123/udp"   # if you want freeipa as ntp server
+  # - "123:123/udp"   # if you want freeipa as ntp server
   # ldap
-  - "389:389/tcp"
-  - "636:636/tcp"    # if your using traefik, open 636 in traefik container instead
-
+  - 389:389/tcp
+  - 636:636/tcp # if your using traefik, open 636 in traefik container instead
 
 # Use file provider to add a serversTransports for connection between traefik proxy
 # and freeipa service. freeipa forces https so traefik must accept freeipa's selfsigned certificate.
