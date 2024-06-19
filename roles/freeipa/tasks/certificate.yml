@@ -18,7 +18,9 @@
   when: not _keyfile.stat.exists
 
 - name: Encrypt private key
-  ansible.builtin.shell: "cat {{ _docker_project_dir }}/freeipa_cert.key.tmp | openssl rsa -aes256 -out {{ _docker_project_dir }}/freeipa_cert.key -passout env:openssl_pw"
+  ansible.builtin.shell:
+    cmd: set -o pipefail && cat {{ _docker_project_dir }}/freeipa_cert.key.tmp | openssl rsa -aes256 -out {{ _docker_project_dir }}/freeipa_cert.key -passout env:openssl_pw
+    executable: /bin/bash
   args:
     creates: "{{ _docker_project_dir }}/freeipa_cert.key"
   environment:

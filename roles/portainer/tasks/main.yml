@@ -12,13 +12,13 @@
   ansible.builtin.template:
     src: docker-compose.yml
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
-    mode: 0640
+    mode: "0640"
 
 - name: Copy admin-password file
   ansible.builtin.copy:
     content: "{{ dapp_portainer_admin_password }}"
     dest: "{{ _docker_project_dir }}/admin.pass"
-    mode: 0640
+    mode: "0640"
   when: dapp_portainer_admin_password is defined
   notify: Restart containers
 
@@ -28,4 +28,4 @@
   changed_when: false
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
