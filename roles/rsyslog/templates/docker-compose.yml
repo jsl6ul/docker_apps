@@ -1,0 +1,29 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  app:
+    build: "./"
+    image: "{{ dapp_rsyslog_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "rsyslog"
+    networks:
+      - traefik_proxy
+{% if dapp_rsyslog_ports is defined %}
+    ports: {{ dapp_rsyslog_ports }}
+{% endif %}
+    mem_limit: 512M
+    environment:
+      TZ: "America/New_York"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "./data:/data"
+      - "./rsyslog.conf:/rsyslog.conf"
+      - "./entrypoint.sh:/entrypoint.sh"
+    labels:
+      traefik.enable: "false"
