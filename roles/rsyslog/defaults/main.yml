@@ -1,0 +1,87 @@
+---
+# docker image
+dapp_rsyslog_docker_image: localbuild/rsyslog
+
+# to map the ports on the host
+# dapp_rsyslog_ports:
+#   - "514:514/udp"
+#   - "514:514/tcp"
+
+# In addition to saving the logs locally,
+# send a copy to a remote syslog server.
+# dapp_rsyslog_remote_syslog:
+#   target: 192.168.0.100
+#   port: 514
+#   protocol: tcp
+
+# Add a daily cronjob to compress the log files ? (absent|present)
+dapp_rsyslog_compress_cron_hour: "04"
+dapp_rsyslog_compress_cron_job: /usr/bin/find {{ docker_rootless_user.home }}/{{ dapp_common_directory }}/{{ role_name }}/data -type f -mtime +3 -name '*-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+  -exec gzip {} \;
+dapp_rsyslog_compress_cron_minute: "12"
+dapp_rsyslog_compress_cron_state: absent
+
+# Dockerfile to build the container
+dapp_rsyslog_dockerfile: |
+  FROM debian:stable-slim
+  RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y --no-install-recommends rsyslog && \
+    apt-get -y upgrade && \
+    apt-get autoremove && \
+    rm -rf /var/cache/apt/*
+  EXPOSE 514/tcp 514/udp
+  ENTRYPOINT ["/entrypoint.sh"]
+
+# container entrypoint.sh
+dapp_rsyslog_entrypoint: |
+  #!/bin/bash
+  echo "config validation"
+  /usr/sbin/rsyslogd -N 1 -f /rsyslog.conf
+  echo "starting rsyslog"
+  /usr/sbin/rsyslogd -n -f /rsyslog.conf
+
+# rsyslog configuration file
+dapp_rsyslog_conf: |
+  # Load UDP module
+  $ModLoad imudp
+  $UDPServerRun 514
+  $UDPServerAddress *
+
+  # Load TCP module
+  $ModLoad imtcp
+  $InputTCPServerRun 514
+
+  # Set file format
+  $ActionFileDefaultTemplate RSYSLOG_FileFormat
+
+  # Set umask
+  $umask 0007
+
+  # Set templates
+  $template tmpl_syslog,"/data/%HOSTNAME%/syslog-%$year-utc%%$month-utc%%$day-utc%"
+  $template tmpl_auth,"/data/%HOSTNAME%/auth-%$year-utc%%$month-utc%%$day-utc%"
+  $template tmpl_cron,"/data/%HOSTNAME%/cron-%$year-utc%%$month-utc%%$day-utc%"
+  $template tmpl_kern,"/data/%HOSTNAME%/kern-%$year-utc%%$month-utc%%$day-utc%"
+  $template tmpl_mail,"/data/%HOSTNAME%/mail-%$year-utc%%$month-utc%%$day-utc%"
+  $template tmpl_user,"/data/%HOSTNAME%/user-%$year-utc%%$month-utc%%$day-utc%"
+
+  # Log anything besides private authentication messages to a single log file
+  *.*;auth,authpriv.none          -?tmpl_syslog
+
+  # Log commonly used facilities to their own log file
+  auth,authpriv.*                 -?tmpl_auth
+  cron.*                          -?tmpl_cron
+  kern.*                          -?tmpl_kern
+  mail.*                          -?tmpl_mail
+  user.*                          -?tmpl_user
+
+  {% if dapp_rsyslog_remote_syslog is defined %}
+  # use a disk queue & forward anything received to a remote server
+  # and have buffering applied automatically when it goes down.
+  $WorkDirectory /data/tmp
+  $ActionQueueType LinkedList   # use asynchronous processing
+  $ActionQueueFileName srvrfwd  # set file name, also enables disk mode
+  $ActionResumeRetryCount -1    # infinite retries on insert failure
+  $ActionQueueSaveOnShutdown on # save in-memory data if rsyslog shuts down
+  *.* action(type="omfwd" target="{{ dapp_rsyslog_remote_syslog.target }}" port="{{ dapp_rsyslog_remote_syslog.port }}" protocol="{{ dapp_rsyslog_remote_syslog.protocol }}")
+  {% endif %}
