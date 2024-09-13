@@ -26,6 +26,15 @@ otherwise, you have to manually run theme:
 - `$ docker exec mirrordeb-app-1 /run_scanpackages_extras.sh`
 - `$ docker exec mirrordeb-app-1 /run_debmirror.sh`
 
+# installer subdirectories
+
+debmirror does not download the 'installer' subdirectories required for netboot installation.
+(ie. http://ftp.ca.debian.org/debian/dists/bookworm/main/installer-amd64/)
+
+You can define these directories in `dapp_mirrordeb_installers` to download them.
+
+Don't forget to add an option to debmirror, to ignore these subdirectories,
+otherwise it will delete them each time it runs. (ie. `--ignore=.*/installer-amd64/.*`)
 
 # gpgv: can't allocate lock for
 
