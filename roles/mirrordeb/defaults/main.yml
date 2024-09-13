@@ -26,10 +26,10 @@ dapp_mirrordeb_mirrors:
     root: /debian
     dist: bookworm,bookworm-updates
     arch: amd64
-    section: main,contrib,non-free,non-free-firmware,main/debian-installer
+    section: main,contrib,non-free,non-free-firmware,main/debian-installer,contrib/debian-installer,non-free/debian-installer,non-free-firmware/debian-installer
     dest: /var/www/html/mirrors/debian/
     method: rsync
-    options: --nosource --i18n --passive --cleanup --verbose --dry-run
+    options: --nosource --i18n --passive --verbose --ignore=.*/installer-amd64/.* --dry-run
   - name: debian-security
     host: debian.mirror.rafal.ca
     root: /debian-security
@@ -38,7 +38,7 @@ dapp_mirrordeb_mirrors:
     section: main,contrib,non-free,non-free-firmware,main/debian-installer
     dest: /var/www/html/mirrors/debian-security/
     method: rsync
-    options: --nosource --i18n --passive --cleanup --verbose --dry-run
+    options: --nosource --i18n --passive --verbose --dry-run
   - name: ubuntu
     host: ca.archive.ubuntu.com
     root: /ubuntu
@@ -47,7 +47,7 @@ dapp_mirrordeb_mirrors:
     section: main,restricted,universe,multiverse
     dest: /var/www/html/mirrors/ubuntu/
     method: rsync
-    options: --nosource --i18n --passive --cleanup --verbose --dry-run
+    options: --nosource --i18n --passive --verbose --dry-run
 
 # signing keys
 dapp_mirrordeb_signing_keys:
@@ -59,6 +59,15 @@ dapp_mirrordeb_signing_keys:
   - https://ftp-master.debian.org/keys/release-12.asc
   - https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x630239cc130e1a7fd81a27b140976eaf437d05b5 # Ubuntu Archive Automatic Signing Key
   - https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf6ecb3762474eda9d21b7022871920d1991bc93c # Ubuntu Archive Automatic Signing Key(2018)
+
+# installer subdirectories
+# Optionally, you can define the installer directories to be downloaded here.
+# dapp_mirrordeb_installers:
+#   - name: bookworm-amd64
+#     host: debian.mirror.rafal.ca
+#     src: debian/dists/bookworm/main/installer-amd64
+#     dest: /var/www/html/mirrors/latest/debian/dists/bookworm/main/
+#     rsync_options: -av --dry-run
 
 # Dockerfile to build the container
 dapp_mirrordeb_dockerfile: |
@@ -94,10 +103,21 @@ dapp_mirrordeb_dockerfile: |
   {% endfor %}\n'\
   >> /run_download_signing_keys.sh
 
+  # bash file to download the installer directories
+  RUN echo '#!/bin/bash\n\
+  {% if dapp_mirrordeb_installers is defined %}
+  {% for installer in dapp_mirrordeb_installers %}
+  echo "rsync download installer for {{ installer.name }} ..."\n\
+  rsync {{ installer.rsync_options }} {{ installer.host }}::{{ installer.src}} {{ installer.dest }}\n\
+  {% endfor %}\n\
+  {% endif %}\n'\
+  >> /run_download_installers.sh
+
   RUN chmod u+x /entrypoint.sh && \
     chmod u+x /run_scanpackages_extras.sh && \
     chmod u+x /run_debmirror.sh && \
     chmod u+x /run_download_signing_keys.sh && \
+    chmod u+x /run_download_installers.sh && \
     rm -f /var/www/html/index.nginx-debian.html
   COPY nginx.conf /etc/nginx/sites-enabled/default
   EXPOSE 80
@@ -114,6 +134,7 @@ dapp_mirrordeb_entrypoint: |
     /run_download_signing_keys.sh
     /run_scanpackages_extras.sh
     /run_debmirror.sh
+    /run_download_installers.sh
     echo "going to sleep ..."
     sleep {{ dapp_mirrordeb_run_delay }}
   done
