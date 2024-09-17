@@ -10,14 +10,14 @@ This container downloads and maintains a partial local Debian/Ubuntu mirror usin
 - https://manpages.org/debmirror
 - https://salsa.debian.org/debian/debmirror
 
-
 # Update / Auto update
 
-In addition to the nginx service, there are three other commands in this container:
+In addition to the nginx service, there are four other commands in this container:
 
 - `/run_debmirror.sh`, to mirror the repositories.
 - `/run_scanpackages_extras.sh`, to build the `Packages.gz` for the `extras` directory.
 - `/run_download_signing_keys.sh`, to update the mirror signing keys.
+- `/run_download_installers.sh`, to download the `installer` directories.
 
 Define `dapp_mirrordeb_run_delay: 6h` to run theses commands every 6 hours,
 otherwise, you have to manually run theme:
@@ -25,6 +25,7 @@ otherwise, you have to manually run theme:
 - `$ docker exec mirrordeb-app-1 /run_download_signing_keys.sh`
 - `$ docker exec mirrordeb-app-1 /run_scanpackages_extras.sh`
 - `$ docker exec mirrordeb-app-1 /run_debmirror.sh`
+- `$ docker exec mirrordeb-app-1 /run_download_installers.sh`
 
 # installer subdirectories
 
