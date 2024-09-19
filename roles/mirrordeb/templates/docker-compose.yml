@@ -17,7 +17,7 @@ services:
         tag: "mirrordeb"
     networks:
       - traefik_proxy
-    mem_limit: 128M
+    mem_limit: {{ dapp_mirrordeb_docker_mem_limit }}
     environment:
       TZ: "America/New_York"
     volumes:
