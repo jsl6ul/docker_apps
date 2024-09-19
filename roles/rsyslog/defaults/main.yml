@@ -78,7 +78,7 @@ dapp_rsyslog_conf: |
   {% if dapp_rsyslog_remote_syslog is defined %}
   # use a disk queue & forward anything received to a remote server
   # and have buffering applied automatically when it goes down.
-  $WorkDirectory /data/tmp
+  $WorkDirectory /data
   $ActionQueueType LinkedList   # use asynchronous processing
   $ActionQueueFileName srvrfwd  # set file name, also enables disk mode
   $ActionResumeRetryCount -1    # infinite retries on insert failure
