@@ -85,7 +85,6 @@ dapp_rsyslog_conf: |
         protocol="{{ dapp_rsyslog_remote_syslog.protocol }}"
         action.resumeRetryCount="-1"
         queue.type="linkedlist"
-        queue.spoolDirectory="/data"
         queue.filename="forward_buffer"
         queue.saveOnShutdown="on"
       )
