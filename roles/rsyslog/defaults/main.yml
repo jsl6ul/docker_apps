@@ -42,46 +42,50 @@ dapp_rsyslog_entrypoint: |
 
 # rsyslog configuration file
 dapp_rsyslog_conf: |
+  global(
+    workDirectory="/data"
+    umask="0007"
+  )
+
   # Load UDP module
-  $ModLoad imudp
-  $UDPServerRun 514
-  $UDPServerAddress *
+  module(load="imudp")
+  input(type="imudp" port="514" address="*")
 
   # Load TCP module
-  $ModLoad imtcp
-  $InputTCPServerRun 514
+  module(load="imtcp")
+  input(type="imtcp" port="514")
 
-  # Set file format
-  $ActionFileDefaultTemplate RSYSLOG_FileFormat
+  # Generate Periodic Statistics of Internal Counters
+  #module(load="impstats" interval="60" severity="7")
 
-  # Set umask
-  $umask 0007
-
-  # Set templates
-  $template tmpl_syslog,"/data/%HOSTNAME%/syslog-%$year-utc%%$month-utc%%$day-utc%"
-  $template tmpl_auth,"/data/%HOSTNAME%/auth-%$year-utc%%$month-utc%%$day-utc%"
-  $template tmpl_cron,"/data/%HOSTNAME%/cron-%$year-utc%%$month-utc%%$day-utc%"
-  $template tmpl_kern,"/data/%HOSTNAME%/kern-%$year-utc%%$month-utc%%$day-utc%"
-  $template tmpl_mail,"/data/%HOSTNAME%/mail-%$year-utc%%$month-utc%%$day-utc%"
-  $template tmpl_user,"/data/%HOSTNAME%/user-%$year-utc%%$month-utc%%$day-utc%"
+  # Set dynafile templates
+  template(name="df_syslog" type="string" string="/data/%HOSTNAME%/syslog-%$year-utc%%$month-utc%%$day-utc%")
+  template(name="df_auth" type="string" string="/data/%HOSTNAME%/auth-%$year-utc%%$month-utc%%$day-utc%")
+  template(name="df_cron" type="string" string="/data/%HOSTNAME%/cron-%$year-utc%%$month-utc%%$day-utc%")
+  template(name="df_kern" type="string" string="/data/%HOSTNAME%/kern-%$year-utc%%$month-utc%%$day-utc%")
+  template(name="df_mail" type="string" string="/data/%HOSTNAME%/mail-%$year-utc%%$month-utc%%$day-utc%")
+  template(name="df_user" type="string" string="/data/%HOSTNAME%/user-%$year-utc%%$month-utc%%$day-utc%")
 
   # Log anything besides private authentication messages to a single log file
-  *.*;auth,authpriv.none          -?tmpl_syslog
+  *.*;auth,authpriv.none action(type="omfile" dynafile="df_syslog" template="RSYSLOG_FileFormat")
 
   # Log commonly used facilities to their own log file
-  auth,authpriv.*                 -?tmpl_auth
-  cron.*                          -?tmpl_cron
-  kern.*                          -?tmpl_kern
-  mail.*                          -?tmpl_mail
-  user.*                          -?tmpl_user
+  auth,authpriv.* action(type="omfile" dynafile="df_auth" template="RSYSLOG_FileFormat")
+  cron.* action(type="omfile" dynafile="df_cron" template="RSYSLOG_FileFormat")
+  kern.* action(type="omfile" dynafile="df_kern" template="RSYSLOG_FileFormat")
+  mail.* action(type="omfile" dynafile="df_mail" template="RSYSLOG_FileFormat")
+  user.* action(type="omfile" dynafile="df_user" template="RSYSLOG_FileFormat")
 
   {% if dapp_rsyslog_remote_syslog is defined %}
   # use a disk queue & forward anything received to a remote server
   # and have buffering applied automatically when it goes down.
-  $WorkDirectory /data
-  $ActionQueueType LinkedList   # use asynchronous processing
-  $ActionQueueFileName srvrfwd  # set file name, also enables disk mode
-  $ActionResumeRetryCount -1    # infinite retries on insert failure
-  $ActionQueueSaveOnShutdown on # save in-memory data if rsyslog shuts down
-  *.* action(type="omfwd" target="{{ dapp_rsyslog_remote_syslog.target }}" port="{{ dapp_rsyslog_remote_syslog.port }}" protocol="{{ dapp_rsyslog_remote_syslog.protocol }}")
+  *.* action(type="omfwd"
+        target="{{ dapp_rsyslog_remote_syslog.target }}"
+        port="{{ dapp_rsyslog_remote_syslog.port }}"
+        protocol="{{ dapp_rsyslog_remote_syslog.protocol }}"
+        action.resumeRetryCount="-1"
+        queue.type="linkedlist"
+        queue.filename="forward_buffer"
+        queue.saveOnShutdown="on"
+      )
   {% endif %}
