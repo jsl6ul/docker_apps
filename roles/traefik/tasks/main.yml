@@ -12,13 +12,13 @@
   ansible.builtin.template:
     src: docker-compose.yml
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
-    mode: 0640
+    mode: "0640"
 
 - name: Copy traefik.env
   ansible.builtin.copy:
     dest: "{{ _docker_project_dir }}/traefik.env"
     content: "{{ dapp_traefik_env_file }}"
-    mode: 0640
+    mode: "0640"
   notify: Restart containers
 
 - name: Copy file_provider.yml
@@ -41,4 +41,4 @@
   changed_when: false
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

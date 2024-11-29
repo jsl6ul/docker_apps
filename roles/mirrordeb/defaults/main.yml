@@ -1,11 +1,11 @@
 ---
 # docker image
-dapp_mirrordeb_docker_image: "localbuild/mirrordeb"
+dapp_mirrordeb_docker_image: localbuild/mirrordeb
 
 dapp_mirrordeb_docker_mem_limit: 512M
 
 # service address
-dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_domain }}"
+dapp_mirrordeb_traefik_address: mirror.{{ dapp_common_domain }}
 
 # Define 'dapp_mirrordeb_run_delay' to execute commands
 # automatically according to the specified delay.
@@ -15,11 +15,11 @@ dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_domain }}"
 # you'll have to create the directories yourself; this role won't do it.
 
 # main directory for debmirror destination
-dapp_mirrordeb_directory_mirrors: "./mirrors"
+dapp_mirrordeb_directory_mirrors: ./mirrors
 # directory for 'extras' packages
-dapp_mirrordeb_directory_extras: "./extras"
+dapp_mirrordeb_directory_extras: ./extras
 # directory for key files
-dapp_mirrordeb_directory_keys: "./keys"
+dapp_mirrordeb_directory_keys: ./keys
 
 # mirror settings (remove '--dry-run' option when all is set)
 dapp_mirrordeb_mirrors:

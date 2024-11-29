@@ -1,10 +1,10 @@
 ---
 # docker images
-dapp_gitlab_docker_image: "docker.io/gitlab/gitlab-ce"
-dapp_gitlab_runner_docker_image: "docker.io/gitlab/gitlab-runner"
+dapp_gitlab_docker_image: docker.io/gitlab/gitlab-ce
+dapp_gitlab_runner_docker_image: docker.io/gitlab/gitlab-runner
 
 # gitlab server address
-dapp_gitlab_traefik_address: "gitlab.{{ dapp_common_domain }}"
+dapp_gitlab_traefik_address: gitlab.{{ dapp_common_domain }}
 
 dapp_gitlab_mem_limit: 4096M
 dapp_gitlab_runner_mem_limit: 3072M

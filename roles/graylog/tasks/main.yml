@@ -12,13 +12,13 @@
   ansible.builtin.template:
     src: docker-compose.yml
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
-    mode: 0640
+    mode: "0640"
 
 - name: Copy graylog.conf
   ansible.builtin.copy:
     dest: "{{ _docker_project_dir }}/graylog.conf"
     content: "{{ dapp_graylog_conf_file }}"
-    mode: 0644
+    mode: "0644"
   notify: Restart containers
 
 - name: Start containers
@@ -27,4 +27,4 @@
   changed_when: false
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
