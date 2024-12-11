@@ -19,7 +19,7 @@ services:
 {% endif %}
     mem_limit: 512M
     environment:
-      TZ: "America/New_York"
+      {{ dapp_rsyslog_docker_environment|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "./data:/data"

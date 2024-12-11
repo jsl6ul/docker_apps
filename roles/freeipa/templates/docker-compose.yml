@@ -34,10 +34,7 @@ services:
     mem_limit: 2048M
     cgroup: host
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
-      #DEBUG_TRACE: 1
-      #DEBUG_NO_EXIT: 1
+      {{ dapp_freeipa_docker_environment|indent(6) }}
     volumes:
       - "data:/data"
       - "python:/usr/lib/python3.9/site-packages/ipaserver"

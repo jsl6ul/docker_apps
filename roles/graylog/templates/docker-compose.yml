@@ -23,8 +23,7 @@ services:
       - default
     mem_limit: 512M
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_graylog_mongo_docker_environment|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_graylog_mongo_volumes|to_nice_yaml|indent(6) }}
@@ -42,16 +41,7 @@ services:
       - default
     mem_limit: 2048M
     environment:
-      TZ: "America/New_York"
-      http.host: "0.0.0.0"
-      transport.host: "localhost"
-      network.host: "0.0.0.0"
-      OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m -Dlog4j2.formatMsgNoLookups=true"
-      discovery.type: "single-node"
-      # access opensearch using http
-      plugins.security.disabled: "true"
-      #reindex.remote.whitelist: "*:9200"
-      OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ dapp_graylog_opensearch_admin_pwd }}"
+      {{ dapp_graylog_opensearch_docker_environment|indent(6) }}
     ulimits:
       memlock:
         soft: -1
@@ -77,8 +67,7 @@ services:
       - traefik_proxy
     mem_limit: 2048M
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_graylog_docker_environment|indent(6) }}
     ports: {{ dapp_graylog_ports }}
     expose:
       - "80"

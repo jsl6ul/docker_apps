@@ -16,8 +16,7 @@ services:
       - traefik_proxy
     mem_limit: 256M
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_privatebin_docker_environment|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
     labels:

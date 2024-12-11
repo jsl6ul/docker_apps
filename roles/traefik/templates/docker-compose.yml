@@ -20,8 +20,7 @@ services:
     mem_limit: 512M
     ports: {{ dapp_traefik_ports }}
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_traefik_docker_environment|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"

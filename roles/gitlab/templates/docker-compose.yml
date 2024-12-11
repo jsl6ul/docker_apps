@@ -24,12 +24,7 @@ services:
     cpus: {{ dapp_gitlab_cpus }}
     mem_limit: {{ dapp_gitlab_mem_limit }}
     environment:
-      TZ: "America/New_York"
-      GITLAB_OMNIBUS_CONFIG: |
-        {{ dapp_gitlab_omnibus_config|indent(8) }}
-{% if dapp_gitlab_omnibus_config_ldap is defined %}
-        {{ dapp_gitlab_omnibus_config_ldap|indent(8) }}
-{% endif %}
+      {{ dapp_gitlab_docker_environment|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "config:/etc/gitlab"
@@ -60,7 +55,7 @@ services:
     cpus: {{ dapp_gitlab_runner_cpus }}
     mem_limit: {{ dapp_gitlab_runner_mem_limit }}
     environment:
-      TZ: "America/New_York"
+      {{ dapp_gitlab_runner_docker_environment|indent(6) }}
     volumes:
       - "runner:/etc/gitlab-runner"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"

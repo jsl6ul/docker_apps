@@ -14,7 +14,7 @@ services:
       - traefik_proxy
     mem_limit: 128M
     environment:
-      TZ: "America/New_York"
+      {{ dapp_homepage_docker_environment|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "./bookmarks.yaml:/app/config/bookmarks.yaml"
