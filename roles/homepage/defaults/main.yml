@@ -2,6 +2,10 @@
 # docker image
 dapp_homepage_docker_image: "ghcr.io/gethomepage/homepage"
 
+# homepage docker environment variables
+dapp_homepage_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
 # homepage server address
 dapp_homepage_traefik_address: "www.{{ dapp_common_domain }}"
 

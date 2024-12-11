@@ -1,4 +1,15 @@
 ---
+# gitlab docker environment variables
+dapp_gitlab_docker_environment: |
+  {{ dapp_common_docker_environment }}
+  GITLAB_OMNIBUS_CONFIG: |
+    {{ dapp_gitlab_omnibus_config|indent(2) }}
+    {{ (dapp_gitlab_omnibus_config_ldap|default(""))|indent(2) }}
+
+# gitlab runner docker environment variables
+dapp_gitlab_runner_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
 # docker images
 dapp_gitlab_docker_image: "docker.io/gitlab/gitlab-ce"
 dapp_gitlab_runner_docker_image: "docker.io/gitlab/gitlab-runner"
