@@ -25,6 +25,8 @@ services:
     mem_limit: {{ dapp_gitlab_mem_limit }}
     environment:
       {{ dapp_gitlab_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_gitlab_docker_healthcheck|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "config:/etc/gitlab"
@@ -56,6 +58,8 @@ services:
     mem_limit: {{ dapp_gitlab_runner_mem_limit }}
     environment:
       {{ dapp_gitlab_runner_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_gitlab_runner_docker_healthcheck|indent(6) }}
     volumes:
       - "runner:/etc/gitlab-runner"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"

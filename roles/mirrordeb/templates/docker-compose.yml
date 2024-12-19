@@ -20,6 +20,8 @@ services:
     mem_limit: {{ dapp_mirrordeb_docker_mem_limit }}
     environment:
       {{ dapp_mirrordeb_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_mirrordeb_docker_healthcheck|indent(6) }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "homeroot:/root"
