@@ -23,6 +23,22 @@ dapp_monitoring_blackbox_docker_environment: |
 dapp_monitoring_grafana_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# prometheus docker healthcheck variables
+dapp_monitoring_prometheus_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# alertmanager docker healthcheck variables
+dapp_monitoring_alertmanager_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# blackbox docker healthcheck variables
+dapp_monitoring_blackbox_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# grafana docker healthcheck variables
+dapp_monitoring_grafana_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # servers address
 dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_domain }}"
 dapp_monitoring_alertmanager_traefik_address: "alertmanager.{{ dapp_common_domain }}"

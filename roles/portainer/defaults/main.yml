@@ -6,6 +6,10 @@ dapp_portainer_docker_image: "docker.io/portainer/portainer-ce:latest"
 dapp_portainer_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# portainer docker healthcheck variables
+dapp_portainer_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # portainer admin password
 #
 # 1. you can define a password (which will be added to a password file)

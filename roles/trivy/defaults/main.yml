@@ -6,3 +6,7 @@ dapp_trivy_token: abc123
 # trivy docker environment variables
 dapp_trivy_docker_environment: |
   {{ dapp_common_docker_environment }}
+
+# trivy docker healthcheck variables
+dapp_trivy_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}

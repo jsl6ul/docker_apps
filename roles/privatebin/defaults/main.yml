@@ -6,5 +6,9 @@ dapp_privatebin_docker_image: "docker.io/privatebin/nginx-fpm-alpine"
 dapp_privatebin_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# privatebin docker healthcheck variables
+dapp_privatebin_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # privatebin server address
 dapp_privatebin_traefik_address: "privatebin.{{ dapp_common_domain }}"

@@ -25,6 +25,18 @@ dapp_graylog_opensearch_docker_environment: |
   #reindex.remote.whitelist: "*:9200"
   OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ dapp_graylog_opensearch_admin_pwd }}"
 
+# graylog docker healthcheck variables
+dapp_graylog_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# mongo docker healthcheck variables
+dapp_graylog_mongo_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# opensearch docker healthcheck variables
+dapp_graylog_opensearch_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # graylog server address
 dapp_graylog_traefik_address: "graylog.{{ dapp_common_domain }}"
 

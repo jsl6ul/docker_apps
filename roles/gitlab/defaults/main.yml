@@ -10,6 +10,14 @@ dapp_gitlab_docker_environment: |
 dapp_gitlab_runner_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# gitlab docker healthcheck variables
+dapp_gitlab_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# gitlab runner docker healthcheck variables
+dapp_gitlab_runner_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # docker images
 dapp_gitlab_docker_image: "docker.io/gitlab/gitlab-ce"
 dapp_gitlab_runner_docker_image: "docker.io/gitlab/gitlab-runner"

@@ -6,3 +6,7 @@ dapp_glances_docker_image: "docker.io/nicolargo/glances:latest"
 dapp_glances_docker_environment: |
   {{ dapp_common_docker_environment }}
   GLANCES_OPT: "--webserver --time 5"
+
+# glances docker healthcheck variables
+dapp_glances_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}

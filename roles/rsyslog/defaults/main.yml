@@ -6,6 +6,10 @@ dapp_rsyslog_docker_image: localbuild/rsyslog
 dapp_rsyslog_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# rsyslog docker healthcheck variables
+dapp_rsyslog_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # to map the ports on the host
 # dapp_rsyslog_ports:
 #   - "514:514/udp"
