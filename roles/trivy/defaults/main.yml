@@ -2,3 +2,11 @@
 dapp_trivy_docker_image: aquasec/trivy
 dapp_trivy_traefik_address: "trivy.{{ dapp_common_domain }}"
 dapp_trivy_token: abc123
+
+# trivy docker environment variables
+dapp_trivy_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# trivy docker healthcheck variables
+dapp_trivy_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}

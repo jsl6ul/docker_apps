@@ -2,6 +2,14 @@
 # docker image
 dapp_traefik_docker_image: "docker.io/traefik"
 
+# traefik docker environment variables
+dapp_traefik_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# traefik docker healthcheck variables
+dapp_traefik_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # default trafik ports
 dapp_traefik_ports:
   - 80:80

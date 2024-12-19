@@ -26,8 +26,9 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_monitoring_prometheus_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_monitoring_prometheus_docker_healthcheck|indent(6) }}
     links:
       - alertmanager
       - blackbox
@@ -66,8 +67,9 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_monitoring_alertmanager_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_monitoring_alertmanager_docker_healthcheck|indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
@@ -102,8 +104,9 @@ services:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_blackbox_volumes|to_nice_yaml|indent(6) }}
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_monitoring_blackbox_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_monitoring_blackbox_docker_healthcheck|indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
@@ -136,8 +139,9 @@ services:
       - "./grafana_ldap.toml:/etc/grafana/ldap.toml"
 {% endif %}
     environment:
-      TZ: "America/New_York"
-      PHP_TZ: "America/New_York"
+      {{ dapp_monitoring_grafana_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_monitoring_grafana_docker_healthcheck|indent(6) }}
     links:
       - prometheus
     labels:

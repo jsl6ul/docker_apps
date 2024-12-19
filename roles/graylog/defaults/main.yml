@@ -4,6 +4,39 @@ dapp_graylog_docker_image: "docker.io/graylog/graylog:5.1.6"
 dapp_graylog_mongo_docker_image: "docker.io/mongo:5.0.13"
 dapp_graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2"
 
+# graylog docker environment variables
+dapp_graylog_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# mongo docker environment variables
+dapp_graylog_mongo_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# opensearch docker environment variables
+dapp_graylog_opensearch_docker_environment: |
+  {{ dapp_common_docker_environment }}
+  http.host: "0.0.0.0"
+  transport.host: "localhost"
+  network.host: "0.0.0.0"
+  OPENSEARCH_JAVA_OPTS: "-Xms1024m -Xmx1024m -Dlog4j2.formatMsgNoLookups=true"
+  discovery.type: "single-node"
+  # access opensearch using http
+  plugins.security.disabled: "true"
+  #reindex.remote.whitelist: "*:9200"
+  OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ dapp_graylog_opensearch_admin_pwd }}"
+
+# graylog docker healthcheck variables
+dapp_graylog_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# mongo docker healthcheck variables
+dapp_graylog_mongo_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# opensearch docker healthcheck variables
+dapp_graylog_opensearch_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # graylog server address
 dapp_graylog_traefik_address: "graylog.{{ dapp_common_domain }}"
 
