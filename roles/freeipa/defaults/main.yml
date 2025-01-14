@@ -1,6 +1,16 @@
 ---
 dapp_freeipa_docker_image: "docker.io/freeipa/freeipa-server:almalinux-9-4.11.0"
 
+# freeipa docker environment variables
+dapp_freeipa_docker_environment: |
+  {{ dapp_common_docker_environment }}
+  #DEBUG_TRACE: 1
+  #DEBUG_NO_EXIT: 1
+
+# freeipa docker healthcheck variables
+dapp_freeipa_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 dapp_freeipa_dns_servers:
   - 1.1.1.1
   - 8.8.8.8

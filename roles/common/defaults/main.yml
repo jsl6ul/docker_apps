@@ -2,6 +2,14 @@
 # main directory for docker apps project. (relative to docker_rootless_home)
 dapp_common_directory: docker
 
+# common docker environment variables
+dapp_common_docker_environment: |
+  TZ: "America/New_York"
+
+# common docker healthcheck variables
+dapp_common_docker_healthcheck: |
+  disable: false
+
 # dns domain name for traefik rules and let's encrypt certificate management.
 dapp_common_domain: localdomain
 

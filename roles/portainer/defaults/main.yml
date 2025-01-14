@@ -2,6 +2,13 @@
 # docker image
 dapp_portainer_docker_image: "docker.io/portainer/portainer-ce:latest"
 
+# portainer docker environment variables
+dapp_portainer_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# portainer docker healthcheck variables
+dapp_portainer_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
 
 # portainer admin password
 #
