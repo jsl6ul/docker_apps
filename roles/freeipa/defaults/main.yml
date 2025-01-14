@@ -22,6 +22,14 @@ dapp_freeipa_dns_servers:
 # freeipa admin password
 # dapp_freeipa_pwd_admin: <secret>
 
+# gives the starting value for UID and GID numbers;
+# by default, the value is selected at random
+# dapp_freeipa_idstart: 1000000
+
+# gives the maximum UID and GID number;
+# by default, the value is the idstart starting value plus 199,999.
+# dapp_freeipa_idmax: 1999999
+
 # Optional certificate for HTTP and Directory server
 # 'pin' is the password to encrypt the HTTP and Directory server private key
 # dapp_freeipa_cert:
@@ -83,7 +91,7 @@ dapp_common_traefik_file_provider: |
 
 # freeipa installation commands
 dapp_freeipa_command_master: |
-  ipa-server-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --ds-password='{{ dapp_freeipa_pwd_dm }}' --domain={{ dapp_freeipa_realm }} --realm={{ dapp_freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check
+  ipa-server-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --ds-password='{{ dapp_freeipa_pwd_dm }}' --domain={{ dapp_freeipa_realm }} --realm={{ dapp_freeipa_realm | upper }} --unattended --no-hbac-allow --no-ntp --skip-mem-check {% if dapp_freeipa_idstart is defined %}--idstart {{ dapp_freeipa_idstart }}{% endif %} {% if dapp_freeipa_idstart is defined and dapp_freeipa_idmax is defined %}--idmax {{ dapp_freeipa_idmax }}{% endif %}
 
 dapp_freeipa_command_replica: |
   ipa-replica-install --admin-password='{{ dapp_freeipa_pwd_admin }}' --domain={{ dapp_freeipa_domain }} --realm={{ dapp_freeipa_realm | upper }} --server={{ dapp_freeipa_server_master }} --hostname={{ dapp_freeipa_hostname }}.{{ dapp_common_domain }} --unattended --no-ntp --setup-ca --skip-mem-check
