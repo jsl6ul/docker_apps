@@ -21,7 +21,7 @@ services:
     networks:
       - default
       - traefik_proxy
-    mem_limit: 512M
+    mem_limit: {{ dapp_monitoring_prometheus_docker_mem_limit }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
@@ -62,7 +62,7 @@ services:
     networks:
       - default
       - traefik_proxy
-    mem_limit: 512M
+    mem_limit: {{ dapp_monitoring_alertmanager_docker_mem_limit }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
@@ -99,7 +99,7 @@ services:
     networks:
       - default
       - traefik_proxy
-    mem_limit: 512M
+    mem_limit: {{ dapp_monitoring_blackbox_docker_mem_limit }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_blackbox_volumes|to_nice_yaml|indent(6) }}
@@ -131,7 +131,7 @@ services:
     networks:
       - default
       - traefik_proxy
-    mem_limit: 512M
+    mem_limit: {{ dapp_monitoring_grafana_docker_mem_limit }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_grafana_volumes|to_nice_yaml|indent(6) }}
