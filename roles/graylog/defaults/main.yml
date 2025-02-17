@@ -37,6 +37,11 @@ dapp_graylog_mongo_docker_healthcheck: |
 dapp_graylog_opensearch_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
+# Docker mem_limit
+dapp_graylog_mongo_docker_mem_limit: 512M
+dapp_graylog_opensearch_docker_mem_limit: 2048M
+dapp_graylog_docker_mem_limit: 2048M
+
 # graylog server address
 dapp_graylog_traefik_address: "graylog.{{ dapp_common_domain }}"
 

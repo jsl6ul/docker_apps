@@ -21,7 +21,7 @@ services:
         tag: "graylog_mongo"
     networks:
       - default
-    mem_limit: 512M
+    mem_limit: {{ dapp_graylog_mongo_docker_mem_limit }}
     environment:
       {{ dapp_graylog_mongo_docker_environment|indent(6) }}
     healthcheck:
@@ -41,7 +41,7 @@ services:
         tag: "graylog_opensearch"
     networks:
       - default
-    mem_limit: 2048M
+    mem_limit: {{ dapp_graylog_opensearch_docker_mem_limit }}
     environment:
       {{ dapp_graylog_opensearch_docker_environment|indent(6) }}
     healthcheck:
@@ -69,7 +69,7 @@ services:
     networks:
       - default
       - traefik_proxy
-    mem_limit: 2048M
+    mem_limit: {{ dapp_graylog_docker_mem_limit }}
     environment:
       {{ dapp_graylog_docker_environment|indent(6) }}
     healthcheck:
