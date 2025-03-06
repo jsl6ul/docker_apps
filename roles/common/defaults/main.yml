@@ -4,7 +4,7 @@ dapp_common_directory: docker
 
 # common docker environment variables
 dapp_common_docker_environment: |
-  TZ: "America/New_York"
+  TZ: "UTC"
 
 # common docker healthcheck variables
 dapp_common_docker_healthcheck: |
