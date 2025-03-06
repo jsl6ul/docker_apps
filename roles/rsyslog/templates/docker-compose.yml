@@ -23,7 +23,6 @@ services:
     healthcheck:
       {{ dapp_rsyslog_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "./data:/data"
       - "./rsyslog.conf:/rsyslog.conf"
       - "./entrypoint.sh:/entrypoint.sh"

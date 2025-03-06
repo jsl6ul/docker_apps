@@ -23,7 +23,6 @@ services:
       - traefik_proxy
     mem_limit: {{ dapp_monitoring_prometheus_docker_mem_limit }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
     environment:
       {{ dapp_monitoring_prometheus_docker_environment|indent(6) }}
@@ -64,7 +63,6 @@ services:
       - traefik_proxy
     mem_limit: {{ dapp_monitoring_alertmanager_docker_mem_limit }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
     environment:
       {{ dapp_monitoring_alertmanager_docker_environment|indent(6) }}
@@ -101,7 +99,6 @@ services:
       - traefik_proxy
     mem_limit: {{ dapp_monitoring_blackbox_docker_mem_limit }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_blackbox_volumes|to_nice_yaml|indent(6) }}
     environment:
       {{ dapp_monitoring_blackbox_docker_environment|indent(6) }}
@@ -133,7 +130,6 @@ services:
       - traefik_proxy
     mem_limit: {{ dapp_monitoring_grafana_docker_mem_limit }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_monitoring_grafana_volumes|to_nice_yaml|indent(6) }}
 {% if dapp_monitoring_grafana_ldap_toml is defined %}
       - "./grafana_ldap.toml:/etc/grafana/ldap.toml"

@@ -28,7 +28,6 @@ services:
     command: --admin-password="{{ dapp_portainer_admin_password_hash | regex_replace('\$','$$') }}"
 {% endif %}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock:ro"
       - "data:/data"
 {% if dapp_portainer_admin_password is defined %}

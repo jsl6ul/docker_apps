@@ -28,7 +28,6 @@ services:
     healthcheck:
       {{ dapp_gitlab_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "config:/etc/gitlab"
       - "logs:/var/log/gitlab"
       - "data:/var/opt/gitlab"

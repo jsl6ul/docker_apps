@@ -18,7 +18,6 @@ services:
     healthcheck:
       {{ dapp_homepage_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "./bookmarks.yaml:/app/config/bookmarks.yaml"
       - "./services.yaml:/app/config/services.yaml"
       - "./settings.yaml:/app/config/settings.yaml"

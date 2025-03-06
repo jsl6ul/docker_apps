@@ -27,7 +27,6 @@ services:
     healthcheck:
       {{ dapp_graylog_mongo_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_graylog_mongo_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "false"
@@ -54,7 +53,6 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_graylog_opensearch_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "false"
@@ -85,7 +83,6 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       {{ dapp_graylog_volumes|to_nice_yaml|indent(6) }}
     labels:
       traefik.enable: "true"

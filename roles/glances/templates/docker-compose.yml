@@ -20,7 +20,6 @@ services:
     healthcheck:
       {{ dapp_glances_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock:ro" # ro for monitoring only
     pid: host
     labels:

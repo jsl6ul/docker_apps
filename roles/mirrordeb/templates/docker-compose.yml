@@ -23,7 +23,6 @@ services:
     healthcheck:
       {{ dapp_mirrordeb_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "homeroot:/root"
       - "{{ dapp_mirrordeb_directory_extras }}:/var/www/html/extras"
       - "{{ dapp_mirrordeb_directory_keys }}:/var/www/html/keys"
