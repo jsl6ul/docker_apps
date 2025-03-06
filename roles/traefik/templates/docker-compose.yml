@@ -24,7 +24,6 @@ services:
     healthcheck:
       {{ dapp_traefik_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "/run/user/{{ docker_rootless_user.uid }}/docker.sock:/var/run/docker.sock"
       - "data:/data"
 {% if dapp_common_traefik_file_provider is defined %}

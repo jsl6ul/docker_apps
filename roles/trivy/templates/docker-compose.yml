@@ -25,7 +25,6 @@ services:
     healthcheck:
       {{ dapp_trivy_docker_healthcheck|indent(6) }}
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
       - "cache:/root/.cache/trivy"
     command: server --listen 0.0.0.0:80 --token "{{ dapp_trivy_token }}"
     labels:

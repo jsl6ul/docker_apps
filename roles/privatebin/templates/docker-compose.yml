@@ -19,8 +19,6 @@ services:
       {{ dapp_privatebin_docker_environment|indent(6) }}
     healthcheck:
       {{ dapp_privatebin_docker_healthcheck|indent(6) }}
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"

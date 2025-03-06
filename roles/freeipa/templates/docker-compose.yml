@@ -42,7 +42,6 @@ services:
       - "python:/usr/lib/python3.9/site-packages/ipaserver"
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
       - "/sys/fs/cgroup/user.slice/user-{{ docker_rootless_user.uid }}.slice/user@{{ docker_rootless_user.uid }}.service:/sys/fs/cgroup/user.slice/user-{{ docker_rootless_user.uid }}.slice/user@{{ docker_rootless_user.uid }}.service:rw"
-      - "/etc/localtime:/etc/localtime:ro"
 {% if dapp_freeipa_cert is defined %}
       - "./freeipa_cert.crt:/etc/pki/CA/certs/freeipa_cert.crt:ro"
       - "./freeipa_cert.key:/etc/pki/CA/private/freeipa_cert.key:ro"
