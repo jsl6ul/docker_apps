@@ -1,8 +1,10 @@
 ---
 # docker image
-dapp_graylog_docker_image: "docker.io/graylog/graylog:5.1.6"
-dapp_graylog_mongo_docker_image: "docker.io/mongo:5.0.13"
-dapp_graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2"
+# Check version compatibility between graylog, mongo and opensearch, before updating.
+# https://go2docs.graylog.org/current/upgrading_graylog/upgrading_graylog_in_docker.htm
+dapp_graylog_docker_image: "docker.io/graylog/graylog:6.1.10"
+dapp_graylog_mongo_docker_image: "docker.io/mongo:6.0.14"
+dapp_graylog_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2.15.0"
 
 # graylog docker environment variables
 dapp_graylog_docker_environment: |
