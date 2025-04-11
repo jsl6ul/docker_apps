@@ -99,11 +99,13 @@ services:
       - traefik_proxy
     mem_limit: {{ dapp_monitoring_blackbox_docker_mem_limit }}
     volumes:
-      {{ dapp_monitoring_blackbox_volumes|to_nice_yaml|indent(6) }}
+      {{ dapp_monitoring_blackbox_volumes|to_nice_yaml | indent(6) }}
     environment:
-      {{ dapp_monitoring_blackbox_docker_environment|indent(6) }}
+      {{ dapp_monitoring_blackbox_docker_environment | indent(6) }}
     healthcheck:
-      {{ dapp_monitoring_blackbox_docker_healthcheck|indent(6) }}
+      {{ dapp_monitoring_blackbox_docker_healthcheck | indent(6) }}
+    command:
+      {{ dapp_monitoring_blackbox_docker_command | to_nice_yaml | indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
