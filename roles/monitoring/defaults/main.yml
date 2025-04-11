@@ -7,35 +7,34 @@ dapp_monitoring_grafana_docker_image: "docker.io/grafana/grafana"
 
 dapp_monitoring_grafana_admin_password: secret
 
-# prometheus docker environment variables
+# docker command
+dapp_monitoring_blackbox_docker_command:
+  - "--config.file=/etc/blackbox_exporter/config.yml"
+  - "--log.prober=warn"
+
+# docker environment variables
 dapp_monitoring_prometheus_docker_environment: |
   {{ dapp_common_docker_environment }}
 
-# alertmanager docker environment variables
 dapp_monitoring_alertmanager_docker_environment: |
   {{ dapp_common_docker_environment }}
 
-# blackbox docker environment variables
 dapp_monitoring_blackbox_docker_environment: |
   {{ dapp_common_docker_environment }}
 
-# grafana docker environment variables
 dapp_monitoring_grafana_docker_environment: |
   {{ dapp_common_docker_environment }}
 
-# prometheus docker healthcheck variables
+# docker healthcheck variables
 dapp_monitoring_prometheus_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
-# alertmanager docker healthcheck variables
 dapp_monitoring_alertmanager_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
-# blackbox docker healthcheck variables
 dapp_monitoring_blackbox_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
-# grafana docker healthcheck variables
 dapp_monitoring_grafana_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
@@ -65,7 +64,7 @@ dapp_monitoring_prometheus_retention_time: "365d"
 # Passwords must be hashed using MD5, SHA1, or BCrypt.
 # dapp_monitoring_alertmanager_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
 
-# Volumes
+# docker volumes
 dapp_monitoring_prometheus_volumes:
   - "./prometheus.yml:/etc/prometheus/prometheus.yml"
   - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
@@ -114,7 +113,6 @@ dapp_monitoring_alertmanager_yml: |
       severity: 'warning'
     # Apply inhibition if the alertname is the same.
     equal: ['alertname', 'dev', 'instance']
-
 
 # blackbox_config.yml
 dapp_monitoring_blackbox_config_yml: |
@@ -183,7 +181,6 @@ dapp_monitoring_blackbox_config_yml: |
         preferred_ip_protocol: ip4
         valid_status_codes: [401]
 
-
 # grafana.env
 dapp_monitoring_grafana_env: |
   GF_SECURITY_ADMIN_PASSWORD={{ dapp_monitoring_grafana_admin_password }}
@@ -215,7 +212,6 @@ dapp_monitoring_grafana_datasources_yml: |
       jsonData:
         label: "default"
 
-
 # grafana_providers.yml
 dapp_monitoring_grafana_providers_yml: |
   apiVersion: 1
@@ -232,7 +228,6 @@ dapp_monitoring_grafana_providers_yml: |
       options:
         path: /var/lib/grafana/dashboards
         foldersFromFilesStructure: true
-
 
 # grafana_ldap.toml
 # dapp_monitoring_grafana_ldap_toml: |
@@ -274,7 +269,6 @@ dapp_monitoring_grafana_providers_yml: |
 #   org_role = "Viewer"
 #   grafana_admin = false
 #   org_id = 1
-
 
 # prometheus_alerts.yml
 dapp_monitoring_prometheus_alerts_yml: |
@@ -407,7 +401,6 @@ dapp_monitoring_prometheus_alerts_yml: |
         severity: page
       annotations:
         summary: "The sssd service does not work on one or more nodes"
-
 
 # prometheus.yml
 dapp_monitoring_prometheus_yml: |
