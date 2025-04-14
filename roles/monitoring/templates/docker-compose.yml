@@ -1,7 +1,7 @@
 ---
 volumes:
   alertmanager:
-  grafana_plugins:
+  grafana_data:
   prometheus:
 
 networks:
