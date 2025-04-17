@@ -25,7 +25,7 @@
           "uid": "${datasource}"
         },
         "enable": true,
-        "expr": "sort_desc(sum by (id,message,severity) (idrac_events_log_entry{instance=\"$instance\"}*1000))",
+        "expr": "last_over_time(idrac_events_log_entry{job=~\"$job\", instance=~\"$instance\"}[$__interval] offset -$__interval) * 1000",
         "iconColor": "purple",
         "name": "Events",
         "tagKeys": "instance,severity",
@@ -2704,7 +2704,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort_desc(sum by (id,message,severity) (idrac_events_log_entry{instance=\"$instance\"}*1000))",
+          "expr": "last_over_time(idrac_events_log_entry{job=~\"$job\", instance=~\"$instance\"}[$__interval] offset -$__interval) * 1000",
           "format": "table",
           "instant": false,
           "interval": "1",
