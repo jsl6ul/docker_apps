@@ -77,6 +77,15 @@
     mode: 0640
   notify: Restart containers
 
+- name: Copy redfish_config.yml
+  ansible.builtin.copy:
+    content: "{{ dapp_monitoring_redfish_config_yml }}"
+    dest: "{{ _docker_project_dir }}/redfish_config.yml"
+    mode: 0644
+  no_log: true
+  notify: Restart containers
+  when: dapp_monitoring_redfish_config_yml is defined
+
 - name: Start containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" up -d

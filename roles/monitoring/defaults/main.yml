@@ -1,13 +1,14 @@
 ---
-# docker image
+# docker images
 dapp_monitoring_prometheus_docker_image: "docker.io/prom/prometheus"
 dapp_monitoring_alertmanager_docker_image: "docker.io/prom/alertmanager"
 dapp_monitoring_blackbox_docker_image: "docker.io/prom/blackbox-exporter"
 dapp_monitoring_grafana_docker_image: "docker.io/grafana/grafana"
+dapp_monitoring_redfish_docker_image: "docker.io/mrlhansen/idrac_exporter"
 
 dapp_monitoring_grafana_admin_password: secret
 
-# docker command
+# docker commands
 dapp_monitoring_blackbox_docker_command:
   - "--config.file=/etc/blackbox_exporter/config.yml"
   - "--log.prober=warn"
@@ -25,6 +26,9 @@ dapp_monitoring_blackbox_docker_environment: |
 dapp_monitoring_grafana_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+dapp_monitoring_redfish_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
 # docker healthcheck variables
 dapp_monitoring_prometheus_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
@@ -38,17 +42,22 @@ dapp_monitoring_blackbox_docker_healthcheck: |
 dapp_monitoring_grafana_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
+dapp_monitoring_redfish_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
 # Docker mem_limit
 dapp_monitoring_prometheus_docker_mem_limit: 512M
 dapp_monitoring_alertmanager_docker_mem_limit: 512M
 dapp_monitoring_blackbox_docker_mem_limit: 512M
 dapp_monitoring_grafana_docker_mem_limit: 512M
+dapp_monitoring_redfish_docker_mem_limit: 512M
 
 # servers address
 dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_domain }}"
 dapp_monitoring_alertmanager_traefik_address: "alertmanager.{{ dapp_common_domain }}"
 dapp_monitoring_blackbox_traefik_address: "blackbox.{{ dapp_common_domain }}"
 dapp_monitoring_grafana_traefik_address: "grafana.{{ dapp_common_domain }}"
+dapp_monitoring_redfish_traefik_address: "redfish.{{ dapp_common_domain }}"
 
 dapp_monitoring_alertmanager_smtp_smarthost: "smtp.{{ dapp_common_domain }}:25"
 dapp_monitoring_alertmanager_smtp_from: "alertmanager@{{ dapp_common_domain }}"
@@ -82,6 +91,9 @@ dapp_monitoring_grafana_volumes:
   - "./grafana_dashboards:/var/lib/grafana/dashboards/"
   - "./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
   - "./grafana_providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
+
+dapp_monitoring_redfish_volumes:
+  - "./redfish_config.yml:/etc/prometheus/idrac.yml"
 
 # Grafana plugins to install
 dapp_monitoring_grafana_install_plugins: "grafana-piechart-panel,vonage-status-panel"
@@ -401,6 +413,22 @@ dapp_monitoring_prometheus_alerts_yml: |
         severity: page
       annotations:
         summary: "The sssd service does not work on one or more nodes"
+    - alert: "iDRAC Server Not Healthy"
+      expr: idrac_system_health{status!="OK"}
+      for: 5m
+      keep_firing_for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "iDRAC status is not healthy. Check server BMC system event log."
+    - alert: "iDRAC Server Not Reporting"
+      expr: up{job=~".*idrac.*"} == 0
+      for: 5m
+      keep_firing_for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "iDRAC failed to reply to monitoring via Redfish API. Check idrac_exporter logs for more details."
 
 # prometheus.yml
 dapp_monitoring_prometheus_yml: |
@@ -441,3 +469,34 @@ dapp_monitoring_prometheus_yml: |
           target_label: instance
         - target_label: __address__
           replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
+    - job_name: idrac
+      static_configs:
+        - targets: ['192.168.9.10', '192.168.9.11']
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: redfish:9348
+
+# redfish exporter config file
+# dapp_monitoring_redfish_config_yml: |
+#   address: 127.0.0.1 # Listen address
+#   port: 9348         # Listen port
+#   timeout: 10        # HTTP timeout (in seconds) for Redfish API calls
+#   hosts:
+#     192.168.9.10:
+#       username: user
+#       password: pass
+#     default:
+#       username: user
+#       password: pass
+#   metrics:
+#     system: true
+#     sensors: true
+#     power: true
+#     events: false
+#     storage: false
+#     memory: false
+#     network: false
