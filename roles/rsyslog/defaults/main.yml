@@ -15,12 +15,33 @@ dapp_rsyslog_docker_healthcheck: |
 #   - "514:514/udp"
 #   - "514:514/tcp"
 
-# In addition to saving the logs locally,
-# send a copy to a remote syslog server.
-# dapp_rsyslog_remote_syslog:
-#   target: 192.168.0.100
-#   port: 514
-#   protocol: tcp
+# rsyslog actions
+# dapp_rsyslog_actions:
+#   - name: forward to remote syslog
+#     selector: "*.*"
+#     parameters:
+#       type: omfwd
+#       target: 192.168.0.100
+#       port: 514
+#       protocol: tcp
+#       action.resumeRetryCount: -1
+#       queue.type: linkedlist
+#       queue.filename: .forward_queue_192.168.0.100
+#       queue.saveOnShutdown: "on"
+#   - name: forward using tls
+#     selector: "*.*"
+#     parameters:
+#       type: omfwd
+#       target: 172.16.0.55
+#       port: 6514
+#       protocol: tcp
+#       action.resumeRetryCount: -1
+#       queue.type: linkedlist
+#       queue.filename: .forward_queue_172.16.0.55
+#       queue.saveOnShutdown: "on"
+#       StreamDriver: gtls
+#       StreamDriverMode: 1
+#       StreamDriverAuthMode: anon
 
 # Add a daily cronjob to compress the log files ? (absent|present)
 dapp_rsyslog_compress_cron_hour: "04"
@@ -64,7 +85,7 @@ dapp_rsyslog_conf: |
   input(type="imtcp" port="514")
 
   # Generate Periodic Statistics of Internal Counters
-  #module(load="impstats" interval="60" severity="7")
+  # module(load="impstats" interval="60" severity="7")
 
   # Set dynafile templates
   template(name="df_syslog" type="string" string="/data/%HOSTNAME%/syslog-%$year-utc%%$month-utc%%$day-utc%")
@@ -84,16 +105,14 @@ dapp_rsyslog_conf: |
   mail.* action(type="omfile" dynafile="df_mail" template="RSYSLOG_FileFormat")
   user.* action(type="omfile" dynafile="df_user" template="RSYSLOG_FileFormat")
 
-  {% if dapp_rsyslog_remote_syslog is defined %}
-  # use a disk queue & forward anything received to a remote server
-  # and have buffering applied automatically when it goes down.
-  *.* action(type="omfwd"
-        target="{{ dapp_rsyslog_remote_syslog.target }}"
-        port="{{ dapp_rsyslog_remote_syslog.port }}"
-        protocol="{{ dapp_rsyslog_remote_syslog.protocol }}"
-        action.resumeRetryCount="-1"
-        queue.type="linkedlist"
-        queue.filename="forward_buffer"
-        queue.saveOnShutdown="on"
+  {% if dapp_rsyslog_actions is defined %}
+  {% for action in dapp_rsyslog_actions %}
+  {{ action.selector }} action(
+        name="{{ action.name|replace(' ','_') }}"
+  {% for key in action.parameters %}
+        {{ key }}="{{ action.parameters[key] }}"
+  {% endfor %}
       )
+
+  {% endfor %}
   {% endif %}
