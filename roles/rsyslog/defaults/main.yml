@@ -33,7 +33,7 @@ dapp_rsyslog_compress_cron_state: absent
 dapp_rsyslog_dockerfile: |
   FROM debian:stable-slim
   RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y --no-install-recommends rsyslog && \
+    apt-get install -y --no-install-recommends rsyslog rsyslog-gnutls rsyslog-relp && \
     apt-get -y upgrade && \
     apt-get autoremove && \
     rm -rf /var/cache/apt/*
