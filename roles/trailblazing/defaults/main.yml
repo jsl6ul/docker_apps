@@ -1,0 +1,64 @@
+---
+# docker images
+dapp_trailblazing_docker_image: "ghcr.io/guilbaults/userportal"
+dapp_trailblazing_database_docker_image: "docker.io/mariadb:11.7"
+
+# docker environment variables
+dapp_trailblazing_docker_environment: |
+  {{ dapp_common_docker_environment }}
+  WORKERS: 4
+  THREADS: 4
+
+dapp_trailblazing_database_docker_environment: |
+  {{ dapp_common_docker_environment }}
+  MARIADB_DATABASE: userportal
+  MARIADB_USER: userportal
+  MARIADB_PASSWORD: changeme
+  # MARIADB_PASSWORD_HASH: changeme
+  MARIADB_ROOT_PASSWORD: changeme
+  # MARIADB_ROOT_PASSWORD_HASH:
+
+# docker healthcheck variables
+dapp_trailblazing_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+dapp_trailblazing_database_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# servers address
+dapp_trailblazing_traefik_address: "userportal.{{ dapp_common_domain }}"
+
+# Docker mem_limit
+dapp_trailblazing_docker_mem_limit: 1024M
+dapp_trailblazing_database_docker_mem_limit: 1024M
+
+# docker volumes
+dapp_trailblazing_docker_volumes:
+  - "./local.py:/secrets/settings/99-local.py:Z"
+  - "./custom.js:/opt/userportal/collected-static/custom.js:Z"  # to remove
+  - "./custom.js:/opt/userportal/static/custom.js:Z"            # to remove
+
+dapp_trailblazing_database_docker_volumes:
+  - "database:/var/lib/mysql:Z"
+
+# local.py to overwrite variables from the userportal settings.
+# https://github.com/guilbaults/TrailblazingTurtle/tree/main/userportal/settings
+dapp_trailblazing_local_py: |
+  ALLOWED_HOSTS = ['localhost', '127.0.0.1', '{{ dapp_trailblazing_traefik_address }}']
+
+# Django SAML Authentication
+# openssl req -nodes -new -x509 -newkey rsa:2048 -days 3650 -keyout private.key -out public.cert
+# dapp_trailblazing_saml_private_key: ""
+# dapp_trailblazing_saml_public_cert: ""
+# dapp_trailblazing_idp_metadata_xml: ""
+
+# Dockerfile to build the container
+# from https://github.com/guilbaults/TrailblazingTurtle/blob/main/Containerfile
+# patched for WhiteNoise. https://whitenoise.readthedocs.io/en/stable/
+dapp_trailblazing_dockerfile: |
+  FROM {{ dapp_trailblazing_docker_image }}
+  WORKDIR /opt/userportal
+  # install WhiteNoise for static files
+  RUN . /opt/userportal-env/bin/activate && /opt/userportal-env/bin/pip install --no-cache-dir whitenoise==6.9.0
+  EXPOSE 8000
+  CMD ["./run-django-production.sh"]
