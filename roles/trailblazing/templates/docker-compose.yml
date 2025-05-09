@@ -1,0 +1,74 @@
+---
+volumes:
+  database:
+
+networks:
+  default:
+  traefik_proxy:
+    external: true
+
+services:
+
+  dbserver:
+    image: "{{ dapp_trailblazing_database_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "trailblazing_db"
+    networks:
+      - default
+    mem_limit: {{ dapp_trailblazing_database_docker_mem_limit }}
+    environment:
+      {{ dapp_trailblazing_database_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_trailblazing_database_docker_healthcheck|indent(6) }}
+    volumes:
+      {{ dapp_trailblazing_database_docker_volumes|to_nice_yaml|indent(6) }}
+    labels:
+      traefik.enable: "false"
+
+  app:
+    #image: "{{ dapp_trailblazing_docker_image }}"
+    build: "./"
+    image: "{{ dapp_trailblazing_docker_image }}_localbuild"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "trailblazing"
+    networks:
+      - default
+      - traefik_proxy
+    mem_limit: {{ dapp_trailblazing_docker_mem_limit }}
+    environment:
+      {{ dapp_trailblazing_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_trailblazing_docker_healthcheck|indent(6) }}
+    volumes:
+      {{ dapp_trailblazing_docker_volumes|to_nice_yaml|indent(6) }}
+{% if dapp_trailblazing_saml_private_key is defined %}
+      - ./saml_private.key:/opt/private.key:Z
+{% endif %}
+{% if dapp_trailblazing_saml_public_cert is defined %}
+      - ./saml_public.cert:/opt/public.cert:Z
+{% endif %}
+{% if dapp_trailblazing_idp_metadata_xml is defined %}
+      - ./idp_metadata.xml:/opt/idp_metadata.xml:Z
+{% endif %}
+    pid: host
+    links:
+      - dbserver
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.trailblazing.entrypoints: "http, https"
+      traefik.http.routers.trailblazing.rule: "Host(`{{ dapp_trailblazing_traefik_address }}`)"
+      traefik.http.services.trailblazing.loadbalancer.server.port: "8000"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.trailblazing.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.trailblazing.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.trailblazing.tls.domains[0].main: "{{ dapp_trailblazing_traefik_address }}"
+{% endif %}
