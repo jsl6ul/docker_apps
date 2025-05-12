@@ -116,3 +116,32 @@ dapp_rsyslog_conf: |
 
   {% endfor %}
   {% endif %}
+
+# Extra files to copy to "{{ _docker_project_dir }}/"
+# Bind mount them in container, if container_path is defined.
+# dapp_rsyslog_extra_files:
+#   - name: cert.pem
+#     mode: "0644"
+#     container_path: /cert.pem
+#     content: |
+#       -----BEGIN CERTIFICATE-----
+#       MIIDazCCAlOgAwIBAgIUWMnzpypiuQZCl4w7wKPP3XscSN0wDQYJKoZIhvcNAQEL
+#       BQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
+#       MTAxNjA1MDFaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEw
+#       DQi0Y9lgF8+gSQJNPjAHTKLn4MZUE+52Iq8XE9mqN9cnuTKivAtZlhjbdo7xPeGo
+#       AQUAA4IBDwAwggEKAoIBAQDjrKL+Wku/cxqj/yX8H1N9z6PS9RF0T2QhIzwkl0Gx
+#       mim3Dz60DFojc6dBBzey2reA3fQcNL/eqaeJUXUy2u9bNOO3tk9uPuiLTKHvsVhH
+#       1j2h8Ubiy4FNmKEteOclrXbM5k47A4YfY6O1kfQ817SjeCnPa51sH9nsJaEPUjGA
+#       1pVoMRkW3bV7/RMnRyqnD/3m27fnaAyObnQJtS+dO5lde349SifCy8yCK+hYZrsj
+#       d75zQ+1UPlYF3dHsRxxP8VIm3lqYkpRJMBTMCBfL4HMHyVZXISHbul7Y12uaQtBo
+#       jg2/EZmj2EQ4Qy/ggYzImPKV0I//b8NH9gmduL6LMueXAgMBAAGjUzBRMB0GA1Ud
+#       DgQWBBTpbLG0sO6QH5JwQbelqvAaylSOSTAfBgNVHSMEGDAWgBTpbLG0sO6QH5Jw
+#       QbelqvAaylSOSTAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAI
+#       C6QToTEdDQ5WmkhneuOiNqzqLoZFQaDW0UKQg3Qa4lSydbSD7y4xgYGpTJcEwT0+
+#       HwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggEiMA0GCSqGSIb3DQEB
+#       +v0y/V/BXHOZQaHfsnB6R/kHK5T8i9zh9mzivdOk/DL9LcMsa8MRfVIVy7iS7eiD
+#       GErN6RsGQfXj6CNcmSJxEKjrpEYRWK8E3ndndTo7vAG8o8nJgNXO874Yat/EOQYB
+#       xh1NJJ0bS6pedftupJDYmOhoDlywq5svV9c+xBTDLhaq6fKGfr1zcBauw/5LVwmt
+#       GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNTA1MTIxNjA1MDFaFw0yNTA4
+#       fqFHMOk+2pxVCESS4xKs
+#       -----END CERTIFICATE-----
