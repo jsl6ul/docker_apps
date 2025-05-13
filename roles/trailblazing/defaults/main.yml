@@ -58,7 +58,11 @@ dapp_trailblazing_local_py: |
 dapp_trailblazing_dockerfile: |
   FROM {{ dapp_trailblazing_docker_image }}
   WORKDIR /opt/userportal
-  # install WhiteNoise for static files
+  # Install WhiteNoise for static files
   RUN . /opt/userportal-env/bin/activate && /opt/userportal-env/bin/pip install --no-cache-dir whitenoise==6.9.0
+  # Wait for mariadb
+  RUN sed -i '10i while true; do echo "Waiting for mariadb..."; /opt/userportal-env/bin/python manage.py check --database default >/dev/null 2>/dev/null && break; sleep 3; done' run-django-production.sh
+  # Database initialisation in the absence of tables.
+  RUN sed -i '11i /opt/userportal-env/bin/python manage.py inspectdb notes_note|grep -q "Unable to inspect table" && /opt/userportal-env/bin/python manage.py migrate' run-django-production.sh
   EXPOSE 8000
   CMD ["./run-django-production.sh"]
