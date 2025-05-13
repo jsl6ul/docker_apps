@@ -26,5 +26,12 @@ services:
       - "./data:/data"
       - "./rsyslog.conf:/rsyslog.conf"
       - "./entrypoint.sh:/entrypoint.sh"
+{% if dapp_rsyslog_extra_files is defined %}
+{% for file in dapp_rsyslog_extra_files %}
+{% if file.container_path is defined %}
+      - "./{{ file.name }}:{{ file.container_path }}"
+{% endif %}
+{% endfor %}
+{% endif %}
     labels:
       traefik.enable: "false"

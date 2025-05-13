@@ -34,6 +34,16 @@
     mode: "0644"
   notify: Restart containers
 
+- name: Copy rsyslog extra files
+  ansible.builtin.copy:
+    dest: "{{ _docker_project_dir }}/{{ item.name }}"
+    content: "{{ item.content }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ dapp_rsyslog_extra_files }}"
+  when: dapp_rsyslog_extra_files is defined
+  no_log: true
+  notify: Restart containers
+
 - name: Start containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" up -d
