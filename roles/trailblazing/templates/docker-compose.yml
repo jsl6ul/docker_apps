@@ -29,7 +29,6 @@ services:
       traefik.enable: "false"
 
   app:
-    #image: "{{ dapp_trailblazing_docker_image }}"
     build: "./"
     image: "{{ dapp_trailblazing_docker_image }}_localbuild"
     restart: unless-stopped
