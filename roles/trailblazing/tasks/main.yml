@@ -26,7 +26,7 @@
   ansible.builtin.copy:
     content: "{{ dapp_trailblazing_local_py }}"
     dest: "{{ _docker_project_dir }}/local.py"
-    mode: 0644
+    mode: 0640
   no_log: true
   notify: Restart containers
 
@@ -34,7 +34,7 @@
   ansible.builtin.copy:
     content: "{{ dapp_trailblazing_saml_private_key }}"
     dest: "{{ _docker_project_dir }}/saml_private.key"
-    mode: 0644
+    mode: 0640
   no_log: true
   when: dapp_trailblazing_saml_private_key is defined
   notify: Restart containers
@@ -43,7 +43,7 @@
   ansible.builtin.copy:
     content: "{{ dapp_trailblazing_saml_public_cert }}"
     dest: "{{ _docker_project_dir }}/saml_public.cert"
-    mode: 0644
+    mode: 0640
   when: dapp_trailblazing_saml_public_cert is defined
   notify: Restart containers
 
@@ -51,7 +51,7 @@
   ansible.builtin.copy:
     content: "{{ dapp_trailblazing_idp_metadata_xml }}"
     dest: "{{ _docker_project_dir }}/idp_metadata.xml"
-    mode: 0644
+    mode: 0640
   when: dapp_trailblazing_idp_metadata_xml is defined
   notify: Restart containers
 
