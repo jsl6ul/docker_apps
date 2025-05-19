@@ -39,88 +39,42 @@ dapp_trailblazing_database_docker_volumes:
 
 # local.py to overwrite variables from the userportal settings.
 # https://github.com/guilbaults/TrailblazingTurtle/tree/main/userportal/settings
-# dapp_trailblazing_local_py: |
-#   # 10-base.py
-#   ALLOWED_HOSTS = ['localhost', '127.0.0.1', '{{ dapp_trailblazing_traefik_address }}']
-#   SECRET_KEY = '{{ __django_secret_key }}'
-#   CSRF_TRUSTED_ORIGINS = ['https://{{ dapp_trailblazing_traefik_address }}']
-#
-#   INSTALLED_APPS = [
-#     'django.contrib.admin',
-#     'django.contrib.auth',
-#     'django.contrib.contenttypes',
-#     'django.contrib.sessions',
-#     'django.contrib.messages',
-#     'django.contrib.staticfiles',
-#     'django.contrib.humanize',
-#     'djangosaml2',
-#     'csp',
-#     'watchman',
-#     'pages',
-#     'slurm',
-#     'notes',
-#     # system modules
-#     'rest_framework',
-#     'rest_framework.authtoken',
-#     'bootstrap_pagination',
-#   ]
-#
-#   # WhiteNoise static files storage
-#   STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-#   MIDDLEWARE += [
-#     'django.middleware.security.SecurityMiddleware',
-#     'whitenoise.middleware.WhiteNoiseMiddleware',
-#     'django.contrib.sessions.middleware.SessionMiddleware',
-#     'django.middleware.locale.LocaleMiddleware',
-#     'django.middleware.common.CommonMiddleware',
-#     'django.middleware.csrf.CsrfViewMiddleware',
-#     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#     'django.contrib.auth.middleware.RemoteUserMiddleware',
-#     'django.contrib.messages.middleware.MessageMiddleware',
-#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#     'djangosaml2.middleware.SamlSessionMiddleware',
-#     'csp.middleware.CSPMiddleware',
-#   ]
-#
-#   # 20-databases.py
-#   DATABASES = {
-#     'default': {
-#       'ENGINE': 'django.db.backends.mysql',
-#       'NAME': 'userportal',
-#       'USER': 'userportal',
-#       'PASSWORD': '{{ __django_mariadb_user_password }}',
-#       'HOST': 'dbserver',
-#       'PORT': '3306',
-#       'OPTIONS': {
-#         'charset': 'utf8mb4',
-#         'use_unicode': True,
-#       },
-#     },
-#     'ldap': {
-#       'ENGINE': 'ldapdb.backends.ldap',
-#       'NAME': 'ldaps://ldap.example.com',
-#       'USER': 'cn=user,dc=example,dc=com',
-#       'PASSWORD': '{{ __ldap_bind_password }}',
-#       'PAGE_SIZE': 100,
-#     },
-#     'slurm': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'slurm_acct_db',
-#         'USER': 'userportal',
-#         'PASSWORD': '{{ __slurmdb_userportal_pw }}',
-#         'HOST': 'slurmdb.{{ dapp_common_domain }}',
-#         'PORT': '3306',
-#     },
-#   }
-#
-#   # 21-prometheus.py
-#   PROMETHEUS = {
-#     'url': 'https://prometheus.{{ dapp_common_domain }}',
-#     'headers': {'Authorization': 'Basic {{ __prometheus_basic_auth_base64 }}'},
-#     'filter': {
-#       'default': "",
-#     },
-#   }
+dapp_trailblazing_local_py: |
+  ALLOWED_HOSTS = ['localhost', '127.0.0.1', '{{ dapp_trailblazing_traefik_address }}']
+  SECRET_KEY = 'changeme'
+  CSRF_TRUSTED_ORIGINS = ['https://{{ dapp_trailblazing_traefik_address }}']
+
+  # WhiteNoise static files storage
+  STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+  MIDDLEWARE += [
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.RemoteUserMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'djangosaml2.middleware.SamlSessionMiddleware',
+    'csp.middleware.CSPMiddleware',
+  ]
+
+  DATABASES = {
+    'default': {
+      'ENGINE': 'django.db.backends.mysql',
+      'NAME': 'userportal',
+      'USER': 'userportal',
+      'PASSWORD': 'changeme',
+      'HOST': 'dbserver',
+      'PORT': '3306',
+      'OPTIONS': {
+        'charset': 'utf8mb4',
+        'use_unicode': True,
+      },
+    },
+  }
 
 # Django SAML Authentication
 # openssl req -nodes -new -x509 -newkey rsa:2048 -days 3650 -keyout private.key -out public.cert
