@@ -77,6 +77,7 @@ dapp_monitoring_prometheus_retention_time: "365d"
 dapp_monitoring_prometheus_volumes:
   - "./prometheus.yml:/etc/prometheus/prometheus.yml"
   - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
+  - "./prometheus_recording.yml:/etc/prometheus/recording.yml"
   - "prometheus:/prometheus"
 
 dapp_monitoring_alertmanager_volumes:
@@ -285,7 +286,7 @@ dapp_monitoring_grafana_providers_yml: |
 # prometheus_alerts.yml
 dapp_monitoring_prometheus_alerts_yml: |
   groups:
-  - name: main
+  - name: alerting_rules
     rules:
     - alert: "Prometheus target down"
       expr: up==0
@@ -430,6 +431,15 @@ dapp_monitoring_prometheus_alerts_yml: |
       annotations:
         summary: "iDRAC failed to reply to monitoring via Redfish API. Check idrac_exporter logs for more details."
 
+# prometheus_recording.yml
+dapp_monitoring_prometheus_recording_yml: ""
+# dapp_monitoring_prometheus_recording_yml: |
+#   groups:
+#   - name: recording_rules
+#     rules:
+#     - record: code:prometheus_http_requests_total:sum
+#       expr: sum by (code) (prometheus_http_requests_total)
+
 # prometheus.yml
 dapp_monitoring_prometheus_yml: |
   # my global config
@@ -446,6 +456,7 @@ dapp_monitoring_prometheus_yml: |
   # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
   rule_files:
     - "/etc/prometheus/alerts.yml"
+    - "/etc/prometheus/recording.yml"
   # A scrape configuration containing exactly one endpoint to scrape:
   # Here it's Prometheus itself.
   scrape_configs:
