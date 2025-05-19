@@ -48,13 +48,13 @@ services:
     volumes:
       {{ dapp_trailblazing_docker_volumes|to_nice_yaml|indent(6) }}
 {% if dapp_trailblazing_saml_private_key is defined %}
-      - ./saml_private.key:/opt/private.key:Z
+      - ./saml_private.key:/opt/userportal/private.key:Z
 {% endif %}
 {% if dapp_trailblazing_saml_public_cert is defined %}
-      - ./saml_public.cert:/opt/public.cert:Z
+      - ./saml_public.cert:/opt/userportal/public.cert:Z
 {% endif %}
 {% if dapp_trailblazing_idp_metadata_xml is defined %}
-      - ./idp_metadata.xml:/opt/idp_metadata.xml:Z
+      - ./idp_metadata.xml:/opt/userportal/idp_metadata.xml:Z
 {% endif %}
     pid: host
     links:
