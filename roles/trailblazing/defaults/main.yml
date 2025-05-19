@@ -1,7 +1,7 @@
 ---
 # docker images
 dapp_trailblazing_docker_image: "ghcr.io/guilbaults/userportal"
-dapp_trailblazing_database_docker_image: "docker.io/mariadb:11.7"
+dapp_trailblazing_database_docker_image: "docker.io/mariadb:lts"
 
 # docker environment variables
 dapp_trailblazing_docker_environment: |
@@ -13,10 +13,8 @@ dapp_trailblazing_database_docker_environment: |
   {{ dapp_common_docker_environment }}
   MARIADB_DATABASE: userportal
   MARIADB_USER: userportal
-  MARIADB_PASSWORD: changeme
-  # MARIADB_PASSWORD_HASH: changeme
-  MARIADB_ROOT_PASSWORD: changeme
-  # MARIADB_ROOT_PASSWORD_HASH:
+  MARIADB_PASSWORD: 'changeme'
+  MARIADB_ROOT_PASSWORD: 'changeme'
 
 # docker healthcheck variables
 dapp_trailblazing_docker_healthcheck: |
@@ -35,8 +33,6 @@ dapp_trailblazing_database_docker_mem_limit: 1024M
 # docker volumes
 dapp_trailblazing_docker_volumes:
   - "./local.py:/secrets/settings/99-local.py:Z"
-  - "./custom.js:/opt/userportal/collected-static/custom.js:Z"  # to remove
-  - "./custom.js:/opt/userportal/static/custom.js:Z"            # to remove
 
 dapp_trailblazing_database_docker_volumes:
   - "database:/var/lib/mysql:Z"
