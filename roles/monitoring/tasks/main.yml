@@ -28,6 +28,13 @@
     mode: 0644
   notify: Restart containers
 
+- name: Copy prometheus_recording.yml
+  ansible.builtin.copy:
+    content: "{{ dapp_monitoring_prometheus_recording_yml }}"
+    dest: "{{ _docker_project_dir }}/prometheus_recording.yml"
+    mode: 0644
+  notify: Restart containers
+
 - name: Copy alertmanager.yml
   ansible.builtin.copy:
     content: "{{ dapp_monitoring_alertmanager_yml }}"
