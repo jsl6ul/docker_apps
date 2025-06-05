@@ -504,6 +504,7 @@ dapp_monitoring_prometheus_yml: |
 #       username: user
 #       password: pass
 #   metrics:
+#     # all: true
 #     system: true
 #     sensors: true
 #     power: true
