@@ -19,6 +19,7 @@
     dest: "{{ _docker_project_dir }}/traefik.env"
     content: "{{ dapp_traefik_env_file }}"
     mode: 0640
+  no_log: true
   notify: Restart containers
 
 - name: Copy file_provider.yml
