@@ -13,6 +13,7 @@
     src: docker-compose.yml
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
+  no_log: true
 
 - name: Copy prometheus.yml
   ansible.builtin.copy:
@@ -69,6 +70,7 @@
     dest: "{{ _docker_project_dir }}/grafana_ldap.toml"
     mode: 0640
   when: dapp_monitoring_grafana_ldap_toml is defined
+  no_log: true
   notify: Restart containers
 
 - name: Copy grafana dashboards
@@ -82,6 +84,7 @@
     content: "{{ dapp_monitoring_grafana_env }}"
     dest: "{{ _docker_project_dir }}/grafana.env"
     mode: 0640
+  no_log: true
   notify: Restart containers
 
 - name: Copy redfish_config.yml
