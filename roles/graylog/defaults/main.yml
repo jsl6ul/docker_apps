@@ -74,16 +74,16 @@ dapp_graylog_mongo_volumes:
 dapp_graylog_opensearch_volumes:
   - "opensearch:/usr/share/opensearch/data"
 
-# smtp server and port if you want graylog alerts by mail
-dapp_graylog_smtp_mailfrom: "graylog@{{ dapp_common_domain }}"
-dapp_graylog_smtp_server: "mail.{{ dapp_common_domain }}"
-dapp_graylog_smtp_port: 25
-dapp_graylog_smtp_enabled: false
-dapp_graylog_smtp_auth_username: nobody
-dapp_graylog_smtp_auth_password: secret
-dapp_graylog_smtp_use_auth: false
-dapp_graylog_smtp_use_ssl: false
-dapp_graylog_smtp_use_tls: false
+# These properties configure email notification delivery settings.
+# dapp_graylog_smtp_mailfrom: "graylog@{{ dapp_common_domain }}"
+# dapp_graylog_smtp_server: "mail.{{ dapp_common_domain }}"
+# dapp_graylog_smtp_port: 25
+# dapp_graylog_smtp_enabled: false
+# dapp_graylog_smtp_auth_username: nobody
+# dapp_graylog_smtp_auth_password: secret
+# dapp_graylog_smtp_use_auth: false
+# dapp_graylog_smtp_use_ssl: false
+# dapp_graylog_smtp_use_tls: false
 
 # graylog.conf file
 dapp_graylog_conf_file: |
@@ -116,16 +116,16 @@ dapp_graylog_conf_file: |
   root_timezone = Canada/Eastern
   root_username = admin
   rotation_strategy = count
-  transport_email_auth_password = {{ dapp_graylog_smtp_auth_password }}
-  transport_email_auth_username = {{ dapp_graylog_smtp_auth_username }}
-  transport_email_enabled = {{ dapp_graylog_smtp_enabled }}
-  transport_email_from_email = {{ dapp_graylog_smtp_mailfrom }}
-  transport_email_hostname = {{ dapp_graylog_smtp_server }}
-  transport_email_port = {{ dapp_graylog_smtp_port }}
+  transport_email_auth_password = {{ dapp_graylog_smtp_auth_password | default('') }}
+  transport_email_auth_username = {{ dapp_graylog_smtp_auth_username | default('') }}
+  transport_email_enabled = {{ dapp_graylog_smtp_enabled | default(false) }}
+  transport_email_from_email = {{ dapp_graylog_smtp_mailfrom | default('') }}
+  transport_email_hostname = {{ dapp_graylog_smtp_server | default('') }}
+  transport_email_port = {{ dapp_graylog_smtp_port | default(25) }}
   transport_email_subject_prefix = [GRAYLOG]
-  transport_email_use_auth = {{ dapp_graylog_smtp_use_auth }}
-  transport_email_use_ssl = {{ dapp_graylog_smtp_use_ssl }}
-  transport_email_use_tls = {{ dapp_graylog_smtp_use_tls }}
+  transport_email_use_auth = {{ dapp_graylog_smtp_use_auth | default(false) }}
+  transport_email_use_ssl = {{ dapp_graylog_smtp_use_ssl | default(false) }}
+  transport_email_use_tls = {{ dapp_graylog_smtp_use_tls | default(false) }}
   transport_email_web_interface_url = https://{{ dapp_graylog_traefik_address }}
   # Performance problems ?
   # inputbuffer_processors = 1
