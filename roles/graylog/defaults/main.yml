@@ -128,15 +128,15 @@ dapp_graylog_conf_file: |
   transport_email_use_tls = {{ dapp_graylog_smtp_use_tls }}
   transport_email_web_interface_url = https://{{ dapp_graylog_traefik_address }}
   # Performance problems ?
-  inputbuffer_processors = 1
-  inputbuffer_ring_size = 16384
-  inputbuffer_wait_strategy = sleeping
-  output_batch_size = 2000
-  output_fault_count_threshold = 5
-  output_fault_penalty_seconds = 30
-  output_flush_interval = 1
-  outputbuffer_processors = 1
-  processbuffer_processors = 2
-  processor_wait_strategy = sleeping
-  ring_size = 16384
-  server_java_opts = -Xms1024m -Xmx1024m
+  # inputbuffer_processors = 1
+  # inputbuffer_ring_size = 16384
+  # inputbuffer_wait_strategy = sleeping
+  # output_batch_size = 2000
+  # output_fault_count_threshold = 5
+  # output_fault_penalty_seconds = 30
+  # output_flush_interval = 1
+  # outputbuffer_processors = 1
+  # processbuffer_processors = 2
+  # processor_wait_strategy = sleeping
+  # ring_size = 16384
+  # server_java_opts = -Xms1024m -Xmx1024m
