@@ -124,6 +124,10 @@ dapp_mirrordeb_dockerfile: |
   {% endif %}\n'\
   >> /run_download_installers.sh
 
+  # copy and apply debmirror patch
+  COPY debmirror.patch /debmirror.patch
+  RUN /usr/bin/patch < /debmirror.patch /usr/bin/debmirror
+
   RUN chmod u+x /entrypoint.sh && \
     chmod u+x /run_scanpackages_extras.sh && \
     chmod u+x /run_debmirror.sh && \
@@ -169,3 +173,65 @@ dapp_mirrordeb_nginx_conf: |
     access_log syslog:server=unix:/dev/log;
     error_log syslog:server=unix:/dev/log;
   }
+
+# Patch to add '--ignore-missing-arch-all' to debmirror
+# from https://salsa.debian.org/debian/debmirror/-/merge_requests/15/diffs
+# Tested and working with debmirror 1:2.37
+__debmirror_patch: |
+  *** /usr/bin/debmirror  Mon Oct  3 11:46:52 2022
+  --- debmirror   Tue Jun 10 19:17:56 2025
+  *************** our $bytes_meta=0;
+  *** 629,634 ****
+  --- 629,635 ----
+    our $doing_meta=1;
+    our $ignore_missing_release=0;
+    our $ignore_release_gpg=0;
+  + our $ignore_missing_arch_all=0;
+    our $start_time = time;
+    our $start_date = `LC_ALL=C date -R`;
+    chomp $start_date;
+  *************** GetOptions('debug'                  => \
+  *** 756,761 ****
+  --- 757,763 ----
+               'state-cache-days=s'     => \$state_cache_days,
+               'ignore-missing-release' => \$ignore_missing_release,
+               'ignore-release-gpg'     => \$ignore_release_gpg,
+  +            'ignore-missing-arch-all' => \$ignore_missing_arch_all,
+               'check-gpg!'             => \$check_gpg,
+               'dry-run'                => \$dry_run,
+               'proxy=s'                => \$proxy,
+  *************** foreach my $dist (keys %distset) {
+  *** 1122,1131 ****
+      foreach my $section (@sections) {
+        # some suites don't have d-i
+        next if ($section =~ /debian-installer/ && di_skip_dist($dist) );
+  !     foreach my $arch (@arches, "all") {
+          get_index("dists/$dist/$section/binary-$arch", "Packages");
+          link_index($dist,$section,$arch) if $debmarshal;
+        }
+        # d-i does not have separate source sections
+        if ($do_source && $section !~ /debian-installer/) {
+          get_index("dists/$dist/$section/source", "Sources");
+  --- 1124,1145 ----
+      foreach my $section (@sections) {
+        # some suites don't have d-i
+        next if ($section =~ /debian-installer/ && di_skip_dist($dist) );
+  !     foreach my $arch (@arches) {
+          get_index("dists/$dist/$section/binary-$arch", "Packages");
+          link_index($dist,$section,$arch) if $debmarshal;
+        }
+  +
+  +     my @errlog_saved = @errlog;
+  +     my $num_errors_saved = $num_errors;
+  +     get_index("dists/$dist/$section/binary-all", "Packages");
+  +     link_index($dist,$section,'all') if $debmarshal;
+  +
+  +     if ($ignore_missing_arch_all) {
+  +       # drop errors from missing binary-all/Packages*:
+  +       @errlog = @errlog_saved;
+  +       $num_errors = $num_errors_saved;
+  +     }
+  +
+        # d-i does not have separate source sections
+        if ($do_source && $section !~ /debian-installer/) {
+          get_index("dists/$dist/$section/source", "Sources");
