@@ -47,6 +47,12 @@
     content: "{{ dapp_mirrordeb_nginx_conf }}"
   notify: Rebuild containers
 
+- name: Copy debmirror.patch
+  ansible.builtin.copy:
+    dest: "{{ _docker_project_dir }}/debmirror.patch"
+    content: "{{ __debmirror_patch }}"
+  notify: Rebuild containers
+
 - name: Start containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" up -d
