@@ -27,7 +27,7 @@ otherwise, you have to manually run theme:
 - `$ docker exec mirrordeb-app-1 /run_debmirror.sh`
 - `$ docker exec mirrordeb-app-1 /run_download_installers.sh`
 
-# installer subdirectories
+# Installer subdirectories
 
 debmirror does not download the 'installer' subdirectories required for netboot installation.
 (ie. http://ftp.ca.debian.org/debian/dists/bookworm/main/installer-amd64/)
@@ -45,3 +45,9 @@ This warning message doesn't seem to be a problem.
 
 Is there a way to solve it?
 https://www.osso.nl/blog/2023/gpgv-can-t-allocate-lock-for/
+
+# Patch: Add option to ignore missing arch 'all'
+
+Apply a patch to ignore errors from missing binary-all/Packages*, with option `--ignore-missing-arch-all`.
+
+https://salsa.debian.org/debian/debmirror/-/merge_requests/15/diffs

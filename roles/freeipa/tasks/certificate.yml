@@ -16,6 +16,7 @@
       {{ dapp_freeipa_cert.key }}
     dest: "{{ _docker_project_dir }}/freeipa_cert.key.tmp"
   when: not _keyfile.stat.exists
+  no_log: true
 
 - name: Encrypt private key
   ansible.builtin.shell: "cat {{ _docker_project_dir }}/freeipa_cert.key.tmp | openssl rsa -aes256 -out {{ _docker_project_dir }}/freeipa_cert.key -passout env:openssl_pw"
