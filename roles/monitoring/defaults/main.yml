@@ -288,73 +288,79 @@ dapp_monitoring_prometheus_alerts_yml: |
   groups:
   - name: alerting_rules
     rules:
-    - alert: "Prometheus target down"
-      expr: up==0
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "Prometheus target down"
-    - alert: "Free space less than 10% and 200MB"
-      expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes < 0.10) + node_filesystem_avail_bytes < 200000000
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "Free space less than 10% and less than 200MB"
-    - alert: "Blackbox probe error"
+
+    - alert: "Blackbox Probe Error"
       expr: probe_success==0
       for: 5m
       labels:
-        severity: page
+        severity: critical
       annotations:
-        summary: "Blackbox probe error for more than 5 minutes"
-    - alert: "ZFS pool state"
-      expr: node_zfs_zpool_state{state='online'}==1 < node_zfs_zpool_state==1
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "ZFS pool not online"
-    - alert: "Server Uptime Warning"
-      expr: (node_time_seconds - node_boot_time_seconds) < 600
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "Server Uptime Warning"
-        description: "Server uptime is less than 10 minutes"
+        summary: "Blackbox Probe Error For More Than 5 Minutes"
+
+    # - alert: "Ceph MONs Cannot Form A Quorum"
+    #   expr: count(ceph_mon_quorum_status) < 3
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph MONs Cannot Form A Quorum"
+
+    # - alert: "Ceph Missing MDS"
+    #   expr: count(ceph_mds_metadata == 1) < 3
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph Missing MDS"
+
+    # - alert: "Ceph Not Healthy"
+    #   expr: ceph_health_status != 0
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph Not Healthy"
+
+    # - alert: "Ceph OSD Down"
+    #   expr: ceph_osd_up == 0
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph OSD Down"
+
     - alert: "Clock Not Synchronising"
       expr: min_over_time(node_timex_sync_status[5m]) == 0 and node_timex_maxerror_seconds >= 16
       for: 5m
       labels:
-        severity: page
+        severity: warning
       annotations:
-        summary: "Clock is not synchronising"
-    - alert: "XFS filesystem free space warning"
-      expr: ((node_filesystem_avail_bytes{fstype="xfs"} / node_filesystem_size_bytes{fstype="xfs"} < 0.20) + node_filesystem_avail_bytes{fstype="xfs"} < 200000000) or (node_filesystem_avail_bytes{fstype="xfs"} / node_filesystem_size_bytes{fstype="xfs"} < 0.02)
+        summary: "Clock Is Not Synchronising"
+
+    - alert: "CPU Utilization"
+      expr: avg( sum( rate(node_cpu_seconds_total{instance!~"tc1.*|tg1.*|tv1.*",mode!="idle"}[15m]) ) without (mode) ) without (cpu) > 0.95
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Average CPU Utilization Is More Than 95% For More Than 30 Minutes. (Normalized By The Number Of CPUs)"
+
+    - alert: "File Descriptor Limit - Critical"
+      expr: node_filefd_allocated * 100 / node_filefd_maximum > 95
       for: 5m
       labels:
-        severity: page
+        severity: critical
       annotations:
-        summary: "Free space less than: 20% & 200MB, or less than 2% free"
-    - alert: "Filesystem Read Only"
-      expr: node_filesystem_readonly == 1
-      for: 1m
+        summary: "File Descriptors Usage Is More Than 95%"
+
+    - alert: "File Descriptor Limit - Warning"
+      expr: node_filefd_allocated * 100 / node_filefd_maximum > 80
+      for: 15m
       labels:
-        severity: page
+        severity: warning
       annotations:
-        summary: "Device is read-only"
-    - alert: "Filesystem Files Filling Up - Warning"
-      expr: |
-        (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 40
-        and predict_linear(node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'}[6h], 24*60*60) < 0
-        and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
-      for: 1h
-      labels:
-        severity: page
-      annotations:
-        summary: "Filesystem is predicted to run out of inodes within the next 24 hours"
+        summary: "File Descriptors Usage Is More Than 80%"
+
     - alert: "Filesystem Files Filling Up - Critical"
       expr: |
         (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 20
@@ -362,74 +368,127 @@ dapp_monitoring_prometheus_alerts_yml: |
         and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
       for: 1h
       labels:
-        severity: page
+        severity: critical
       annotations:
-        summary: "Filesystem is predicted to run out of inodes within the next 4 hours"
+        summary: "Filesystem Is Predicted To Run Out Of Inodes Within The Next 4 Hours"
+
+    - alert: "Filesystem Files Filling Up - Warning"
+      expr: |
+        (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 40
+        and predict_linear(node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'}[6h], 24*60*60) < 0
+        and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        summary: "Filesystem Is Predicted To Run Out Of Inodes Within The Next 24 Hours"
+
+    - alert: "Filesystem Free Space Warning For Xfs And Ext[2,3,4]"
+      expr: ((node_filesystem_avail_bytes{fstype=~"xfs|ext[2,3,4]"} / node_filesystem_size_bytes{fstype=~"xfs|ext[2,3,4]"} < 0.20) + node_filesystem_avail_bytes{fstype=~"xfs|ext[2,3,4]"} < 200000000) or (node_filesystem_avail_bytes{fstype=~"xfs|ext[2,3,4]"} / node_filesystem_size_bytes{fstype=~"xfs|ext[2,3,4]"} < 0.02)
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Free Space Less Than: 20% & 200MB, Or Less Than 2% Free"
+
+    - alert: "Filesystem Read Only"
+      expr: node_filesystem_readonly == 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Device Is Read-Only"
+
+    - alert: "Free Space Less Than 10% And 200MB"
+      expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes < 0.10) + node_filesystem_avail_bytes < 200000000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Free Space Less Than 10% And Less Than 200MB"
+
+    - alert: "Free Swap Space Less Than 50MB"
+      expr: node_memory_SwapFree_bytes < 50000000 and node_memory_SwapTotal_bytes > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Free Swap Space Less Than 50MB"
+
+    - alert: "Node Load Average"
+      expr: node_load15 / count by (instance, job) (node_cpu_seconds_total{mode="idle"}) > 1
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Load Average 15 Is Greater Than 1 For More Than 30 Minutes. (Normalized By The Number Of CPUs)"
+
+    - alert: "Prometheus Target Down"
+      expr: up==0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Prometheus Target Down"
+
+    - alert: "Server Uptime Warning"
+      expr: (node_time_seconds - node_boot_time_seconds) < 600
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Server Uptime Warning"
+        description: "Server Uptime Is Less Than 10 Minutes"
+
+    - alert: "SSSD Service Not Running"
+      expr: node_systemd_unit_state{name="sssd.service",state="active"} == 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "The Sssd Service Does Not Work On One Or More Nodes"
+
     - alert: "Unusual Disk Read Latency"
       expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
       for: 5m
       labels:
-        severity: page
+        severity: warning
       annotations:
-        summary: "Unusual disk read latency"
+        summary: "Unusual Disk Read Latency"
+
     - alert: "Unusual Disk Write Latency"
       expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_write_completed_total[1m]) > 0.1 and rate(node_disk_write_completed_total[1m]) > 0
       for: 5m
       labels:
-        severity: page
-      annotations:
-        summary: "Unusual disk write latency"
-    - alert: "Node Load Average"
-      expr: node_load15 / count by (instance, job) (node_cpu_seconds_total{mode='idle'}) > 5
-      for: 30m
-      labels:
-        severity: page
-      annotations:
-        summary: "Load average is greater than 5 for more than 30 minutes"
-    - alert: "Free swap space less than 50MB"
-      expr: node_memory_SwapFree_bytes < 50000000 and node_memory_SwapTotal_bytes > 0
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "Free swap space less than 50MB"
-    - alert: "File Descriptor Limit - Warning"
-      expr: node_filefd_allocated * 100 / node_filefd_maximum > 80
-      for: 15m
-      labels:
-        severity: page
-      annotations:
-        summary: "File descriptors usage is more than 80%"
-    - alert: "File Descriptor Limit - Critical"
-      expr: node_filefd_allocated * 100 / node_filefd_maximum > 95
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "File descriptors usage is more than 95%"
-    - alert: "The sssd service is not running"
-      expr: count(node_systemd_unit_state{name="sssd.service",state="active"}) != count(up{job="node-exporter"}==1)
-      for: 5m
-      labels:
-        severity: page
-      annotations:
-        summary: "The sssd service does not work on one or more nodes"
-    - alert: "iDRAC Server Not Healthy"
-      expr: idrac_system_health{status!="OK"}
-      for: 5m
-      keep_firing_for: 5m
-      labels:
         severity: warning
       annotations:
-        summary: "iDRAC status is not healthy. Check server BMC system event log."
-    - alert: "iDRAC Server Not Reporting"
-      expr: up{job=~".*idrac.*"} == 0
-      for: 5m
-      keep_firing_for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "iDRAC failed to reply to monitoring via Redfish API. Check idrac_exporter logs for more details."
+        summary: "Unusual Disk Write Latency"
+
+    # - alert: "iDRAC Server Not Healthy"
+    #   expr: idrac_system_health{status!="OK"}
+    #   for: 5m
+    #   keep_firing_for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "iDRAC Status Is Not Healthy. Check Server BMC System Event Log."
+
+    # - alert: "iDRAC Server Not Reporting"
+    #   expr: up{job=~".*idrac.*"} == 0
+    #   for: 5m
+    #   keep_firing_for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "iDRAC Failed To Reply To Monitoring Via Redfish API. Check Idrac_Exporter Logs For More Details."
+
+    # - alert: "ZFS Pool State"
+    #   expr: node_zfs_zpool_state{state='online'}==1 < node_zfs_zpool_state==1
+    #   for: 5m
+    #   labels:
+    #     severity: page
+    #   annotations:
+    #     summary: "ZFS Pool Not Online"
 
 # prometheus_recording.yml
 dapp_monitoring_prometheus_recording_yml: ""
