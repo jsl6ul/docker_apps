@@ -338,7 +338,7 @@ dapp_monitoring_prometheus_alerts_yml: |
         summary: "Clock Is Not Synchronising"
 
     - alert: "CPU Utilization"
-      expr: avg( sum( rate(node_cpu_seconds_total{instance!~"tc1.*|tg1.*|tv1.*",mode!="idle"}[15m]) ) without (mode) ) without (cpu) > 0.95
+      expr: avg( sum( rate(node_cpu_seconds_total{mode!="idle"}[15m]) ) without (mode) ) without (cpu) > 0.95
       for: 30m
       labels:
         severity: warning
