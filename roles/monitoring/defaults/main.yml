@@ -108,7 +108,7 @@ dapp_monitoring_alertmanager_yml: |
     smtp_require_tls: false
   route:
     group_by: ['alertname']
-    group_wait: 30s
+    group_wait: 90s
     group_interval: 5m
     repeat_interval: 12h
     receiver: 'main_receiver'
@@ -124,8 +124,8 @@ dapp_monitoring_alertmanager_yml: |
       severity: 'critical'
     target_match:
       severity: 'warning'
-    # Apply inhibition if the alertname is the same.
-    equal: ['alertname', 'dev', 'instance']
+    # Apply inhibition if the alertname and instance are the same.
+    equal: ['alertname', 'instance']
 
 # blackbox_config.yml
 dapp_monitoring_blackbox_config_yml: |
@@ -503,8 +503,8 @@ dapp_monitoring_prometheus_recording_yml: ""
 dapp_monitoring_prometheus_yml: |
   # my global config
   global:
-    scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-    evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+    scrape_interval:     30s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+    evaluation_interval: 30s # Evaluate rules every 15 seconds. The default is every 1 minute.
     # scrape_timeout is set to the global default (10s).
   # Alertmanager configuration
   alerting:
