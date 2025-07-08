@@ -503,8 +503,8 @@ dapp_monitoring_prometheus_recording_yml: ""
 dapp_monitoring_prometheus_yml: |
   # my global config
   global:
-    scrape_interval:     30s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-    evaluation_interval: 30s # Evaluate rules every 15 seconds. The default is every 1 minute.
+    scrape_interval:     30s
+    evaluation_interval: 30s
     # scrape_timeout is set to the global default (10s).
   # Alertmanager configuration
   alerting:
