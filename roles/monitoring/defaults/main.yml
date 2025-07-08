@@ -413,7 +413,7 @@ dapp_monitoring_prometheus_alerts_yml: |
       labels:
         severity: warning
       annotations:
-        summary: "Load Average 15 Is Greater Than 1 For More Than 30 Minutes. (Normalized By The Number Of CPUs)"
+        summary: "Load Average 15m Is Greater Than 1 For More Than 30 Minutes. (Normalized By The Number Of CPUs)"
 
     - alert: "Prometheus Target Down"
       expr: up==0
