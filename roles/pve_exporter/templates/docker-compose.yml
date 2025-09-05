@@ -1,0 +1,32 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  app:
+    image: "{{ dapp_pve_exporter_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "pve_exporter"
+    networks:
+      - traefik_proxy
+    mem_limit: 128M
+    environment:
+      {{ dapp_pve_exporter_environment|indent(6) }}
+    volumes:
+      - "./pve_exporter.yml:/etc/prometheus/pve.yml"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.pve_exporter.entrypoints: "http, https"
+      traefik.http.routers.pve_exporter.rule: "Host(`{{ dapp_pve_exporter_traefik_address }}`)"
+      traefik.http.services.pve_exporter.loadbalancer.server.port: "9221"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.pve_exporter.tls: "false"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.pve_exporter.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+{% endif %}
