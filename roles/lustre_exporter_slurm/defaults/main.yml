@@ -1,0 +1,49 @@
+---
+dapp_lustre_exporter_slurm_config_ini: |
+  [api]
+  local_port = 8080
+  usernames = ldap
+
+  [slurmdb]
+  host = slurmdb
+  port = 3306
+  dbname = slurmdb
+  user = slurmdb
+  password = changeme
+  job_table = changeme_job_table
+
+  [ldap]
+  server = ldaps://ldapserver:636
+  search_base = People,dc=computecanada,dc=ca
+
+dapp_lustre_exporter_slurm_dockerfile: |
+  FROM debian:stable-slim
+  COPY entrypoint.sh /entrypoint.sh
+  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update && \
+    /usr/bin/apt-get upgrade -y && \
+    /usr/bin/apt-get dist-upgrade -ufy && \
+    /usr/bin/apt-get install git python3 python3-mysqldb python3-ldap python3-aiohttp python3-cachetools -y && \
+    /usr/bin/rm -rf /var/lib/apt/lists/*
+  RUN git clone https://github.com/guilbaults/lustre_exporter_slurm.git
+  RUN /usr/bin/chmod u+x /entrypoint.sh
+  EXPOSE 8080/tcp
+  ENTRYPOINT ["/entrypoint.sh"]
+
+dapp_lustre_exporter_slurm_entrypoint: |
+  #!/bin/bash
+  /usr/bin/python3 -u /lustre_exporter_slurm/lustre_exporter_slurm.py /config.ini
+
+# docker environment variables
+dapp_lustre_exporter_slurm_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# docker healthcheck variables
+dapp_lustre_exporter_slurm_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+dapp_lustre_exporter_slurm_docker_ports:
+  - "8080:8080"
+
+# docker environment variables
+dapp_lustre_exporter_slurm_docker_volumes:
+  - "./config.ini:/config.ini"
