@@ -31,7 +31,7 @@ dapp_lustre_exporter_slurm_dockerfile: |
 
 dapp_lustre_exporter_slurm_entrypoint: |
   #!/bin/bash
-  /usr/bin/python3 /lustre_exporter_slurm/lustre_exporter_slurm.py /config.ini
+  /usr/bin/python3 -u /lustre_exporter_slurm/lustre_exporter_slurm.py /config.ini
 
 # docker environment variables
 dapp_lustre_exporter_slurm_docker_environment: |
