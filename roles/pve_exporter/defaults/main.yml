@@ -1,0 +1,21 @@
+---
+dapp_pve_exporter_traefik_address: "pveexporter.{{ dapp_common_domain }}"
+dapp_pve_exporter_docker_image: "prompve/prometheus-pve-exporter"
+
+dapp_pve_exporter_environment: |
+  TZ: "Etc/UTC"
+
+# exporter configuration file
+# dapp_pve_exporter_yml: |
+#   # for password authentication:
+#   default:
+#     user: prometheus@pve
+#     password: sEcr3T!
+#     # Optional: set to false to skip SSL/TLS verification
+#     verify_ssl: true
+#
+#   # for token authentication:
+#   default:
+#     user: prometheus@pve
+#     token_name: "your-token-id"
+#     token_value: "..."
