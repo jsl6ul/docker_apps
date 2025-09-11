@@ -1,0 +1,96 @@
+---
+dapp_thanos_docker_image: "docker.io/thanosio/thanos:v0.39.2"
+
+dapp_thanos_traefik_address: "thanos.{{ dapp_common_domain }}"
+dapp_thanos_store_gateway_traefik_address: "thanos.{{ dapp_common_domain }}"
+
+
+dapp_thanos_environment: |
+  TZ: "Etc/UTC"
+
+dapp_thanos_sidecar_mem_limit: 2048M
+
+dapp_thanos_sidecar_volumes:
+  - ./something:/something
+
+dapp_thanos_store_gateway_volumes:
+  - ./something:/something
+
+dapp_thanos_sidecar_commande: |
+  - 'sidecar'
+  - '--tsdb.path=/prometheus'
+  - '--prometheus.url=http://prometheus-1:9090'
+  - '--grpc-address=0.0.0.0:10091'
+  - '--http-address=0.0.0.0:10902'
+  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
+
+dapp_thanos_queryfrontend_commande: |
+  - 'query-frontend'
+  - '--http-address=0.0.0.0:10901'
+  - '--query-frontend.downstream-url=http://thanos-querier:10902'
+
+dapp_thanos_querier_commande: |
+  - 'query'
+  - '--grpc-address=0.0.0.0:10091'
+  - '--http-address=0.0.0.0:10902'
+  - '--query.replica-label=replica'
+  - '--store=thanos-sidecar-1:10091'
+  - '--store=thanos-sidecar-2:10091'
+  - '--store=thanos-sidecar-3:10091'
+  - '--store=thanos-sidecar-4:10091'
+  - '--store=thanos-store-gateway:10091'
+  - '--store=thanos-ruler:10091'
+
+dapp_thanos_store_gateway_commande: |
+  - 'store'
+  - '--grpc-address=0.0.0.0:10091'
+  - '--http-address=0.0.0.0:10902'
+  - '--data-dir=/tmp/thanos/store'
+  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
+
+dapp_thanos_compactor_commande: |
+  - 'compact'
+  - '--log.level=debug'
+  - '--data-dir=/data'
+  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
+  - '--wait'
+
+dapp_thanos_ruler_commande: |
+  - 'rule'
+  - '--grpc-address=0.0.0.0:10091'
+  - '--http-address=0.0.0.0:10902'
+  - '--log.level=debug'
+  - '--data-dir=/data'
+  - '--eval-interval=15s'
+  - '--rule-file=/etc/thanos/*.rules.yaml'
+  - '--alertmanagers.url=http://alertmanager:9093'
+  - '--query=thanos-querier:10902'
+  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
+  - "--label=ruler_cluster=\"vegas\""
+  - "--label=ruler_replica=\"r1\""
+
+dapp_thanos_bucket_commande: |
+  - 'tools'
+  - 'bucket'
+  - 'web'
+  - '--http-address=0.0.0.0:10902'
+  - '--log.level=debug'
+  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
+  - '--refresh=5m'
+  - '--timeout=2m'
+  - '--label=replica'
+
+sidecars:
+  - name: sidecar1
+    dapp_thanos_environment: |
+      paul: "ringo"
+    dapp_thanos_sidecar_volumes:
+      - ./un:/deux
+    dapp_thanos_sidecar_commande: "/path/to/command1"
+
+  - name: sidecar2
+    dapp_thanos_environment: |
+      john: "george"
+    dapp_thanos_sidecar_volumes:
+      - ./trois:/quatre
+    dapp_thanos_sidecar_commande: "/path/to/command2"

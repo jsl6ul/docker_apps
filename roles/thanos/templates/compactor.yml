@@ -1,0 +1,28 @@
+  thanos-compactor:
+    image: "{{ dapp_thanos_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "thanos-compactor"
+    networks:
+      - traefik_proxy
+    environment:
+      {{ dapp_thanos_environment|indent(6) }}
+    volumes: {{ dapp_thanos_compactor_volumes }}
+    command:
+      {{ dapp_thanos_compactor_commande|indent(6) }}
+    depends_on:
+      - minio
+    labels:
+      traefik.enable: "false"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.thanos-compactor.entrypoints: "http, https"
+      traefik.http.routers.thanos-compactor.rule: "Host(`{{ dapp_thanos_compactor_traefik_address }}`)"
+      traefik.http.services.thanos-compactor.loadbalancer.server.port: "10902"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.thanos-compactor.tls: "false"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.thanos-compactor.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+{% endif %}

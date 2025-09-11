@@ -1,0 +1,19 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+
+{% filter indent(width=2, first=true) %}
+
+{% include './templates/sidecar.yml' %}
+
+{% include './templates/store_gateway.yml' %}
+
+{% for sc in sidecars %}
+{% include './templates/sidecar.yml' %}
+{% endfor %}
+
+
+{% endfilter %}

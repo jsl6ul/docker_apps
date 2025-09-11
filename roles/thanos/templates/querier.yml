@@ -1,0 +1,28 @@
+  thanos-querier:
+    image: "{{ dapp_thanos_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "thanos-querier"
+    networks:
+      - traefik_proxy
+    environment:
+      {{ dapp_thanos_environment|indent(6) }}
+    volumes: {{ dapp_thanos_querier_volumes }}
+    command:
+      {{ dapp_thanos_querier_commande|indent(6) }}
+    depends_on:
+      - thanos-sidecar
+    labels:
+      traefik.enable: "false"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.thanos-querier.entrypoints: "http, https"
+      traefik.http.routers.thanos-querier.rule: "Host(`{{ dapp_thanos_querier_traefik_address }}`)"
+      traefik.http.services.thanos-querier.loadbalancer.server.port: "10902"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.thanos-querier.tls: "false"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.thanos-querier.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+{% endif %}
