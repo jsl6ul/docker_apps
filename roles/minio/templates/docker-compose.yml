@@ -14,9 +14,6 @@ services:
         tag: "minio"
     networks:
       - traefik_proxy
-{% if dapp_minio_expose is defined %}
-    expose: {{ dapp_minio_expose }}
-{% endif %}
 {% if dapp_minio_docker_mem_limit is defined %}
     mem_limit: {{ dapp_minio_docker_mem_limit }}
 {% endif %}
@@ -41,7 +38,7 @@ services:
 {% endif %}
 
       traefik.http.routers.minio-console.entrypoints: "http, https"
-      traefik.http.routers.minio-console.rule: "Host(`{{ dapp_miniocon_traefik_address }}`)"
+      traefik.http.routers.minio-console.rule: "Host(`{{ dapp_minio_console_traefik_address }}`)"
       traefik.http.routers.minio-console.service: "minio-console"
       traefik.http.services.minio-console.loadbalancer.server.port: "9001"
 {% if dapp_common_traefik_tls %}
@@ -49,5 +46,5 @@ services:
 {% endif %}
 {% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
       traefik.http.routers.minio-console.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
-      traefik.http.routers.minio-console.tls.domains[0].main: "{{ dapp_miniocon_traefik_address }}"
+      traefik.http.routers.minio-console.tls.domains[0].main: "{{ dapp_minio_console_traefik_address }}"
 {% endif %}
