@@ -31,6 +31,8 @@ services:
     links:
       - alertmanager
       - blackbox
+    command:
+      {{ dapp_monitoring_prometheus_docker_command | to_nice_yaml | indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
@@ -49,7 +51,6 @@ services:
       traefik.http.routers.prometheus.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
       traefik.http.routers.prometheus.tls.domains[0].main: "{{ dapp_monitoring_prometheus_traefik_address }}"
 {% endif %}
-    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --storage.tsdb.retention.time={{ dapp_monitoring_prometheus_retention_time }}
 
   alertmanager:
     image: "{{ dapp_monitoring_alertmanager_docker_image }}"
