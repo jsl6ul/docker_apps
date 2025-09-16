@@ -1,0 +1,50 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  app:
+    image: "{{ dapp_minio_docker_image }}"
+    restart: unless-stopped
+    container_name: minio
+    logging:
+      driver: journald
+      options:
+        tag: "minio"
+    networks:
+      - traefik_proxy
+{% if dapp_minio_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_minio_docker_mem_limit }}
+{% endif %}
+    environment:
+      {{ dapp_minio_docker_environment|indent(6) }}
+    volumes: {{ dapp_minio_docker_volumes }}
+    command: {{ dapp_minio_docker_command }}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+
+      traefik.http.routers.minio.entrypoints: "http, https"
+      traefik.http.routers.minio.rule: "Host(`{{ dapp_minio_traefik_address }}`)"
+      traefik.http.routers.minio.service: "minio"
+      traefik.http.services.minio.loadbalancer.server.port: "9000"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.minio.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.minio.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.minio.tls.domains[0].main: "{{ dapp_minio_traefik_address }}"
+{% endif %}
+
+      traefik.http.routers.minio-console.entrypoints: "http, https"
+      traefik.http.routers.minio-console.rule: "Host(`{{ dapp_minio_console_traefik_address }}`)"
+      traefik.http.routers.minio-console.service: "minio-console"
+      traefik.http.services.minio-console.loadbalancer.server.port: "9001"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.minio-console.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.minio-console.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.minio-console.tls.domains[0].main: "{{ dapp_minio_console_traefik_address }}"
+{% endif %}
