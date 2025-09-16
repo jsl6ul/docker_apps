@@ -1,96 +1,152 @@
 ---
 dapp_thanos_docker_image: "docker.io/thanosio/thanos:v0.39.2"
 
-dapp_thanos_traefik_address: "thanos.{{ dapp_common_domain }}"
-dapp_thanos_store_gateway_traefik_address: "thanos.{{ dapp_common_domain }}"
+# Thanos Querier provides a web interface similar to that of Prometheus,
+# allowing for ad-hoc querying and checking the status of the Thanos stores.
+dapp_thanos_querier_traefik_address: "thanos.{{ dapp_common_domain }}"
 
+# To access the sidecar remotely
+# dapp_thanos_sidecar_traefik_address: "sidecar.{{ dapp_common_domain }}"
 
 dapp_thanos_environment: |
   TZ: "Etc/UTC"
 
-dapp_thanos_sidecar_mem_limit: 2048M
+# dapp_thanos_volumes:
+#   volumes:
+#     thanos_compactor:
+#       name: thanos_compactor
+#
+#     # external volume to prometheus data
+#     prometheus_data:
+#       external: true
 
-dapp_thanos_sidecar_volumes:
-  - ./something:/something
+# dapp_thanos_objstore_config_files:
+#   # s3/minio object store configuration.
+#   - name: objstore-1.yml
+#     content: |
+#       type: S3
+#       config:
+#         access_key: thanos
+#         bucket: sidecar1
+#         endpoint: s3.example.com
+#         insecure: false
+#         http_config:
+#           insecure_skip_verify: true
+#         trace:
+#           enable: true
+#         secret_key: secret123
+#         signature_version2: true
 
-dapp_thanos_store_gateway_volumes:
-  - ./something:/something
+# dapp_thanos_sidecars:
+#   - name: thanos-sidecar-1
+#     # The user must be the same as the one running Prometheus
+#     # to access the prometheus data volume in write mode.
+#     user: '"nobody:nobody"'
+#     volumes:
+#       - prometheus_data:/prometheus
+#       - ./objstore-1.yml:/objstore.yml
+#     command:
+#       - 'sidecar'
+#       - '--log.level=info'
+#       - '--tsdb.path=/prometheus'
+#       - '--prometheus.url=https://prometheus.{{ dapp_common_domain }}'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--objstore.config-file=/objstore.yml'
+#       #- '--shipper.upload-compacted'
+#       # If you want to migrate to Thanos and have to keep the historical data,
+#       # this will also upload blocks that were compacted by Prometheus. 
+#     expose:
+#       - 10901
+#       - 10902
+#     ports:
+#       - 10902:10902
+#     labels:
+#       traefik.enable: "false"
+#
+#   - name: thanos-sidecar-2
+#     # The user must be the same as the one running Prometheus
+#     # to access the prometheus data volume in write mode.
+#     user: '"nobody:nobody"'
+#     volumes:
+#       - prometheus_data:/prometheus
+#       - ./objstore-1.yml:/objstore.yml
+#     command:
+#       - 'sidecar'
+#       - '--log.level=info'
+#       - '--tsdb.path=/prometheus'
+#       - '--prometheus.url=https://prometheus.{{ dapp_common_domain }}'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--objstore.config-file=/objstore.yml'
+#       #- '--shipper.upload-compacted'
+#       # If you want to migrate to Thanos and have to keep the historical data,
+#       # this will also upload blocks that were compacted by Prometheus. 
+#     expose:
+#       - 10901
+#       - 10902
+#     labels:
+#       traefik.enable: "true"
+#       traefik.docker.network: "traefik_proxy"
+#       traefik.http.routers.sidecar.entrypoints: "http, https"
+#       traefik.http.routers.sidecar.rule: "Host(`{{ dapp_thanos_sidecar_traefik_address }}`)"
+#       traefik.http.services.sidecar.loadbalancer.server.port: "10902"
+#       traefik.http.routers.sidecar.tls: "{{ dapp_common_traefik_tls }}"
+#       traefik.http.routers.sidecar.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+#       traefik.http.routers.sidecar.tls.domains[0].main: "{{ dapp_thanos_sidecar_traefik_address }}"
 
-dapp_thanos_sidecar_commande: |
-  - 'sidecar'
-  - '--tsdb.path=/prometheus'
-  - '--prometheus.url=http://prometheus-1:9090'
-  - '--grpc-address=0.0.0.0:10091'
-  - '--http-address=0.0.0.0:10902'
-  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
+# dapp_thanos_compactors:
+#   - name: thanos-compactor-1
+#     volumes:
+#       - ./objstore-1.yml:/objstore.yml
+#       - thanos_compactor:/data
+#     command:
+#       - 'compact'
+#       - '--log.level=info'
+#       - '--data-dir=/data' # Update the 'chown' command in template if path changes.
+#       - '--objstore.config-file=/objstore.yml'
+#       - '--wait'
 
-dapp_thanos_queryfrontend_commande: |
-  - 'query-frontend'
-  - '--http-address=0.0.0.0:10901'
-  - '--query-frontend.downstream-url=http://thanos-querier:10902'
-
-dapp_thanos_querier_commande: |
-  - 'query'
-  - '--grpc-address=0.0.0.0:10091'
-  - '--http-address=0.0.0.0:10902'
-  - '--query.replica-label=replica'
-  - '--store=thanos-sidecar-1:10091'
-  - '--store=thanos-sidecar-2:10091'
-  - '--store=thanos-sidecar-3:10091'
-  - '--store=thanos-sidecar-4:10091'
-  - '--store=thanos-store-gateway:10091'
-  - '--store=thanos-ruler:10091'
-
-dapp_thanos_store_gateway_commande: |
-  - 'store'
-  - '--grpc-address=0.0.0.0:10091'
-  - '--http-address=0.0.0.0:10902'
-  - '--data-dir=/tmp/thanos/store'
-  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
-
-dapp_thanos_compactor_commande: |
-  - 'compact'
-  - '--log.level=debug'
-  - '--data-dir=/data'
-  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
-  - '--wait'
-
-dapp_thanos_ruler_commande: |
-  - 'rule'
-  - '--grpc-address=0.0.0.0:10091'
-  - '--http-address=0.0.0.0:10902'
-  - '--log.level=debug'
-  - '--data-dir=/data'
-  - '--eval-interval=15s'
-  - '--rule-file=/etc/thanos/*.rules.yaml'
-  - '--alertmanagers.url=http://alertmanager:9093'
-  - '--query=thanos-querier:10902'
-  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
-  - "--label=ruler_cluster=\"vegas\""
-  - "--label=ruler_replica=\"r1\""
-
-dapp_thanos_bucket_commande: |
-  - 'tools'
-  - 'bucket'
-  - 'web'
-  - '--http-address=0.0.0.0:10902'
-  - '--log.level=debug'
-  - '--objstore.config-file=/etc/thanos/bucket_config.yaml'
-  - '--refresh=5m'
-  - '--timeout=2m'
-  - '--label=replica'
-
-sidecars:
-  - name: sidecar1
-    dapp_thanos_environment: |
-      paul: "ringo"
-    dapp_thanos_sidecar_volumes:
-      - ./un:/deux
-    dapp_thanos_sidecar_commande: "/path/to/command1"
-
-  - name: sidecar2
-    dapp_thanos_environment: |
-      john: "george"
-    dapp_thanos_sidecar_volumes:
-      - ./trois:/quatre
-    dapp_thanos_sidecar_commande: "/path/to/command2"
+# dapp_thanos_queriers:
+#   - name: thanos-querier-1
+#     command:
+#       - 'query'
+#       - '--log.level=info'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--query.replica-label=replica'
+#       - '--endpoint=thanos-sidecar-1:10901'
+#     expose:
+#       - 10901
+#       - 10902
+#     ports:
+#       - 10902:10902
+#     links:
+#       - thanos-sidecar-1
+#     labels:
+#       traefik.enable: "false"
+#     labels:
+#       traefik.enable: "false"
+#
+#   - name: thanos-querier-2
+#     command:
+#       - 'query'
+#       - '--log.level=info'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--query.replica-label=replica'
+#       - '--endpoint=thanos-sidecar-1:10901'
+#     expose:
+#       - 10901
+#       - 10902
+#     links:
+#       - thanos-sidecar-1
+#     labels:
+#       traefik.enable: "true"
+#       traefik.docker.network: "traefik_proxy"
+#       traefik.http.routers.querier.entrypoints: "http, https"
+#       traefik.http.routers.querier.rule: "Host(`{{ dapp_thanos_querier_traefik_address }}`)"
+#       traefik.http.services.querier.loadbalancer.server.port: "10902"
+#       traefik.http.routers.querier.tls: "{{ dapp_common_traefik_tls }}"
+#       traefik.http.routers.querier.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+#       traefik.http.routers.querier.tls.domains[0].main: "{{ dapp_thanos_querier_traefik_address }}"
