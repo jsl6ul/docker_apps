@@ -1,0 +1,24 @@
+---
+dapp_minio_docker_image: "docker.io/minio/minio:RELEASE.2025-09-07T16-13-09Z"
+
+# minio s3 server address
+dapp_minio_traefik_address: "s3.{{ dapp_common_domain }}"
+
+# minio console is the web-based user interface
+dapp_minio_console_traefik_address: "s3web.{{ dapp_common_domain }}"
+
+# dapp_minio_docker_mem_limit: 2048M
+
+dapp_minio_docker_volumes:
+  - ./data:/data
+
+dapp_minio_docker_command: server /data --console-address ":9001"
+
+dapp_minio_docker_environment: |
+  TZ: "UTC"
+  MINIO_ROOT_USER: admin
+  MINIO_ROOT_PASSWORD: secret123
+
+  # Do NOT use MINIO_DOMAIN or MINIO_SERVER_URL with Traefik.
+  # All Routing is done by Traefik, just tell minio where to redirect to.
+  MINIO_BROWSER_REDIRECT_URL: "https://{{ dapp_minio_console_traefik_address }}"
