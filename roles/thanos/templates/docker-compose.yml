@@ -3,17 +3,28 @@ networks:
   traefik_proxy:
     external: true
 
+{{ (dapp_thanos_volumes|to_nice_yaml) | default("") }}
+
 services:
 
 {% filter indent(width=2, first=true) %}
 
-{% include './templates/sidecar.yml' %}
-
-{% include './templates/store_gateway.yml' %}
-
-{% for sc in sidecars %}
+{% if dapp_thanos_sidecars is defined %}
+{% for sidecar in dapp_thanos_sidecars %}
 {% include './templates/sidecar.yml' %}
 {% endfor %}
+{% endif %}
 
+{% if dapp_thanos_compactors is defined %}
+{% for compactor in dapp_thanos_compactors %}
+{% include './templates/compactor.yml' %}
+{% endfor %}
+{% endif %}
+
+{% if dapp_thanos_queriers is defined %}
+{% for querier in dapp_thanos_queriers %}
+{% include './templates/querier.yml' %}
+{% endfor %}
+{% endif %}
 
 {% endfilter %}
