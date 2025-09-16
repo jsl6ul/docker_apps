@@ -1,21 +1,22 @@
-{% if sc is defined %}
-{{ sc.name }}:
+{% if sidecar is defined %}
+{{ sidecar.name }}:
   image: "{{ dapp_thanos_docker_image }}"
+  container_name: {{ sidecar.name }}
   restart: unless-stopped
   logging:
     driver: journald
     options:
-      tag: "thanos-sidecar"
+      tag: "{{ sidecar.name }}"
   networks:
     - traefik_proxy
+  expose: {{ sidecar.expose }}
+{% if sidecar.user is defined %}
+  user: {{ sidecar.user }}
+{% endif %}
   environment:
-    {{ sc.dapp_thanos_environment|indent(6) }}
-  volumes: {{ sc.dapp_thanos_sidecar_volumes }}
-  command:
-    {{ sc.dapp_thanos_sidecar_commande|indent(6) }}
-  depends_on:
-    - prometheus-4
-    - minio
+    {{ dapp_thanos_environment|indent(6) }}
+  volumes: {{ sidecar.volumes }}
+  command: {{ sidecar.command }}
   labels:
     traefik.enable: "false"
 {% endif %}
