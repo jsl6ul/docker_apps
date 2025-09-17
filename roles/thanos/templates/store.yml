@@ -1,7 +1,8 @@
 {% if store is defined %}
 {{ store.name }}-set-volume-owner:
   image: docker.io/alpine
-  volumes: {{ store.volumes }}
+  volumes:
+    {{ store.volumes | to_nice_yaml | indent(4) }}
   # Set store volume owner to 'thanos'
   command: sh -c "chown 1001:1001 /data || exit 1"
   user: "root"
@@ -17,14 +18,18 @@
       tag: "{{ store.name }}"
   networks:
     - traefik_proxy
-  expose: {{ store.expose }}
+  expose:
+    {{ store.expose | to_nice_yaml | indent(4) }}
 {% if store.ports is defined %}
-  ports: {{ store.ports }}
+  ports:
+    {{ store.ports | to_nice_yaml | indent(4) }}
 {% endif %}
   environment:
-    {{ dapp_thanos_environment|indent(6) }}
-  volumes: {{ store.volumes }}
-  command: {{ store.command }}
+    {{ dapp_thanos_environment | indent(6) }}
+  volumes:
+    {{ store.volumes | to_nice_yaml | indent(4) }}
+  command:
+    {{ store.command | to_nice_yaml | indent(4) }}
   depends_on:
     {{ store.name }}-set-volume-owner:
       condition: service_completed_successfully
