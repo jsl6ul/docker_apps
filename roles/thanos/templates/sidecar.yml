@@ -9,14 +9,21 @@
       tag: "{{ sidecar.name }}"
   networks:
     - traefik_proxy
-  expose: {{ sidecar.expose }}
+  expose:
+    {{ sidecar.expose | to_nice_yaml | indent(4) }}
+{% if sidecar.ports is defined %}
+  ports:
+    {{ sidecar.ports | to_nice_yaml | indent(4) }}
+{% endif %}
 {% if sidecar.user is defined %}
   user: {{ sidecar.user }}
 {% endif %}
   environment:
-    {{ dapp_thanos_environment|indent(6) }}
-  volumes: {{ sidecar.volumes }}
-  command: {{ sidecar.command }}
+    {{ dapp_thanos_environment | indent(6) }}
+  volumes:
+    {{ sidecar.volumes | to_nice_yaml | indent(4) }}
+  command:
+    {{ sidecar.command | to_nice_yaml | indent(4) }}
   labels:
     traefik.enable: "false"
 {% endif %}
