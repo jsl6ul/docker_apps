@@ -1,7 +1,8 @@
 {% if compactor is defined %}
 {{ compactor.name }}-set-volume-owner:
   image: docker.io/alpine
-  volumes: {{ compactor.volumes }}
+  volumes:
+    {{ compactor.volumes | to_nice_yaml | indent(4) }}
   # Set compactor volume owner to 'thanos'
   command: sh -c "chown 1001:1001 /data || exit 1"
   user: "root"
@@ -18,9 +19,11 @@
   networks:
     - traefik_proxy
   environment:
-    {{ dapp_thanos_environment|indent(6) }}
-  volumes: {{ compactor.volumes }}
-  command: {{ compactor.command }}
+    {{ dapp_thanos_environment | indent(6) }}
+  volumes:
+    {{ compactor.volumes | to_nice_yaml | indent(4) }}
+  command:
+    {{ compactor.command | to_nice_yaml | indent(4) }}
   depends_on:
     {{ compactor.name }}-set-volume-owner:
       condition: service_completed_successfully
