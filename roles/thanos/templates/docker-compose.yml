@@ -21,6 +21,12 @@ services:
 {% endfor %}
 {% endif %}
 
+{% if dapp_thanos_stores is defined %}
+{% for store in dapp_thanos_stores %}
+{% include './templates/store.yml' %}
+{% endfor %}
+{% endif %}
+
 {% if dapp_thanos_queriers is defined %}
 {% for querier in dapp_thanos_queriers %}
 {% include './templates/querier.yml' %}
