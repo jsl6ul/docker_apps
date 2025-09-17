@@ -5,9 +5,6 @@ dapp_thanos_docker_image: "docker.io/thanosio/thanos:v0.39.2"
 # allowing for ad-hoc querying and checking the status of the Thanos stores.
 dapp_thanos_querier_traefik_address: "thanos.{{ dapp_common_domain }}"
 
-# To access the sidecar remotely
-# dapp_thanos_sidecar_traefik_address: "sidecar.{{ dapp_common_domain }}"
-
 dapp_thanos_environment: |
   TZ: "Etc/UTC"
 
@@ -15,6 +12,9 @@ dapp_thanos_environment: |
 #   volumes:
 #     thanos_compactor:
 #       name: thanos_compactor
+#
+#     thanos_store:
+#       name: thanos_store
 #
 #     # external volume to prometheus data
 #     prometheus_data:
@@ -53,47 +53,15 @@ dapp_thanos_environment: |
 #       - '--grpc-address=0.0.0.0:10901'
 #       - '--http-address=0.0.0.0:10902'
 #       - '--objstore.config-file=/objstore.yml'
-#       #- '--shipper.upload-compacted'
+#       # - '--shipper.upload-compacted'
 #       # If you want to migrate to Thanos and have to keep the historical data,
 #       # this will also upload blocks that were compacted by Prometheus. 
 #     expose:
 #       - 10901
 #       - 10902
-#     ports:
-#       - 10902:10902
-#     labels:
-#       traefik.enable: "false"
-#
-#   - name: thanos-sidecar-2
-#     # The user must be the same as the one running Prometheus
-#     # to access the prometheus data volume in write mode.
-#     user: '"nobody:nobody"'
-#     volumes:
-#       - prometheus_data:/prometheus
-#       - ./objstore-1.yml:/objstore.yml
-#     command:
-#       - 'sidecar'
-#       - '--log.level=info'
-#       - '--tsdb.path=/prometheus'
-#       - '--prometheus.url=https://prometheus.{{ dapp_common_domain }}'
-#       - '--grpc-address=0.0.0.0:10901'
-#       - '--http-address=0.0.0.0:10902'
-#       - '--objstore.config-file=/objstore.yml'
-#       #- '--shipper.upload-compacted'
-#       # If you want to migrate to Thanos and have to keep the historical data,
-#       # this will also upload blocks that were compacted by Prometheus. 
-#     expose:
-#       - 10901
-#       - 10902
-#     labels:
-#       traefik.enable: "true"
-#       traefik.docker.network: "traefik_proxy"
-#       traefik.http.routers.sidecar.entrypoints: "http, https"
-#       traefik.http.routers.sidecar.rule: "Host(`{{ dapp_thanos_sidecar_traefik_address }}`)"
-#       traefik.http.services.sidecar.loadbalancer.server.port: "10902"
-#       traefik.http.routers.sidecar.tls: "{{ dapp_common_traefik_tls }}"
-#       traefik.http.routers.sidecar.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
-#       traefik.http.routers.sidecar.tls.domains[0].main: "{{ dapp_thanos_sidecar_traefik_address }}"
+#     # ports:
+#     #   - 10901:10901
+#     #   - 10902:10902
 
 # dapp_thanos_compactors:
 #   - name: thanos-compactor-1
@@ -107,6 +75,24 @@ dapp_thanos_environment: |
 #       - '--objstore.config-file=/objstore.yml'
 #       - '--wait'
 
+# dapp_thanos_stores:
+#   - name: thanos-store-1
+#     volumes:
+#       - ./objstore-1.yml:/objstore.yml
+#       - thanos_store:/data
+#     command:
+#       - 'store'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--data-dir=/data' # Update the 'chown' command in template if path changes.
+#       - '--objstore.config-file=/objstore.yml'
+#     expose:
+#       - 10901
+#       - 10902
+#     # ports:
+#     #   - 10901:10901
+#     #   - 10902:10902
+
 # dapp_thanos_queriers:
 #   - name: thanos-querier-1
 #     command:
@@ -116,31 +102,16 @@ dapp_thanos_environment: |
 #       - '--http-address=0.0.0.0:10902'
 #       - '--query.replica-label=replica'
 #       - '--endpoint=thanos-sidecar-1:10901'
+#       - '--endpoint=thanos-store-1:10901'
 #     expose:
 #       - 10901
 #       - 10902
-#     ports:
-#       - 10902:10902
+#     # ports:
+#     #   - 10901:10901
+#     #   - 10902:10902
 #     links:
 #       - thanos-sidecar-1
-#     labels:
-#       traefik.enable: "false"
-#     labels:
-#       traefik.enable: "false"
-#
-#   - name: thanos-querier-2
-#     command:
-#       - 'query'
-#       - '--log.level=info'
-#       - '--grpc-address=0.0.0.0:10901'
-#       - '--http-address=0.0.0.0:10902'
-#       - '--query.replica-label=replica'
-#       - '--endpoint=thanos-sidecar-1:10901'
-#     expose:
-#       - 10901
-#       - 10902
-#     links:
-#       - thanos-sidecar-1
+#       - thanos-store-1
 #     labels:
 #       traefik.enable: "true"
 #       traefik.docker.network: "traefik_proxy"
