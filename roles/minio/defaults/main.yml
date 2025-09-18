@@ -10,7 +10,7 @@ dapp_minio_console_traefik_address: "s3web.{{ dapp_common_domain }}"
 # dapp_minio_docker_mem_limit: 2048M
 
 dapp_minio_docker_volumes:
-  - ./data:/data
+  - data:/data
 
 dapp_minio_docker_command: server /data --console-address ":9001"
 
