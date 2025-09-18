@@ -10,9 +10,7 @@ You need an external Prometheus and an external object store.
 
 # Prometheus
 
-Thanos sidecar requires a Prometheus external_label. The external_label
-is used by Thanos to uniquely identify the Prometheus instance that the
-sidecar is running alongside.
+Thanos sidecar requires a Prometheus external_label. The external_label is used by Thanos to uniquely identify the Prometheus instance that the sidecar is running alongside.
 
 ```
   global:
