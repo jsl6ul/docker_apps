@@ -24,6 +24,10 @@
     {{ sidecar.volumes | to_nice_yaml | indent(4) }}
   command:
     {{ sidecar.command | to_nice_yaml | indent(4) }}
+{% if sidecar.links is defined %}
+  links:
+    {{ sidecar.links | to_nice_yaml | indent(4) }}
+{% endif %}
   labels:
     traefik.enable: "false"
 {% endif %}
