@@ -3,7 +3,9 @@ networks:
   traefik_proxy:
     external: true
 
-{{ (dapp_thanos_volumes|to_nice_yaml) | default("") }}
+{% if dapp_thanos_volumes is defined %}
+{{ (dapp_thanos_volumes | to_nice_yaml) | default("") }}
+{% endif %}
 
 services:
 
