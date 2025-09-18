@@ -45,6 +45,7 @@ dapp_thanos_environment: |
 #     volumes:
 #       - prometheus_data:/prometheus
 #       - ./objstore-1.yml:/objstore.yml
+#
 #     command:
 #       - 'sidecar'
 #       - '--log.level=info'
@@ -53,9 +54,12 @@ dapp_thanos_environment: |
 #       - '--grpc-address=0.0.0.0:10901'
 #       - '--http-address=0.0.0.0:10902'
 #       - '--objstore.config-file=/objstore.yml'
+#       # The file to store shipper metadata in. (one per sidecar)
+#       - '--shipper.meta-file-name=thanos-sidecar-1.shipper.json'
+#       # Upload compacted blocks as well? Useful for migration purposes.
+#       # Do it once and then disable the flag when done.
 #       # - '--shipper.upload-compacted'
-#       # If you want to migrate to Thanos and have to keep the historical data,
-#       # this will also upload blocks that were compacted by Prometheus. 
+#
 #     expose:
 #       - 10901
 #       - 10902
