@@ -24,10 +24,10 @@
   when: dapp_thanos_objstore_config_files is defined
   with_items: "{{ dapp_thanos_objstore_config_files }}"
 
-#- name: Start container
-#  ansible.builtin.shell: |
-#    docker compose --project-directory "{{ _docker_project_dir }}" up -d
-#  changed_when: false
+- name: Start container
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
+  changed_when: false
 
-#- name: Flush handlers
-#  meta: flush_handlers
+- name: Flush handlers
+  meta: flush_handlers
