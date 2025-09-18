@@ -38,6 +38,4 @@ It is best to read about [Thanos](https://thanos.io/tip/thanos/quick-tutorial.md
 - Querier talks to the Sidecar (for recent data) and to the Store gateway (for historic / down-sampled data). It presents a single PromQL endpoint that Grafana or any client can use.
 
 
-The sidecar must be co-located with the Prometheus instance and have direct access to the TSDB directory. One sidecar per Prometheus instance.
-
-The other components can be located on the same server as Prometheus or on remote servers.
+*(The sidecar must be co-located with the Prometheus instance and have direct access to the TSDB directory. The other components can be located on remote servers.)*
