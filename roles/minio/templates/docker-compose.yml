@@ -3,6 +3,9 @@ networks:
   traefik_proxy:
     external: true
 
+volumes:
+  data:
+
 services:
   app:
     image: "{{ dapp_minio_docker_image }}"
