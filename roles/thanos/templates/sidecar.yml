@@ -28,6 +28,10 @@
   links:
     {{ sidecar.links | to_nice_yaml | indent(4) }}
 {% endif %}
+{% if sidecar.external_links is defined %}
+  external_links:
+    {{ sidecar.external_links | to_nice_yaml | indent(4) }}
+{% endif %}
   labels:
     traefik.enable: "false"
 {% endif %}
