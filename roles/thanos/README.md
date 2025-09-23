@@ -39,3 +39,7 @@ It is best to read about [Thanos](https://thanos.io/tip/thanos/quick-tutorial.md
 
 
 *(The sidecar must be co-located with the Prometheus instance and have direct access to the TSDB directory. The other components can be located on remote servers.)*
+
+# --shipper.upload-compacted
+
+In the scenario where you're doing an initial upload of a year's worth of compacted Prometheus data using the `--shipper.upload-compacted` option, it's probably a good idea to disable the Thanos Compactor during this process. The Thanos Compactor may attempt to compact the same blocks, leading to overlaps and conflicts. This can result in the error: "Found overlap or error during sync, cannot upload compacted block". By disabling the Thanos Compactor, you can ensure that the initial upload process is not disrupted or impacted by the compaction activities.
