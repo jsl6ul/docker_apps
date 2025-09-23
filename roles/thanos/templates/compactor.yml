@@ -27,6 +27,10 @@
   depends_on:
     {{ compactor.name }}-set-volume-owner:
       condition: service_completed_successfully
+{% if compactor.external_links is defined %}
+  external_links:
+    {{ compactor.external_links | to_nice_yaml | indent(4) }}
+{% endif %}
   labels:
     traefik.enable: "false"
 {% endif %}

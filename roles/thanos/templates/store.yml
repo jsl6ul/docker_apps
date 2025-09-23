@@ -33,6 +33,10 @@
   depends_on:
     {{ store.name }}-set-volume-owner:
       condition: service_completed_successfully
+{% if store.external_links is defined %}
+  external_links:
+    {{ store.external_links | to_nice_yaml | indent(4) }}
+{% endif %}
   labels:
     traefik.enable: "false"
 {% endif %}
