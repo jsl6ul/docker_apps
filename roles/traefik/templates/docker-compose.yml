@@ -36,6 +36,10 @@ services:
       - "./traefik-cert.crt:/etc/ssl/traefik/cert.crt"
       - "./traefik-cert.key:/etc/ssl/traefik/cert.key"
 {% endif %}
+{% if dapp_traefik_docker_external_links is defined %}
+    external_links:
+      {{ dapp_traefik_docker_external_links | to_nice_yaml | indent(4) }}
+{% endif %}
     env_file: traefik.env
     labels:
       traefik.enable: "true"
