@@ -6,6 +6,10 @@ dapp_traefik_docker_image: "docker.io/traefik"
 dapp_traefik_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# dapp_traefik_docker_external_links:
+#   - container1
+#   - container2
+
 # traefik docker healthcheck variables
 dapp_traefik_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
