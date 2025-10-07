@@ -17,7 +17,9 @@ services:
 {% if dapp_rsyslog_ports is defined %}
     ports: {{ dapp_rsyslog_ports }}
 {% endif %}
-    mem_limit: 512M
+{% if dapp_rsyslog_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_rsyslog_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_rsyslog_docker_environment|indent(6) }}
     healthcheck:

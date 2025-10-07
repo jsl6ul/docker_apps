@@ -22,7 +22,9 @@ services:
       - traefik_proxy
     ports: {{ dapp_gitlab_ports }}
     cpus: {{ dapp_gitlab_cpus }}
+{% if dapp_gitlab_mem_limit is defined %}
     mem_limit: {{ dapp_gitlab_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_gitlab_docker_environment|indent(6) }}
     healthcheck:

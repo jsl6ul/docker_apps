@@ -14,7 +14,9 @@ services:
         tag: "glances"
     networks:
       - traefik_proxy
-    mem_limit: 512M
+{% if dapp_glances_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_glances_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_glances_docker_environment|indent(6) }}
     healthcheck:
