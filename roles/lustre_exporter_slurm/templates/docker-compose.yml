@@ -7,7 +7,6 @@ services:
   app:
     build: "./"
     image: "localbuild/lustre_exporter_slurm"
-    container_name: lustre_exporter_slurm
     restart: unless-stopped
     logging:
       driver: journald
