@@ -1,0 +1,33 @@
+{% if querier is defined %}
+{{ querier.name }}:
+  image: "{{ dapp_thanos_docker_image }}"
+  container_name: {{ querier.name }}
+  restart: unless-stopped
+  logging:
+    driver: journald
+    options:
+      tag: "{{ querier.name }}"
+  networks:
+    - traefik_proxy
+  expose:
+    {{ querier.expose | to_nice_yaml | indent(4) }}
+{% if querier.ports is defined %}
+  ports:
+    {{ querier.ports | to_nice_yaml | indent(4) }}
+{% endif %}
+  environment:
+    {{ dapp_thanos_environment | indent(6) }}
+  command:
+    {{ querier.command | to_nice_yaml | indent(4) }}
+{% if querier.links is defined %}
+  links:
+    {{ querier.links | to_nice_yaml | indent(4) }}
+{% endif %}
+{% if querier.labels is defined %}
+  labels:
+    {{ querier.labels | to_nice_yaml | indent(4) }}
+{% else %}
+  labels:
+    traefik.enable: "false"
+{% endif %}
+{% endif %}

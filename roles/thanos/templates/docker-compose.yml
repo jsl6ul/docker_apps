@@ -1,0 +1,38 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+{% if dapp_thanos_volumes is defined %}
+{{ (dapp_thanos_volumes | to_nice_yaml) | default("") }}
+{% endif %}
+
+services:
+
+{% filter indent(width=2, first=true) %}
+
+{% if dapp_thanos_sidecars is defined %}
+{% for sidecar in dapp_thanos_sidecars %}
+{% include './templates/sidecar.yml' %}
+{% endfor %}
+{% endif %}
+
+{% if dapp_thanos_compactors is defined %}
+{% for compactor in dapp_thanos_compactors %}
+{% include './templates/compactor.yml' %}
+{% endfor %}
+{% endif %}
+
+{% if dapp_thanos_stores is defined %}
+{% for store in dapp_thanos_stores %}
+{% include './templates/store.yml' %}
+{% endfor %}
+{% endif %}
+
+{% if dapp_thanos_queriers is defined %}
+{% for querier in dapp_thanos_queriers %}
+{% include './templates/querier.yml' %}
+{% endfor %}
+{% endif %}
+
+{% endfilter %}
