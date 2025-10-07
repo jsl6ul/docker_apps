@@ -17,7 +17,9 @@ services:
         tag: "traefik"
     networks:
       - proxy
-    mem_limit: 512M
+{% if dapp_traefik_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_traefik_docker_mem_limit }}
+{% endif %}
     ports: {{ dapp_traefik_ports }}
     environment:
       {{ dapp_traefik_docker_environment|indent(6) }}

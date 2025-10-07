@@ -17,7 +17,9 @@ services:
         tag: "mirrordeb"
     networks:
       - traefik_proxy
+{% if dapp_mirrordeb_docker_mem_limit is defined %}
     mem_limit: {{ dapp_mirrordeb_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_mirrordeb_docker_environment|indent(6) }}
     healthcheck:

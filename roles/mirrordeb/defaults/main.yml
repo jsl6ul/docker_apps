@@ -11,7 +11,7 @@ dapp_mirrordeb_docker_healthcheck: |
 # docker image
 dapp_mirrordeb_docker_image: "localbuild/mirrordeb"
 
-dapp_mirrordeb_docker_mem_limit: 512M
+# dapp_mirrordeb_docker_mem_limit: 512M
 
 # service address
 dapp_mirrordeb_traefik_address: "mirror.{{ dapp_common_domain }}"

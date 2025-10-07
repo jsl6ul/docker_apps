@@ -19,7 +19,9 @@ services:
       - traefik_proxy
     expose:
       - 80
-    mem_limit: 512M
+{% if dapp_trivy_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_trivy_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_trivy_docker_environment|indent(6) }}
     healthcheck:

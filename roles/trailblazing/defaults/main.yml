@@ -27,8 +27,8 @@ dapp_trailblazing_database_docker_healthcheck: |
 dapp_trailblazing_traefik_address: "userportal.{{ dapp_common_domain }}"
 
 # Docker mem_limit
-dapp_trailblazing_docker_mem_limit: 1024M
-dapp_trailblazing_database_docker_mem_limit: 1024M
+# dapp_trailblazing_docker_mem_limit: 1024M
+# dapp_trailblazing_database_docker_mem_limit: 1024M
 
 # docker volumes
 dapp_trailblazing_docker_volumes:

@@ -10,3 +10,5 @@ dapp_glances_docker_environment: |
 # glances docker healthcheck variables
 dapp_glances_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
+
+# dapp_glances_docker_mem_limit: 512M
