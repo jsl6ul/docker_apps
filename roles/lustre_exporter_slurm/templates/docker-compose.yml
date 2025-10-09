@@ -7,7 +7,6 @@ services:
   app:
     build: "./"
     image: "localbuild/lustre_exporter_slurm"
-    container_name: lustre_exporter_slurm
     restart: unless-stopped
     logging:
       driver: journald
@@ -15,7 +14,9 @@ services:
         tag: "lustre_exporter_slurm"
     networks:
       - traefik_proxy
-    mem_limit: 512M
+{% if dapp_lustre_exporter_slurm_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_lustre_exporter_slurm_docker_mem_limit }}
+{% endif %}
     ports:
       {{ dapp_lustre_exporter_slurm_docker_ports|to_nice_yaml|indent(6) }}
     environment:

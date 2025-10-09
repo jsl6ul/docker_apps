@@ -13,6 +13,13 @@ dapp_monitoring_blackbox_docker_command:
   - "--config.file=/etc/blackbox_exporter/config.yml"
   - "--log.prober=warn"
 
+dapp_monitoring_prometheus_docker_command:
+  - "--config.file=/etc/prometheus/prometheus.yml"
+  - "--storage.tsdb.path=/prometheus"
+  - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+  - "--web.console.templates=/usr/share/prometheus/consoles"
+  - "--storage.tsdb.retention.time={{ dapp_monitoring_prometheus_retention_time }}"
+
 # docker environment variables
 dapp_monitoring_prometheus_docker_environment: |
   {{ dapp_common_docker_environment }}
@@ -46,11 +53,11 @@ dapp_monitoring_redfish_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
 # Docker mem_limit
-dapp_monitoring_prometheus_docker_mem_limit: 512M
-dapp_monitoring_alertmanager_docker_mem_limit: 512M
-dapp_monitoring_blackbox_docker_mem_limit: 512M
-dapp_monitoring_grafana_docker_mem_limit: 512M
-dapp_monitoring_redfish_docker_mem_limit: 512M
+# dapp_monitoring_prometheus_docker_mem_limit: 512M
+# dapp_monitoring_alertmanager_docker_mem_limit: 512M
+# dapp_monitoring_blackbox_docker_mem_limit: 512M
+# dapp_monitoring_grafana_docker_mem_limit: 512M
+# dapp_monitoring_redfish_docker_mem_limit: 512M
 
 # servers address
 dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_domain }}"

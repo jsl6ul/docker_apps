@@ -16,7 +16,9 @@ services:
         tag: "portainer"
     networks:
       - traefik_proxy
-    mem_limit: 512M
+{% if dapp_portainer_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_portainer_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_portainer_docker_environment|indent(6) }}
     healthcheck:

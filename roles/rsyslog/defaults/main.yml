@@ -10,6 +10,8 @@ dapp_rsyslog_docker_environment: |
 dapp_rsyslog_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
+# dapp_rsyslog_docker_mem_limit: 512M
+
 # to map the ports on the host
 # dapp_rsyslog_ports:
 #   - "514:514/udp"

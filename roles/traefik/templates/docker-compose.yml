@@ -17,7 +17,9 @@ services:
         tag: "traefik"
     networks:
       - proxy
-    mem_limit: 512M
+{% if dapp_traefik_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_traefik_docker_mem_limit }}
+{% endif %}
     ports: {{ dapp_traefik_ports }}
     environment:
       {{ dapp_traefik_docker_environment|indent(6) }}
@@ -33,6 +35,10 @@ services:
       - "./traefik-tls.yml:/etc/traefik/tls.yml"
       - "./traefik-cert.crt:/etc/ssl/traefik/cert.crt"
       - "./traefik-cert.key:/etc/ssl/traefik/cert.key"
+{% endif %}
+{% if dapp_traefik_docker_external_links is defined %}
+    external_links:
+      {{ dapp_traefik_docker_external_links | to_nice_yaml | indent(4) }}
 {% endif %}
     env_file: traefik.env
     labels:

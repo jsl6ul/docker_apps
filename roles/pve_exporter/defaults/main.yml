@@ -2,6 +2,8 @@
 dapp_pve_exporter_traefik_address: "pveexporter.{{ dapp_common_domain }}"
 dapp_pve_exporter_docker_image: "prompve/prometheus-pve-exporter"
 
+# dapp_pve_exporter_docker_mem_limit: 128M
+
 dapp_pve_exporter_environment: |
   TZ: "Etc/UTC"
 

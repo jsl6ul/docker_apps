@@ -13,7 +13,9 @@ services:
         tag: "pve_exporter"
     networks:
       - traefik_proxy
-    mem_limit: 128M
+{% if dapp_pve_exporter_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_pve_exporter_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_pve_exporter_environment|indent(6) }}
     volumes:

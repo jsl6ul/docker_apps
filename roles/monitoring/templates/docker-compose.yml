@@ -21,7 +21,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_prometheus_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_prometheus_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
     environment:
@@ -31,6 +33,8 @@ services:
     links:
       - alertmanager
       - blackbox
+    command:
+      {{ dapp_monitoring_prometheus_docker_command | to_nice_yaml | indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
@@ -49,7 +53,6 @@ services:
       traefik.http.routers.prometheus.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
       traefik.http.routers.prometheus.tls.domains[0].main: "{{ dapp_monitoring_prometheus_traefik_address }}"
 {% endif %}
-    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles --storage.tsdb.retention.time={{ dapp_monitoring_prometheus_retention_time }}
 
   alertmanager:
     image: "{{ dapp_monitoring_alertmanager_docker_image }}"
@@ -61,7 +64,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_alertmanager_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_alertmanager_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
     environment:
@@ -97,7 +102,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_blackbox_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_blackbox_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_blackbox_volumes|to_nice_yaml | indent(6) }}
     environment:
@@ -130,7 +137,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_grafana_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_grafana_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_grafana_volumes|to_nice_yaml|indent(6) }}
 {% if dapp_monitoring_grafana_ldap_toml is defined %}
@@ -170,7 +179,9 @@ services:
       - traefik_proxy
     expose:
       - 9348
+{% if dapp_monitoring_redfish_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_redfish_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_redfish_volumes|to_nice_yaml | indent(6) }}
     environment:
