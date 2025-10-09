@@ -3,19 +3,19 @@
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" build
   listen:
-    - "Rebuild containers"
+    - Rebuild containers
 
-- name: Stop and remove containers
+- name: Down containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" down
   listen:
-    - "Rebuild containers"
+    - Rebuild containers
 
-- name: Create and start containers
+- name: Up containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" up -d
   listen:
-    - "Rebuild containers"
+    - Rebuild containers
 
 - name: Stop containers
   ansible.builtin.shell: |
