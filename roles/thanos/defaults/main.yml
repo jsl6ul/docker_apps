@@ -1,0 +1,127 @@
+---
+dapp_thanos_docker_image: "docker.io/thanosio/thanos:v0.39.2"
+
+# Thanos Querier provides a web interface similar to that of Prometheus,
+# allowing for ad-hoc querying and checking the status of the Thanos stores.
+dapp_thanos_querier_traefik_address: "thanos.{{ dapp_common_domain }}"
+
+dapp_thanos_environment: |
+  TZ: "Etc/UTC"
+
+# dapp_thanos_volumes:
+#   volumes:
+#     thanos_compactor:
+#       name: thanos_compactor
+#
+#     thanos_store:
+#       name: thanos_store
+#
+#     # external volume to prometheus data
+#     prometheus_data:
+#       external: true
+
+# dapp_thanos_objstore_config_files:
+#   # s3/minio object store configuration.
+#   - name: objstore-1.yml
+#     content: |
+#       type: S3
+#       config:
+#         access_key: thanos
+#         bucket: sidecar1
+#         endpoint: s3.example.com
+#         insecure: false
+#         http_config:
+#           insecure_skip_verify: true
+#         trace:
+#           enable: true
+#         secret_key: secret123
+#         signature_version2: true
+
+# dapp_thanos_sidecars:
+#   - name: thanos-sidecar-1
+#     # The user must be the same as the one running Prometheus
+#     # to access the prometheus data volume in write mode.
+#     user: '"nobody:nobody"'
+#     volumes:
+#       - prometheus_data:/prometheus
+#       - ./objstore-1.yml:/objstore.yml
+#
+#     command:
+#       - 'sidecar'
+#       - '--log.level=info'
+#       - '--tsdb.path=/prometheus'
+#       - '--prometheus.url=https://prometheus.{{ dapp_common_domain }}'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--objstore.config-file=/objstore.yml'
+#       # The file to store shipper metadata in. (one per sidecar)
+#       - '--shipper.meta-file-name=thanos-sidecar-1.shipper.json'
+#       # Upload compacted blocks as well? Useful for migration purposes.
+#       # Do it once and then disable the flag when done.
+#       # - '--shipper.upload-compacted'
+#
+#     expose:
+#       - 10901
+#       - 10902
+#     # ports:
+#     #   - 10901:10901
+#     #   - 10902:10902
+
+# dapp_thanos_compactors:
+#   - name: thanos-compactor-1
+#     volumes:
+#       - ./objstore-1.yml:/objstore.yml
+#       - thanos_compactor:/data
+#     command:
+#       - 'compact'
+#       - '--log.level=info'
+#       - '--data-dir=/data' # Update the 'chown' command in template if path changes.
+#       - '--objstore.config-file=/objstore.yml'
+#       - '--wait'
+
+# dapp_thanos_stores:
+#   - name: thanos-store-1
+#     volumes:
+#       - ./objstore-1.yml:/objstore.yml
+#       - thanos_store:/data
+#     command:
+#       - 'store'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--data-dir=/data' # Update the 'chown' command in template if path changes.
+#       - '--objstore.config-file=/objstore.yml'
+#     expose:
+#       - 10901
+#       - 10902
+#     # ports:
+#     #   - 10901:10901
+#     #   - 10902:10902
+
+# dapp_thanos_queriers:
+#   - name: thanos-querier-1
+#     command:
+#       - 'query'
+#       - '--log.level=info'
+#       - '--grpc-address=0.0.0.0:10901'
+#       - '--http-address=0.0.0.0:10902'
+#       - '--query.replica-label=replica'
+#       - '--endpoint=thanos-sidecar-1:10901'
+#       - '--endpoint=thanos-store-1:10901'
+#     expose:
+#       - 10901
+#       - 10902
+#     # ports:
+#     #   - 10901:10901
+#     #   - 10902:10902
+#     links:
+#       - thanos-sidecar-1
+#       - thanos-store-1
+#     labels:
+#       traefik.enable: "true"
+#       traefik.docker.network: "traefik_proxy"
+#       traefik.http.routers.querier.entrypoints: "http, https"
+#       traefik.http.routers.querier.rule: "Host(`{{ dapp_thanos_querier_traefik_address }}`)"
+#       traefik.http.services.querier.loadbalancer.server.port: "10902"
+#       traefik.http.routers.querier.tls: "{{ dapp_common_traefik_tls }}"
+#       traefik.http.routers.querier.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+#       traefik.http.routers.querier.tls.domains[0].main: "{{ dapp_thanos_querier_traefik_address }}"
