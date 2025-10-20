@@ -25,6 +25,10 @@ dapp_common_traefik_certresolver: none
 # how to set a provider from https://go-acme.github.io/lego/dns/
 # dapp_common_traefik_certresolver: mydomain
 
+# Define basic auth to access the traefik API and Dashboard. (user: admin, password: hashed)
+# remember to escape dollar signs by doubling them. openssl passwd -apr1 | sed -E 's:\$:\$\$:g'
+# dapp_common_traefik_api_basicauth: "admin:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj0"
+
 # You can add Traefik configuration using file provider.
 # https://doc.traefik.io/traefik/providers/file/
 # dapp_common_traefik_file_provider: |
