@@ -47,6 +47,11 @@ services:
       traefik.http.routers.dashboard.entrypoints: "http, https"
       traefik.http.routers.dashboard.service: "api@internal"
 
+{% if dapp_common_traefik_api_basicauth is defined %}
+      traefik.http.middlewares.auth.basicauth.users: "{{ dapp_common_traefik_api_basicauth }}"
+      traefik.http.routers.dashboard.middlewares: "auth"
+{% endif %}
+
 {% if dapp_common_traefik_tls %}
       traefik.http.routers.dashboard.tls: "true"
       traefik.http.middlewares.https_redirect.redirectscheme.scheme: "https"
