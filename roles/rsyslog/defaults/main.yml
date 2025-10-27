@@ -6,6 +6,10 @@ dapp_rsyslog_docker_image: localbuild/rsyslog
 dapp_rsyslog_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# Link services managed outside of your application.
+# dapp_rsyslog_docker_external_links:
+#   - extservice:intservice
+
 # rsyslog docker healthcheck variables
 dapp_rsyslog_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
