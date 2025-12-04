@@ -21,7 +21,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_prometheus_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_prometheus_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_prometheus_volumes|to_nice_yaml|indent(6) }}
     environment:
@@ -62,7 +64,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_alertmanager_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_alertmanager_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_alertmanager_volumes|to_nice_yaml|indent(6) }}
     environment:
@@ -98,7 +102,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_blackbox_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_blackbox_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_blackbox_volumes|to_nice_yaml | indent(6) }}
     environment:
@@ -131,7 +137,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_monitoring_grafana_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_grafana_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_grafana_volumes|to_nice_yaml|indent(6) }}
 {% if dapp_monitoring_grafana_ldap_toml is defined %}
@@ -143,6 +151,10 @@ services:
       {{ dapp_monitoring_grafana_docker_healthcheck|indent(6) }}
     links:
       - prometheus
+{% if dapp_monitoring_grafana_docker_external_links is defined %}
+    external_links:
+      {{ dapp_monitoring_grafana_docker_external_links | to_nice_yaml | indent(4) }}
+{% endif %}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
@@ -171,7 +183,9 @@ services:
       - traefik_proxy
     expose:
       - 9348
+{% if dapp_monitoring_redfish_docker_mem_limit is defined %}
     mem_limit: {{ dapp_monitoring_redfish_docker_mem_limit }}
+{% endif %}
     volumes:
       {{ dapp_monitoring_redfish_volumes|to_nice_yaml | indent(6) }}
     environment:

@@ -36,6 +36,10 @@ dapp_monitoring_grafana_docker_environment: |
 dapp_monitoring_redfish_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# Link services managed outside of your application.
+# dapp_monitoring_grafana_docker_external_links:
+#   - extservice:intservice
+
 # docker healthcheck variables
 dapp_monitoring_prometheus_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
@@ -53,11 +57,11 @@ dapp_monitoring_redfish_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
 # Docker mem_limit
-dapp_monitoring_prometheus_docker_mem_limit: 512M
-dapp_monitoring_alertmanager_docker_mem_limit: 512M
-dapp_monitoring_blackbox_docker_mem_limit: 512M
-dapp_monitoring_grafana_docker_mem_limit: 512M
-dapp_monitoring_redfish_docker_mem_limit: 512M
+# dapp_monitoring_prometheus_docker_mem_limit: 512M
+# dapp_monitoring_alertmanager_docker_mem_limit: 512M
+# dapp_monitoring_blackbox_docker_mem_limit: 512M
+# dapp_monitoring_grafana_docker_mem_limit: 512M
+# dapp_monitoring_redfish_docker_mem_limit: 512M
 
 # servers address
 dapp_monitoring_prometheus_traefik_address: "prometheus.{{ dapp_common_domain }}"

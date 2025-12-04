@@ -11,6 +11,8 @@ dapp_freeipa_docker_environment: |
 dapp_freeipa_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
+# dapp_freeipa_docker_mem_limit: 2048M
+
 dapp_freeipa_dns_servers:
   - 1.1.1.1
   - 8.8.8.8

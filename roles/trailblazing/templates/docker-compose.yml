@@ -18,7 +18,9 @@ services:
         tag: "trailblazing_db"
     networks:
       - default
+{% if dapp_trailblazing_database_docker_mem_limit is defined %}
     mem_limit: {{ dapp_trailblazing_database_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_trailblazing_database_docker_environment|indent(6) }}
     healthcheck:
@@ -39,7 +41,9 @@ services:
     networks:
       - default
       - traefik_proxy
+{% if dapp_trailblazing_docker_mem_limit is defined %}
     mem_limit: {{ dapp_trailblazing_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_trailblazing_docker_environment|indent(6) }}
     healthcheck:

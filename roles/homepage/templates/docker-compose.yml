@@ -12,7 +12,9 @@ services:
         tag: "homepage"
     networks:
       - traefik_proxy
-    mem_limit: 128M
+{% if dapp_homepage_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_homepage_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_homepage_docker_environment|indent(6) }}
     healthcheck:

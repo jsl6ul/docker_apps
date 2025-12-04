@@ -10,3 +10,5 @@ dapp_trivy_docker_environment: |
 # trivy docker healthcheck variables
 dapp_trivy_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
+
+# dapp_trivy_docker_mem_limit: 512M

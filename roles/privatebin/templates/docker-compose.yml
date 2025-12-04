@@ -14,7 +14,9 @@ services:
         tag: "privatebin"
     networks:
       - traefik_proxy
-    mem_limit: 256M
+{% if dapp_privatebin_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_privatebin_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_privatebin_docker_environment|indent(6) }}
     healthcheck:

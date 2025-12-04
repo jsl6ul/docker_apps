@@ -10,6 +10,8 @@ dapp_portainer_docker_environment: |
 dapp_portainer_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
+# dapp_portainer_docker_mem_limit: 512M
+
 # portainer admin password
 #
 # 1. you can define a password (which will be added to a password file)

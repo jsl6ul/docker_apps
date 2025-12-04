@@ -10,7 +10,6 @@ services:
   app:
     image: "{{ dapp_minio_docker_image }}"
     restart: unless-stopped
-    container_name: minio
     logging:
       driver: journald
       options:

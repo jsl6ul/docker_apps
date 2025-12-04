@@ -31,7 +31,9 @@ services:
 {% endif %}
     dns: {{ dapp_freeipa_dns_servers }}
     ports: {{ dapp_freeipa_ports }}
-    mem_limit: 2048M
+{% if dapp_freeipa_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_freeipa_docker_mem_limit }}
+{% endif %}
     cgroup: host
     environment:
       {{ dapp_freeipa_docker_environment|indent(6) }}

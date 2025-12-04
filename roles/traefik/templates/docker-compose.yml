@@ -17,7 +17,9 @@ services:
         tag: "traefik"
     networks:
       - proxy
-    mem_limit: 512M
+{% if dapp_traefik_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_traefik_docker_mem_limit }}
+{% endif %}
     ports: {{ dapp_traefik_ports }}
     environment:
       {{ dapp_traefik_docker_environment|indent(6) }}
@@ -34,12 +36,21 @@ services:
       - "./traefik-cert.crt:/etc/ssl/traefik/cert.crt"
       - "./traefik-cert.key:/etc/ssl/traefik/cert.key"
 {% endif %}
+{% if dapp_traefik_docker_external_links is defined %}
+    external_links:
+      {{ dapp_traefik_docker_external_links | to_nice_yaml | indent(4) }}
+{% endif %}
     env_file: traefik.env
     labels:
       traefik.enable: "true"
       traefik.http.routers.dashboard.rule: "Host(`{{ inventory_hostname }}.{{ dapp_common_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       traefik.http.routers.dashboard.entrypoints: "http, https"
       traefik.http.routers.dashboard.service: "api@internal"
+
+{% if dapp_common_traefik_api_basicauth is defined %}
+      traefik.http.middlewares.auth.basicauth.users: "{{ dapp_common_traefik_api_basicauth }}"
+      traefik.http.routers.dashboard.middlewares: "auth"
+{% endif %}
 
 {% if dapp_common_traefik_tls %}
       traefik.http.routers.dashboard.tls: "true"

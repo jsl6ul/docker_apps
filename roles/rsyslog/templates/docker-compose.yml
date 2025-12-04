@@ -17,7 +17,9 @@ services:
 {% if dapp_rsyslog_ports is defined %}
     ports: {{ dapp_rsyslog_ports }}
 {% endif %}
-    mem_limit: 512M
+{% if dapp_rsyslog_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_rsyslog_docker_mem_limit }}
+{% endif %}
     environment:
       {{ dapp_rsyslog_docker_environment|indent(6) }}
     healthcheck:
@@ -32,6 +34,10 @@ services:
       - "./{{ file.name }}:{{ file.container_path }}"
 {% endif %}
 {% endfor %}
+{% endif %}
+{% if dapp_rsyslog_docker_external_links is defined %}
+    external_links:
+      {{ dapp_rsyslog_docker_external_links | to_nice_yaml | indent(4) }}
 {% endif %}
     labels:
       traefik.enable: "false"
