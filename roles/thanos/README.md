@@ -1,16 +1,22 @@
 A role for [Thanos](https://thanos.io/)
 
-Open source, highly available Prometheus setup with long term storage capabilities.
+Open source, highly available Prometheus setup with long term storage
+capabilities.
+
 
 # Deployment
 
-This role deploys a partial Thanos environment, including a Sidecar, a Compactor, a Store gateway, and a Querier.
+This role deploys a partial Thanos environment, including a Sidecar, a
+Compactor, a Store gateway, and a Querier.
 
 You need an external Prometheus and an external object store.
 
+
 # Prometheus
 
-Thanos sidecar requires a Prometheus external_label. The external_label is used by Thanos to uniquely identify the Prometheus instance that the sidecar is running alongside.
+Thanos sidecar requires a Prometheus external_label. The
+external_label is used by Thanos to uniquely identify the Prometheus
+instance that the sidecar is running alongside.
 
 ```
   global:
@@ -18,28 +24,63 @@ Thanos sidecar requires a Prometheus external_label. The external_label is used 
       cluster: prod-cluster-1
 ```
 
+
 # Components
 
-It is best to read about [Thanos](https://thanos.io/tip/thanos/quick-tutorial.md/) if you are not familiar with it.
+It is best to read about
+[Thanos](https://thanos.io/tip/thanos/quick-tutorial.md/) if you are
+not familiar with it.
 
 - Prometheus scrapes targets as usual.
 
-- Sidecar watches Prometheus’s TSDB directory and every time Prometheus finishes a block it:
-  - Serves the block over the Thanos gRPC API (so the Querier can read it instantly).
+- Sidecar watches Prometheus’s TSDB directory and every time
+  Prometheus finishes a block it:
+  - Serves the block over the Thanos gRPC API (so the Querier can read
+    it instantly).
   - Remote-writes the block to the configured object store.
 
 - Compactor runs periodically, it:
   - Pulls raw blocks from the object store.
-  - Merges overlapping blocks, removes duplicates, and creates down-sampled versions.
-  - Writes the compacted blocks back to the same bucket, marking the originals for deletion.
+  - Merges overlapping blocks, removes duplicates, and creates
+    down-sampled versions.
+  - Writes the compacted blocks back to the same bucket, marking the
+    originals for deletion.
 
-- Store gateway reads historic blocks from the object store and serves them to queries.
+- Store gateway reads historic blocks from the object store and serves
+  them to queries.
 
-- Querier talks to the Sidecar (for recent data) and to the Store gateway (for historic / down-sampled data). It presents a single PromQL endpoint that Grafana or any client can use.
+- Querier talks to the Sidecar (for recent data) and to the Store
+  gateway (for historic / down-sampled data). It presents a single
+  PromQL endpoint that Grafana or any client can use.
 
 
-*(The sidecar must be co-located with the Prometheus instance and have direct access to the TSDB directory. The other components can be located on remote servers.)*
+*(The sidecar must be co-located with the Prometheus instance and have
+direct access to the TSDB directory. The other components can be
+located on remote servers.)*
+
 
 # --shipper.upload-compacted
 
-In the scenario where you're doing an initial upload of a year's worth of compacted Prometheus data using the `--shipper.upload-compacted` option, it's probably a good idea to disable the Thanos Compactor during this process. The Thanos Compactor may attempt to compact the same blocks, leading to overlaps and conflicts. This can result in the error: "Found overlap or error during sync, cannot upload compacted block". By disabling the Thanos Compactor, you can ensure that the initial upload process is not disrupted or impacted by the compaction activities.
+In the scenario where you're doing an initial upload of a year's worth
+of compacted Prometheus data using the `--shipper.upload-compacted`
+option, it's probably a good idea to disable the Thanos Compactor
+during this process.
+
+The Thanos Compactor may attempt to compact the same blocks, leading
+to overlaps and conflicts. This can result in the error: `Found
+overlap or error during sync, cannot upload compacted block`.
+
+By disabling the Thanos Compactor, you can ensure that the initial
+upload process is not disrupted or impacted by the compaction
+activities.
+
+
+# Errors
+
+- Sidecar connection errors to Prometheus are normal when starting
+  Prometheus and it performs a Write-Ahead Log (WAL) replay.
+
+- Querier connection errors to Store gateway are normal when the Store
+  is loading blocks from S3.
+
+In these situations, you just have to wait.
