@@ -152,8 +152,7 @@ services:
     links:
       - prometheus
 {% if dapp_monitoring_grafana_docker_external_links is defined %}
-    external_links:
-      {{ dapp_monitoring_grafana_docker_external_links | to_nice_yaml | indent(4) }}
+    external_links: {{ dapp_monitoring_grafana_docker_external_links }}
 {% endif %}
     labels:
       traefik.enable: "true"

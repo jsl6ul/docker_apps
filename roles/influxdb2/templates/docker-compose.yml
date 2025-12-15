@@ -26,8 +26,7 @@ services:
     command: {{ dapp_influxdb2_docker_command }}
 {% endif %}
 {% if dapp_influxdb2_docker_external_links is defined %}
-    external_links:
-      {{ dapp_influxdb2_docker_external_links | to_nice_yaml | indent(4) }}
+    external_links: {{ dapp_influxdb2_docker_external_links }}
 {% endif %}
     labels:
       traefik.enable: "true"
