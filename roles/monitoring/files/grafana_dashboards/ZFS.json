@@ -3,10 +3,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -35,10 +32,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -97,10 +91,7 @@
       "pluginVersion": "10.2.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "node_zfs_zpool_state == 1",
           "instant": false,
@@ -114,10 +105,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -128,10 +116,7 @@
       "panels": [],
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "refId": "A"
         }
       ],
@@ -143,10 +128,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -195,10 +177,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "irate(node_zfs_zpool_dataset_nread{job=\"node-exporter\",instance=\"$node:$port\"}[5m])",
           "format": "time_series",
@@ -210,10 +189,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "irate(node_zfs_zpool_dataset_nwritten{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
@@ -264,10 +240,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -316,10 +289,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "irate(node_zfs_zpool_dataset_reads{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
@@ -331,10 +301,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "editorMode": "code",
           "expr": "irate(node_zfs_zpool_dataset_writes{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
@@ -381,10 +348,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -395,10 +359,7 @@
       "panels": [],
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "refId": "A"
         }
       ],
@@ -410,10 +371,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -463,10 +421,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_demand_data_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m]) / (irate(node_zfs_arc_demand_data_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m]) + irate(node_zfs_arc_demand_data_misses{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
@@ -476,10 +431,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_demand_metadata_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m]) / (irate(node_zfs_arc_demand_metadata_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m]) + irate(node_zfs_arc_demand_metadata_misses{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
@@ -525,10 +477,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -576,10 +525,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_demand_data_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
@@ -589,10 +535,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_demand_metadata_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
@@ -602,10 +545,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_demand_data_misses{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
@@ -615,10 +555,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_demand_metadata_misses{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
@@ -664,10 +601,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -714,10 +648,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_data_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "hide": false,
@@ -729,10 +660,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_metadata_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "intervalFactor": 2,
@@ -742,10 +670,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_anon_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "hide": false,
@@ -757,10 +682,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_hdr_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "intervalFactor": 2,
@@ -770,10 +692,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_other_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "intervalFactor": 2,
@@ -816,10 +735,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -830,10 +746,7 @@
       "panels": [],
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "refId": "A"
         }
       ],
@@ -845,10 +758,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -898,10 +808,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_l2_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m]) / (irate(node_zfs_arc_l2_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m]) + irate(node_zfs_arc_l2_misses{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
@@ -947,10 +854,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -998,10 +902,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_l2_hits{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
@@ -1011,10 +912,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "irate(node_zfs_arc_l2_misses{job=\"node-exporter\",instance=~\"$node:$port\"}[5m])",
           "format": "time_series",
           "intervalFactor": 2,
@@ -1060,10 +958,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -1110,10 +1005,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_l2_asize{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "hide": false,
@@ -1125,10 +1017,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_l2_hdr_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "intervalFactor": 2,
@@ -1138,10 +1027,7 @@
           "target": ""
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
+          "datasource": "${DS_PROMETHEUS}",
           "expr": "node_zfs_arc_l2_size{job=\"node-exporter\",instance=~\"$node:$port\"}",
           "format": "time_series",
           "hide": false,
@@ -1191,15 +1077,17 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": true,
-          "text": "tanker.laqc.ca",
-          "value": "tanker.laqc.ca"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
+        "hide": 0,
+        "label": "Data Source",
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(node_exporter_build_info{job=~\"node-exporter\"}, instance)",
         "hide": 0,
         "includeAll": false,
@@ -1222,10 +1110,7 @@
           "text": "9100",
           "value": "9100"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "PBFA97CFB590B2093"
-        },
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(node_exporter_build_info{instance=~\"$node:(.*)\"}, instance)",
         "hide": 2,
         "includeAll": false,
