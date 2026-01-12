@@ -25,7 +25,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -141,7 +141,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -255,7 +255,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -371,7 +371,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": null,
       "format": "decbytes",
       "gauge": {
@@ -459,7 +459,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "format": "bytes",
       "gauge": {
         "maxValue": 100,
@@ -541,7 +541,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "Checks all interfaces for dropped/error packets, and alerts if more than 10 are seen in a 5m interval",
       "fill": 1,
       "fillGradient": 0,
@@ -635,7 +635,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -772,7 +772,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -926,7 +926,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "editable": true,
       "error": false,
       "fill": 1,
@@ -1037,13 +1037,18 @@
   "templating": {
     "list": [
       {
+        "hide": 0,
+        "label": "Data Source",
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "carrier.laqc.ca:9100",
-          "value": "carrier.laqc.ca:9100"
-        },
-        "datasource": "Prometheus",
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "",
         "hide": 0,
         "includeAll": false,
@@ -1064,15 +1069,10 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "br-87b8754e38fb",
-          "value": "br-87b8754e38fb"
-        },
-        "datasource": "Prometheus",
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": null,
         "multi": true,
         "name": "device",
