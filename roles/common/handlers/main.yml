@@ -5,17 +5,19 @@
   listen:
     - Rebuild containers
 
-- name: Down containers
+- name: Stop and remove containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" down
   listen:
     - Rebuild containers
+    - Down containers
 
-- name: Up containers
+- name: Create and start containers
   ansible.builtin.shell: |
     docker compose --project-directory "{{ _docker_project_dir }}" up -d
   listen:
     - Rebuild containers
+    - Up containers
 
 - name: Stop containers
   ansible.builtin.shell: |
