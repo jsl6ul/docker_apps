@@ -1,0 +1,43 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+volumes:
+  data:
+  config:
+
+services:
+  app:
+    image: "{{ dapp_influxdb2_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "influxdb2"
+    networks:
+      - traefik_proxy
+    environment:
+      {{ dapp_influxdb2_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_influxdb2_docker_healthcheck|indent(6) }}
+    volumes: {{ dapp_influxdb2_docker_volumes }}
+{% if dapp_influxdb2_docker_command is defined %}
+    command: {{ dapp_influxdb2_docker_command }}
+{% endif %}
+{% if dapp_influxdb2_docker_external_links is defined %}
+    external_links: {{ dapp_influxdb2_docker_external_links }}
+{% endif %}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.influxdb2.entrypoints: "http, https"
+      traefik.http.routers.influxdb2.rule: "Host(`{{ dapp_influxdb2_traefik_address }}`)"
+      traefik.http.services.influxdb2.loadbalancer.server.port: "8086"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.influxdb2.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.influxdb2.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.influxdb2.tls.domains[0].main: "{{ dapp_influxdb2_traefik_address }}"
+{% endif %}

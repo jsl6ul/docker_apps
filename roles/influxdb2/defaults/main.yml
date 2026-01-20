@@ -1,0 +1,24 @@
+---
+dapp_influxdb2_docker_image: "docker.io/influxdb:2"
+dapp_influxdb2_traefik_address: "influxdb.{{ dapp_common_domain }}"
+
+# influxdb2 docker environment variables
+# dapp_influxdb2_docker_environment: |
+#   {{ dapp_common_docker_environment }}
+#   DOCKER_INFLUXDB_INIT_MODE: "setup"
+#   DOCKER_INFLUXDB_INIT_USERNAME: "my-user"
+#   DOCKER_INFLUXDB_INIT_PASSWORD: "my-password"
+#   DOCKER_INFLUXDB_INIT_ORG: "my-org"
+#   DOCKER_INFLUXDB_INIT_BUCKET: "my-bucket"
+
+# Link services managed outside of your application.
+# dapp_influxdb2_docker_external_links:
+#   - extservice:intservice
+
+# influxdb2 docker healthcheck variables
+dapp_influxdb2_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+dapp_influxdb2_docker_volumes:
+  - "data:/var/lib/influxdb2"
+  - "config:/etc/influxdb2"

@@ -36,6 +36,10 @@ dapp_monitoring_grafana_docker_environment: |
 dapp_monitoring_redfish_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# Link services managed outside of your application.
+# dapp_monitoring_grafana_docker_external_links:
+#   - extservice:intservice
+
 # docker healthcheck variables
 dapp_monitoring_prometheus_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}

@@ -1,0 +1,47 @@
+---
+dapp_opensearch_docker_image: "docker.io/opensearchproject/opensearch:2.15.0"
+
+# opensearch admin password
+# dapp_opensearch_admin_pwd: <secret>
+
+# opensearch docker environment variables
+dapp_opensearch_docker_environment: |
+  {{ dapp_common_docker_environment }}
+  http.host: "0.0.0.0"
+  transport.host: "localhost"
+  network.host: "0.0.0.0"
+  OPENSEARCH_JAVA_OPTS: "{{ dapp_opensearch_java_opts }}"
+  discovery.type: "single-node"
+  # access opensearch using http, traefik do the offload ssl
+  plugins.security.disabled: "true"
+  #reindex.remote.whitelist: "*:9200"
+  OPENSEARCH_INITIAL_ADMIN_PASSWORD: "{{ dapp_opensearch_admin_pwd }}"
+
+# opensearch docker healthcheck variables
+dapp_opensearch_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# Docker mem_limit
+# dapp_opensearch_docker_mem_limit: 2048M
+
+dapp_opensearch_java_opts: "-Xms1024m -Xmx1024m -Dlog4j2.formatMsgNoLookups=true"
+
+# dapp_opensearch_ports:
+#   - "9200:9200/tcp"
+#   - "9300:9300/tcp"
+#   - "9600:9600/tcp"
+#   - "9650:9650/tcp"
+
+dapp_opensearch_ulimits:
+  memlock:
+    soft: -1
+    hard: -1
+  nofile:
+    soft: 65536
+    hard: 65536
+
+# server address
+dapp_opensearch_traefik_address: "opensearch.{{ dapp_common_domain }}"
+
+dapp_opensearch_volumes:
+  - "opensearch:/usr/share/opensearch/data"

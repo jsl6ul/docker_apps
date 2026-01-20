@@ -25,7 +25,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "editable": true,
       "error": false,
@@ -63,13 +63,6 @@
       "renderer": "flot",
       "repeat": "node",
       "repeatDirection": "h",
-      "scopedVars": {
-        "node": {
-          "selected": true,
-          "text": "carrier.laqc.ca:9100",
-          "value": "carrier.laqc.ca:9100"
-        }
-      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
@@ -128,7 +121,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -146,7 +139,7 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "format": "none",
@@ -194,13 +187,6 @@
             }
           ],
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
             "full": false,
@@ -239,7 +225,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "decimals": 3,
           "editable": true,
           "error": false,
@@ -279,13 +265,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": true,
@@ -423,7 +402,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -460,13 +439,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/Apps|Buffers|Cached|Free|Slab|SwapCached|PageTables|VmallocUsed/",
@@ -642,7 +614,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -678,13 +650,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -746,7 +711,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -787,13 +752,6 @@
           "renderer": "flot",
           "repeat": "node",
           "repeatDirection": "h",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "Interrupts",
@@ -865,7 +823,7 @@
           "bars": true,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -906,13 +864,6 @@
           "renderer": "flot",
           "repeat": "node",
           "repeatDirection": "h",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "Processes blocked waiting for I/O to complete",
@@ -1002,7 +953,7 @@
           "bars": true,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "decimals": 2,
           "editable": true,
           "error": false,
@@ -1043,13 +994,6 @@
           "renderer": "flot",
           "repeat": "node",
           "repeatDirection": "h",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "Forks",
@@ -1122,7 +1066,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1136,7 +1080,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "decimals": 3,
           "editable": true,
           "error": false,
@@ -1173,13 +1117,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -1241,7 +1178,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1277,13 +1214,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -1345,7 +1275,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1381,13 +1311,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/.*_read$/",
@@ -1463,7 +1386,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1499,13 +1422,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/.*_read/",
@@ -1581,7 +1497,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1617,13 +1533,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -1686,7 +1595,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1697,7 +1606,7 @@
       "panels": [
         {
           "cacheTimeout": null,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "gridPos": {
             "h": 7,
             "w": 24,
@@ -1745,13 +1654,6 @@
           "pluginVersion": "6.6.1",
           "repeat": "node",
           "repeatDirection": "h",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "targets": [
             {
               "expr": "sum(increase(node_network_receive_bytes_total{instance=~\"$node\",device=~\"(eth|en|ib|sl|wl|ww).*\"}[$__range]))",
@@ -1778,7 +1680,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1814,13 +1716,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/.*_in/",
@@ -1897,7 +1792,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -1933,13 +1828,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -1999,7 +1887,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2035,13 +1923,6 @@
           "points": false,
           "renderer": "flot",
           "repeat": "node",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [
             {
               "alias": "/.*Out.*/",
@@ -2132,7 +2013,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "editable": true,
           "error": false,
           "fill": 1,
@@ -2169,13 +2050,6 @@
           "renderer": "flot",
           "repeat": "node",
           "repeatDirection": "h",
-          "scopedVars": {
-            "node": {
-              "selected": true,
-              "text": "ul-stk-pr-cam01.l.ul.ca",
-              "value": "ul-stk-pr-cam01.l.ul.ca"
-            }
-          },
           "seriesOverrides": [],
           "spaceLength": 10,
           "stack": false,
@@ -2247,14 +2121,19 @@
   "templating": {
     "list": [
       {
+        "hide": 0,
+        "label": "Data Source",
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
         "allFormat": "glob",
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "carrier.laqc.ca:9100",
-          "value": "carrier.laqc.ca:9100"
-        },
-        "datasource": "Prometheus",
+        "datasource": "${DS_PROMETHEUS}",
         "definition": "",
         "hide": 0,
         "includeAll": false,

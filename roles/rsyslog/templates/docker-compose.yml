@@ -35,5 +35,8 @@ services:
 {% endif %}
 {% endfor %}
 {% endif %}
+{% if dapp_rsyslog_docker_external_links is defined %}
+    external_links: {{ dapp_rsyslog_docker_external_links }}
+{% endif %}
     labels:
       traefik.enable: "false"

@@ -1,0 +1,37 @@
+{% if sidecar is defined %}
+{{ sidecar.name }}:
+  image: "{{ dapp_thanos_docker_image }}"
+  container_name: {{ sidecar.name }}
+  restart: unless-stopped
+  logging:
+    driver: journald
+    options:
+      tag: "{{ sidecar.name }}"
+  networks:
+    - traefik_proxy
+  expose:
+    {{ sidecar.expose | to_nice_yaml | indent(4) }}
+{% if sidecar.ports is defined %}
+  ports:
+    {{ sidecar.ports | to_nice_yaml | indent(4) }}
+{% endif %}
+{% if sidecar.user is defined %}
+  user: {{ sidecar.user }}
+{% endif %}
+  environment:
+    {{ dapp_thanos_environment | indent(6) }}
+  volumes:
+    {{ sidecar.volumes | to_nice_yaml | indent(4) }}
+  command:
+    {{ sidecar.command | to_nice_yaml | indent(4) }}
+{% if sidecar.links is defined %}
+  links:
+    {{ sidecar.links | to_nice_yaml | indent(4) }}
+{% endif %}
+{% if sidecar.external_links is defined %}
+  external_links:
+    {{ sidecar.external_links | to_nice_yaml | indent(4) }}
+{% endif %}
+  labels:
+    traefik.enable: "false"
+{% endif %}
