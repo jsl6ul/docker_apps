@@ -1,0 +1,54 @@
+---
+dapp_alertmanager_docker_image: "docker.io/prom/alertmanager"
+
+dapp_alertmanager_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+dapp_alertmanager_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# dapp_alertmanager_docker_mem_limit: 512M
+
+# service address
+dapp_alertmanager_traefik_address: "alertmanager.{{ dapp_common_domain }}"
+
+dapp_alertmanager_smtp_smarthost: "smtp.{{ dapp_common_domain }}:25"
+dapp_alertmanager_smtp_from: "alertmanager@{{ dapp_common_domain }}"
+dapp_alertmanager_main_receiver: "root@{{ dapp_common_domain }}"
+
+# Alert manager basic authentication using traefik.
+# Passwords must be hashed using MD5, SHA1, or BCrypt.
+# dapp_alertmanager_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+
+# docker volumes
+dapp_alertmanager_volumes:
+  - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+  - "alertmanager:/alertmanager"
+
+# alertmanager.yml
+dapp_alertmanager_yml: |
+  global:
+    # The smarthost and SMTP sender used for mail notifications.
+    smtp_smarthost: "{{ dapp_alertmanager_smtp_smarthost }}"
+    smtp_from: "{{ dapp_alertmanager_smtp_from }}"
+    smtp_require_tls: false
+  route:
+    group_by: ['alertname']
+    group_wait: 90s
+    group_interval: 5m
+    repeat_interval: 12h
+    receiver: 'main_receiver'
+  receivers:
+  - name: 'main_receiver'
+    email_configs:
+    - to: "{{ dapp_alertmanager_main_receiver }}"
+      send_resolved: true
+  # Inhibition rules allow to mute a set of alerts given that another alert is firing.
+  # We use this to mute any warning-level notifications if the same alert is already critical.
+  inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    # Apply inhibition if the alertname and instance are the same.
+    equal: ['alertname', 'instance']
