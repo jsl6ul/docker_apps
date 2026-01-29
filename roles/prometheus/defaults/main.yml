@@ -1,0 +1,300 @@
+---
+dapp_prometheus_docker_image: "docker.io/prom/prometheus"
+
+dapp_prometheus_docker_command:
+  - "--config.file=/etc/prometheus/prometheus.yml"
+  - "--storage.tsdb.path=/prometheus"
+  - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+  - "--web.console.templates=/usr/share/prometheus/consoles"
+  - "--storage.tsdb.retention.time={{ dapp_prometheus_retention_time }}"
+
+dapp_prometheus_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+dapp_prometheus_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# dapp_prometheus_docker_mem_limit: 512M
+
+# service address
+dapp_prometheus_traefik_address: "prometheus.{{ dapp_common_domain }}"
+
+dapp_prometheus_retention_time: "365d"
+
+# Prometheus basic authentication using traefik.
+# Passwords must be hashed using MD5, SHA1, or BCrypt.
+# dapp_prometheus_basicauth: "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/,test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+
+# docker volumes
+dapp_prometheus_volumes:
+  - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+  - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
+  - "./prometheus_recording.yml:/etc/prometheus/recording.yml"
+  - "prometheus:/prometheus"
+
+# prometheus_alerts.yml
+dapp_prometheus_alerts_yml: |
+  groups:
+  - name: alerting_rules
+    rules:
+
+    - alert: "Blackbox Probe Error"
+      expr: probe_success==0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Blackbox Probe Error For More Than 5 Minutes"
+
+    # - alert: "Ceph MONs Cannot Form A Quorum"
+    #   expr: count(ceph_mon_quorum_status) < 3
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph MONs Cannot Form A Quorum"
+
+    # - alert: "Ceph Missing MDS"
+    #   expr: count(ceph_mds_metadata == 1) < 3
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph Missing MDS"
+
+    # - alert: "Ceph Not Healthy"
+    #   expr: ceph_health_status != 0
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph Not Healthy"
+
+    # - alert: "Ceph OSD Down"
+    #   expr: ceph_osd_up == 0
+    #   for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "Ceph OSD Down"
+
+    - alert: "Clock Not Synchronising"
+      expr: min_over_time(node_timex_sync_status[5m]) == 0 and node_timex_maxerror_seconds >= 16
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Clock Is Not Synchronising"
+
+    - alert: "CPU Utilization"
+      expr: avg( sum( rate(node_cpu_seconds_total{mode!="idle"}[15m]) ) without (mode) ) without (cpu) > 0.95
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Average CPU Utilization Is More Than 95% For More Than 30 Minutes. (Normalized By The Number Of CPUs)"
+
+    - alert: "File Descriptor Limit - Critical"
+      expr: node_filefd_allocated * 100 / node_filefd_maximum > 95
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "File Descriptors Usage Is More Than 95%"
+
+    - alert: "File Descriptor Limit - Warning"
+      expr: node_filefd_allocated * 100 / node_filefd_maximum > 80
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        summary: "File Descriptors Usage Is More Than 80%"
+
+    - alert: "Filesystem Files Filling Up - Critical"
+      expr: |
+        (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 20
+        and predict_linear(node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'}[6h], 24*60*60) < 0
+        and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
+      for: 1h
+      labels:
+        severity: critical
+      annotations:
+        summary: "Filesystem Is Predicted To Run Out Of Inodes Within The Next 4 Hours"
+
+    - alert: "Filesystem Files Filling Up - Warning"
+      expr: |
+        (node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} / node_filesystem_files * 100 < 40
+        and predict_linear(node_filesystem_files_free{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'}[6h], 24*60*60) < 0
+        and node_filesystem_readonly{mountpoint=~'/|/boot|/home|/tmp|/var|/var/log|/var/log/audit'} == 0)
+      for: 1h
+      labels:
+        severity: warning
+      annotations:
+        summary: "Filesystem Is Predicted To Run Out Of Inodes Within The Next 24 Hours"
+
+    - alert: "Filesystem Free Space Warning"
+      expr: ((node_filesystem_avail_bytes{fstype=~"ext[2,3,4]|xfs|zfs"} / node_filesystem_size_bytes{fstype=~"ext[2,3,4]|xfs|zfs"} < 0.2) + node_filesystem_avail_bytes{fstype=~"ext[2,3,4]|xfs|zfs"} < 256000000) or (node_filesystem_avail_bytes{fstype=~"ext[2,3,4]|xfs|zfs"} / node_filesystem_size_bytes{fstype=~"ext[2,3,4]|xfs|zfs"} < 0.02)
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Free Space Less Than: 20% & 256 MB, Or Less Than 2% Free"
+
+    - alert: "Filesystem Read Only"
+      expr: node_filesystem_readonly == 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Device Is Read-Only"
+
+    - alert: "Free Swap Space Less Than 50 MB"
+      expr: node_memory_SwapFree_bytes < 50000000 and node_memory_SwapTotal_bytes > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Free Swap Space Less Than 50 MB"
+
+    - alert: "Node Load Average"
+      expr: node_load15 / count by (instance, job) (node_cpu_seconds_total{mode="idle"}) > 1
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Load Average 15m Is Greater Than 1 For More Than 30 Minutes. (Normalized By The Number Of CPUs)"
+
+    - alert: "Prometheus Target Down"
+      expr: up==0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Prometheus Target Down"
+
+    - alert: "Server Uptime Warning"
+      expr: (node_time_seconds - node_boot_time_seconds) < 600
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Server Uptime Warning"
+        description: "Server Uptime Is Less Than 10 Minutes"
+
+    - alert: "Service Rsyslog Not Running"
+      expr: node_systemd_unit_state{name="rsyslog.service",state!="active"} == 1
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Service Rsyslog Is Not Running"
+
+    - alert: "Service sssd not running"
+      expr: node_systemd_unit_state{name="sssd.service",state!="active"} == 1
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Service sssd is not running"
+
+    - alert: "Unusual Disk Read Latency"
+      expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Unusual Disk Read Latency"
+
+    - alert: "Unusual Disk Write Latency"
+      expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_write_completed_total[1m]) > 0.1 and rate(node_disk_write_completed_total[1m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Unusual Disk Write Latency"
+
+    # - alert: "iDRAC Server Not Healthy"
+    #   expr: idrac_system_health{status!="OK"}
+    #   for: 5m
+    #   keep_firing_for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "iDRAC Status Is Not Healthy. Check Server BMC System Event Log."
+
+    # - alert: "iDRAC Server Not Reporting"
+    #   expr: up{job=~".*idrac.*"} == 0
+    #   for: 5m
+    #   keep_firing_for: 5m
+    #   labels:
+    #     severity: warning
+    #   annotations:
+    #     summary: "iDRAC Failed To Reply To Monitoring Via Redfish API. Check Idrac_Exporter Logs For More Details."
+
+    # - alert: "ZFS Pool State"
+    #   expr: node_zfs_zpool_state{state='online'}==1 < node_zfs_zpool_state==1
+    #   for: 5m
+    #   labels:
+    #     severity: critical
+    #   annotations:
+    #     summary: "ZFS Pool Not Online"
+
+# prometheus_recording.yml
+dapp_prometheus_recording_yml: ""
+# dapp_prometheus_recording_yml: |
+#   groups:
+#   - name: recording_rules
+#     rules:
+#     - record: code:prometheus_http_requests_total:sum
+#       expr: sum by (code) (prometheus_http_requests_total)
+
+# prometheus.yml
+dapp_prometheus_yml: |
+  # my global config
+  global:
+    scrape_interval:     30s
+    evaluation_interval: 30s
+    # scrape_timeout is set to the global default (10s).
+  # Alertmanager configuration
+  alerting:
+    alertmanagers:
+    - static_configs:
+      - targets:
+        - alertmanager:9093
+  # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+  rule_files:
+    - "/etc/prometheus/alerts.yml"
+    - "/etc/prometheus/recording.yml"
+  # A scrape configuration containing exactly one endpoint to scrape:
+  # Here it's Prometheus itself.
+  scrape_configs:
+    # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+    - job_name: 'prometheus'
+      # metrics_path defaults to '/metrics'
+      # scheme defaults to 'http'.
+      static_configs:
+      - targets: ['localhost:9090']
+    - job_name: 'blackbox http'
+      metrics_path: /probe
+      params:
+        module: [http_2xx]  # Look for a HTTP 200 response.
+      static_configs:
+        - targets:
+            - https://prometheus.io/
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: blackbox:9115  # The blackbox exporter's real hostname:port.
+    - job_name: idrac
+      static_configs:
+        - targets: ['192.168.9.10', '192.168.9.11']
+      relabel_configs:
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: instance
+        - target_label: __address__
+          replacement: redfish:9348
