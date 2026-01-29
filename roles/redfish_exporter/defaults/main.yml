@@ -1,0 +1,38 @@
+---
+dapp_redfish_docker_image: "docker.io/mrlhansen/idrac_exporter"
+
+dapp_redfish_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+dapp_redfish_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# dapp_redfish_docker_mem_limit: 512M
+
+# service address
+dapp_redfish_traefik_address: "redfish.{{ dapp_common_domain }}"
+
+dapp_redfish_volumes:
+  - "./redfish_config.yml:/etc/prometheus/idrac.yml"
+
+# redfish exporter config file
+# dapp_redfish_config_yml: |
+#   address: 127.0.0.1 # Listen address
+#   port: 9348         # Listen port
+#   timeout: 10        # HTTP timeout (in seconds) for Redfish API calls
+#   hosts:
+#     192.168.9.10:
+#       username: user
+#       password: pass
+#     default:
+#       username: user
+#       password: pass
+#   metrics:
+#     # all: true
+#     system: true
+#     sensors: true
+#     power: true
+#     events: false
+#     storage: false
+#     memory: false
+#     network: false
