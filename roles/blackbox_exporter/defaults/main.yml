@@ -1,0 +1,89 @@
+---
+dapp_blackbox_docker_image: "docker.io/prom/blackbox-exporter"
+
+# docker commands
+dapp_blackbox_docker_command:
+  - "--config.file=/etc/blackbox_exporter/config.yml"
+  - "--log.prober=warn"
+
+dapp_blackbox_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+dapp_blackbox_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# dapp_blackbox_docker_mem_limit: 512M
+
+# service address
+dapp_blackbox_traefik_address: "blackbox.{{ dapp_common_domain }}"
+
+# docker volumes
+dapp_blackbox_volumes:
+  - "./blackbox_config.yml:/etc/blackbox_exporter/config.yml"
+
+# blackbox_config.yml
+dapp_blackbox_config_yml: |
+  modules:
+    http_2xx:
+      prober: http
+      http:
+        preferred_ip_protocol: ip4
+    http_post_2xx:
+      prober: http
+      http:
+        method: POST
+        preferred_ip_protocol: ip4
+    tcp_connect:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+    tcp_connect_tls:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        tls: true
+        tls_config:
+          insecure_skip_verify: false
+    pop3s_banner:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        query_response:
+        - expect: "^+OK"
+        tls: true
+        tls_config:
+          insecure_skip_verify: false
+    ssh_banner:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        query_response:
+        - expect: "^SSH-2.0-"
+        - send: "SSH-2.0-blackbox-ssh-check"
+    irc_banner:
+      prober: tcp
+      tcp:
+        preferred_ip_protocol: ip4
+        query_response:
+        - send: "NICK prober"
+        - send: "USER prober prober prober :prober"
+        - expect: "PING :([^ ]+)"
+          send: "PONG ${1}"
+        - expect: "^:[^ ]+ 001"
+    icmp:
+      prober: icmp
+    # accept a self-signed certificate
+    http_selfsigned:
+      prober: http
+      http:
+        preferred_ip_protocol: ip4
+        fail_if_ssl: false
+        fail_if_not_ssl: true
+        tls_config:
+          insecure_skip_verify: true
+    # accept http 401 as ok
+    http_401ok:
+      prober: http
+      http:
+        preferred_ip_protocol: ip4
+        valid_status_codes: [401]

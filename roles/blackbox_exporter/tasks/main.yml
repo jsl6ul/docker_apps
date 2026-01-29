@@ -1,0 +1,31 @@
+---
+- name: Set project directory
+  ansible.builtin.set_fact:
+    _docker_project_dir: "{{ dapp_common_directory }}/{{ role_name }}"
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}"
+    state: directory
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
+    mode: 0640
+  no_log: true
+
+- name: Copy blackbox_config.yml
+  ansible.builtin.copy:
+    content: "{{ dapp_blackbox_config_yml }}"
+    dest: "{{ _docker_project_dir }}/blackbox_config.yml"
+    mode: 0644
+  notify: Restart containers
+
+- name: Start containers
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
+  changed_when: false
+
+- name: Flush handlers
+  meta: flush_handlers
