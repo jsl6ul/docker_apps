@@ -1,6 +1,6 @@
 ---
 volumes:
-  grafana_data:
+  data:
 
 networks:
   default:

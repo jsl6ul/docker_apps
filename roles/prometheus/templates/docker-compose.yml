@@ -1,6 +1,6 @@
 ---
 volumes:
-  prometheus:
+  data:
 
 networks:
   default:

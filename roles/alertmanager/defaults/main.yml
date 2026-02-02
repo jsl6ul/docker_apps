@@ -23,7 +23,7 @@ dapp_alertmanager_main_receiver: "root@{{ dapp_common_domain }}"
 # docker volumes
 dapp_alertmanager_volumes:
   - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
-  - "alertmanager:/alertmanager"
+  - "data:/alertmanager"
 
 # alertmanager.yml
 dapp_alertmanager_yml: |

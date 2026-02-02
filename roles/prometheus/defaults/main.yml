@@ -30,7 +30,7 @@ dapp_prometheus_volumes:
   - "./prometheus.yml:/etc/prometheus/prometheus.yml"
   - "./prometheus_alerts.yml:/etc/prometheus/alerts.yml"
   - "./prometheus_recording.yml:/etc/prometheus/recording.yml"
-  - "prometheus:/prometheus"
+  - "data:/prometheus"
 
 # prometheus_alerts.yml
 dapp_prometheus_alerts_yml: |

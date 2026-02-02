@@ -1,6 +1,6 @@
 ---
 volumes:
-  alertmanager:
+  data:
 
 networks:
   default:
