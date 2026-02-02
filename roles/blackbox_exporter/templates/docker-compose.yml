@@ -7,7 +7,7 @@ networks:
 services:
 
   blackbox:
-    image: "{{ dapp_monitoring_blackbox_docker_image }}"
+    image: "{{ dapp_blackbox_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -16,27 +16,27 @@ services:
     networks:
       - default
       - traefik_proxy
-{% if dapp_monitoring_blackbox_docker_mem_limit is defined %}
-    mem_limit: {{ dapp_monitoring_blackbox_docker_mem_limit }}
+{% if dapp_blackbox_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_blackbox_docker_mem_limit }}
 {% endif %}
     volumes:
-      {{ dapp_monitoring_blackbox_volumes|to_nice_yaml | indent(6) }}
+      {{ dapp_blackbox_volumes|to_nice_yaml | indent(6) }}
     environment:
-      {{ dapp_monitoring_blackbox_docker_environment | indent(6) }}
+      {{ dapp_blackbox_docker_environment | indent(6) }}
     healthcheck:
-      {{ dapp_monitoring_blackbox_docker_healthcheck | indent(6) }}
+      {{ dapp_blackbox_docker_healthcheck | indent(6) }}
     command:
-      {{ dapp_monitoring_blackbox_docker_command | to_nice_yaml | indent(6) }}
+      {{ dapp_blackbox_docker_command | to_nice_yaml | indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.blackbox.entrypoints: "http, https"
-      traefik.http.routers.blackbox.rule: "Host(`{{ dapp_monitoring_blackbox_traefik_address }}`)"
+      traefik.http.routers.blackbox.rule: "Host(`{{ dapp_blackbox_traefik_address }}`)"
       traefik.http.services.blackbox.loadbalancer.server.port: "9115"
 {% if dapp_common_traefik_tls %}
       traefik.http.routers.blackbox.tls: "true"
 {% endif %}
 {% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
       traefik.http.routers.blackbox.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
-      traefik.http.routers.blackbox.tls.domains[0].main: "{{ dapp_monitoring_blackbox_traefik_address }}"
+      traefik.http.routers.blackbox.tls.domains[0].main: "{{ dapp_blackbox_traefik_address }}"
 {% endif %}

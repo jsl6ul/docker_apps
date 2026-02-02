@@ -7,7 +7,7 @@ networks:
 services:
 
   redfish:
-    image: "{{ dapp_monitoring_redfish_docker_image }}"
+    image: "{{ dapp_redfish_docker_image }}"
     restart: unless-stopped
     logging:
       driver: journald
@@ -18,25 +18,25 @@ services:
       - traefik_proxy
     expose:
       - 9348
-{% if dapp_monitoring_redfish_docker_mem_limit is defined %}
-    mem_limit: {{ dapp_monitoring_redfish_docker_mem_limit }}
+{% if dapp_redfish_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_redfish_docker_mem_limit }}
 {% endif %}
     volumes:
-      {{ dapp_monitoring_redfish_volumes|to_nice_yaml | indent(6) }}
+      {{ dapp_redfish_volumes|to_nice_yaml | indent(6) }}
     environment:
-      {{ dapp_monitoring_redfish_docker_environment | indent(6) }}
+      {{ dapp_redfish_docker_environment | indent(6) }}
     healthcheck:
-      {{ dapp_monitoring_redfish_docker_healthcheck | indent(6) }}
+      {{ dapp_redfish_docker_healthcheck | indent(6) }}
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
       traefik.http.routers.redfish.entrypoints: "http, https"
-      traefik.http.routers.redfish.rule: "Host(`{{ dapp_monitoring_redfish_traefik_address }}`)"
+      traefik.http.routers.redfish.rule: "Host(`{{ dapp_redfish_traefik_address }}`)"
       traefik.http.services.redfish.loadbalancer.server.port: "9348"
 {% if dapp_common_traefik_tls %}
       traefik.http.routers.redfish.tls: "true"
 {% endif %}
 {% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
       traefik.http.routers.redfish.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
-      traefik.http.routers.redfish.tls.domains[0].main: "{{ dapp_monitoring_redfish_traefik_address }}"
+      traefik.http.routers.redfish.tls.domains[0].main: "{{ dapp_redfish_traefik_address }}"
 {% endif %}
