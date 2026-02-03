@@ -20,9 +20,9 @@ dapp_grafana_traefik_address: "grafana.{{ dapp_common_domain }}"
 
 dapp_grafana_volumes:
   - "data:/var/lib/grafana/"
-  - "./grafana_dashboards:/var/lib/grafana/dashboards/"
-  - "./grafana_datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
-  - "./grafana_providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
+  - "./dashboards:/var/lib/grafana/dashboards/"
+  - "./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+  - "./providers.yml:/etc/grafana/provisioning/dashboards/providers.yml"
 
 # Grafana plugins to install
 dapp_grafana_install_plugins: "grafana-piechart-panel,vonage-status-panel"
