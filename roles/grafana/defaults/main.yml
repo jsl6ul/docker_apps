@@ -8,7 +8,7 @@ dapp_grafana_docker_environment: |
 
 # Link services managed outside of your application.
 # dapp_grafana_docker_external_links:
-#   - extservice:intservice
+#   - prometheus-app-1:prometheus
 
 dapp_grafana_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
