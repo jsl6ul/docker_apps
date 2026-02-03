@@ -16,21 +16,21 @@
   no_log: true
   notify: Create and start containers
 
-- name: Copy grafana_datasources.yml
+- name: Copy datasources.yml
   ansible.builtin.copy:
     content: "{{ dapp_grafana_datasources_yml }}"
     dest: "{{ _docker_project_dir }}/datasources.yml"
     mode: 0644
   notify: Restart containers
 
-- name: Copy grafana_providers.yml
+- name: Copy providers.yml
   ansible.builtin.copy:
     content: "{{ dapp_grafana_providers_yml }}"
     dest: "{{ _docker_project_dir }}/providers.yml"
     mode: 0644
   notify: Restart containers
 
-- name: Copy grafana_ldap.toml
+- name: Copy ldap.toml
   ansible.builtin.copy:
     content: "{{ dapp_grafana_ldap_toml }}"
     dest: "{{ _docker_project_dir }}/ldap.toml"
@@ -39,7 +39,7 @@
   no_log: true
   notify: Restart containers
 
-- name: Copy grafana dashboards
+- name: Copy dashboards
   ansible.builtin.copy:
     src: dashboards/
     dest: "{{ _docker_project_dir }}/dashboards/ansible"
