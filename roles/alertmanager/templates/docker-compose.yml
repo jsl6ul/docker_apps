@@ -9,7 +9,7 @@ networks:
 
 services:
 
-  alertmanager:
+  app:
     image: "{{ dapp_alertmanager_docker_image }}"
     restart: unless-stopped
     logging:

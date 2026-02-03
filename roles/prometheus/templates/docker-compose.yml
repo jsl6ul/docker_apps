@@ -9,7 +9,7 @@ networks:
 
 services:
 
-  prometheus:
+  app:
     image: "{{ dapp_prometheus_docker_image }}"
     restart: unless-stopped
     logging:

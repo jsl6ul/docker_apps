@@ -9,7 +9,7 @@ networks:
 
 services:
 
-  grafana:
+  app:
     image: "{{ dapp_grafana_docker_image }}"
     restart: unless-stopped
     logging:

@@ -6,7 +6,7 @@ networks:
 
 services:
 
-  redfish:
+  app:
     image: "{{ dapp_redfish_docker_image }}"
     restart: unless-stopped
     logging:
