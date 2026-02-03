@@ -14,6 +14,7 @@
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
   no_log: true
+  notify: Create and start containers
 
 - name: Copy prometheus.yml
   ansible.builtin.copy:
