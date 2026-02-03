@@ -28,9 +28,9 @@ services:
       {{ dapp_prometheus_docker_environment|indent(6) }}
     healthcheck:
       {{ dapp_prometheus_docker_healthcheck|indent(6) }}
-    links:
-      - alertmanager
-      - blackbox
+{% if dapp_prometheus_docker_external_links is defined %}
+    external_links: {{ dapp_prometheus_docker_external_links }}
+{% endif %}
     command:
       {{ dapp_prometheus_docker_command | to_nice_yaml | indent(6) }}
     labels:
