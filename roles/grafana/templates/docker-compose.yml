@@ -25,7 +25,7 @@ services:
     volumes:
       {{ dapp_grafana_volumes|to_nice_yaml|indent(6) }}
 {% if dapp_grafana_ldap_toml is defined %}
-      - "./grafana_ldap.toml:/etc/grafana/ldap.toml"
+      - "./ldap.toml:/etc/grafana/ldap.toml"
 {% endif %}
     environment:
       {{ dapp_grafana_docker_environment|indent(6) }}
