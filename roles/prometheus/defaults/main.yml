@@ -11,6 +11,11 @@ dapp_prometheus_docker_command:
 dapp_prometheus_docker_environment: |
   {{ dapp_common_docker_environment }}
 
+# Link services managed outside of your application.
+# dapp_prometheus_docker_external_links:
+#   - alertmanager-app-1:alertmanager
+#   - blackbox_exporter-app-1:blackbox
+
 dapp_prometheus_docker_healthcheck: |
   {{ dapp_common_docker_healthcheck }}
 
