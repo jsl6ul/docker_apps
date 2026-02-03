@@ -1,0 +1,50 @@
+---
+volumes:
+  data:
+
+networks:
+  default:
+  traefik_proxy:
+    external: true
+
+services:
+
+  app:
+    image: "{{ dapp_grafana_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "grafana"
+    networks:
+      - default
+      - traefik_proxy
+{% if dapp_grafana_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_grafana_docker_mem_limit }}
+{% endif %}
+    volumes:
+      {{ dapp_grafana_volumes|to_nice_yaml|indent(6) }}
+{% if dapp_grafana_ldap_toml is defined %}
+      - "./ldap.toml:/etc/grafana/ldap.toml"
+{% endif %}
+    environment:
+      {{ dapp_grafana_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_grafana_docker_healthcheck|indent(6) }}
+{% if dapp_grafana_docker_external_links is defined %}
+    external_links: {{ dapp_grafana_docker_external_links }}
+{% endif %}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.grafana.entrypoints: "http, https"
+      traefik.http.routers.grafana.rule: "Host(`{{ dapp_grafana_traefik_address }}`)"
+      traefik.http.services.grafana.loadbalancer.server.port: "3000"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.grafana.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.grafana.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.grafana.tls.domains[0].main: "{{ dapp_grafana_traefik_address }}"
+{% endif %}
+    env_file: grafana.env

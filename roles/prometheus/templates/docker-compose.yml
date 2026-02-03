@@ -1,0 +1,53 @@
+---
+volumes:
+  data:
+
+networks:
+  default:
+  traefik_proxy:
+    external: true
+
+services:
+
+  app:
+    image: "{{ dapp_prometheus_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: "prometheus"
+    networks:
+      - default
+      - traefik_proxy
+{% if dapp_prometheus_docker_mem_limit is defined %}
+    mem_limit: {{ dapp_prometheus_docker_mem_limit }}
+{% endif %}
+    volumes:
+      {{ dapp_prometheus_volumes|to_nice_yaml|indent(6) }}
+    environment:
+      {{ dapp_prometheus_docker_environment|indent(6) }}
+    healthcheck:
+      {{ dapp_prometheus_docker_healthcheck|indent(6) }}
+{% if dapp_prometheus_docker_external_links is defined %}
+    external_links: {{ dapp_prometheus_docker_external_links }}
+{% endif %}
+    command:
+      {{ dapp_prometheus_docker_command | to_nice_yaml | indent(6) }}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+      traefik.http.routers.prometheus.entrypoints: "http, https"
+      traefik.http.routers.prometheus.rule: "Host(`{{ dapp_prometheus_traefik_address }}`)"
+      traefik.http.services.prometheus.loadbalancer.server.port: "9090"
+{% if dapp_prometheus_basicauth is defined %}
+      # password hash: escape $ with a second $
+      traefik.http.middlewares.prometheusauth.basicauth.users: "{{ dapp_prometheus_basicauth | regex_replace('\$','$$') }}"
+      traefik.http.routers.prometheus.middlewares: "prometheusauth"
+{% endif %}
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.prometheus.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.prometheus.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+      traefik.http.routers.prometheus.tls.domains[0].main: "{{ dapp_prometheus_traefik_address }}"
+{% endif %}
