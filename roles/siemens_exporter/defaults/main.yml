@@ -1,0 +1,30 @@
+---
+dapp_siemens_exporter_dockerfile: |
+  FROM debian:stable-slim
+  COPY entrypoint.sh /entrypoint.sh
+  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update && \
+    /usr/bin/apt-get upgrade -y && \
+    /usr/bin/apt-get dist-upgrade -ufy && \
+    /usr/bin/apt-get install git python3 python3-requests -y && \
+    /usr/bin/rm -rf /var/lib/apt/lists/*
+  RUN git clone https://github.com/guilbaults/siemens-PAC4220-exporter.git
+  RUN /usr/bin/chmod u+x /entrypoint.sh
+  EXPOSE 8081/tcp
+  ENTRYPOINT ["/entrypoint.sh"]
+
+dapp_siemens_exporter_entrypoint: |
+  #!/bin/bash
+  /usr/bin/python3 -u /siemens-PAC4220-exporter/siemens-pac4220-exporter.py
+
+# docker environment variables
+dapp_siemens_exporter_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# docker healthcheck variables
+dapp_siemens_exporter_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# dapp_siemens_exporter_docker_mem_limit: 512M
+
+dapp_siemens_exporter_docker_ports:
+  - "8081:8080"
