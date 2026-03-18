@@ -90,42 +90,15 @@ dapp_mirrordeb_dockerfile: |
     rm -rf /var/cache/apt/*
   COPY entrypoint.sh /entrypoint.sh
 
-  # bash file to run dpkg-scanpackages on /var/www/html/extras/
-  RUN echo "#!/bin/bash\ncd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz" > /run_scanpackages_extras.sh
-
-  # bash file to run debmirror
-  RUN echo '#!/bin/bash\n\
-  {% for amirror in dapp_mirrordeb_mirrors %}
-  echo "debmirror {{ amirror.name }} ..."\n\
-  debmirror {{ amirror.options }}\\\n\
-    --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }}\\\n\
-    --dist={{ amirror.dist }} --arch={{ amirror.arch }}\\\n\
-    --section={{ amirror.section }} {{ amirror.dest }}\n\
-  \n\
-  {% endfor %}\n'\
-  >> /run_debmirror.sh
-
-  # bash file to download signing keys
-  RUN echo '#!/bin/bash\n\
-  touch /root/.gnupg/trustedkeys.gpg\n\
-  chmod 0600 /root/.gnupg/trustedkeys.gpg\n\
-  {% for akey in dapp_mirrordeb_signing_keys %}
-  curl --silent "{{ akey }}" | gpg --no-default-keyring --keyring trustedkeys.gpg --import -\n\
-  {% endfor %}\n'\
-  >> /run_download_signing_keys.sh
-
-  # bash file to download the installer directories
-  RUN echo '#!/bin/bash\n\
-  {% if dapp_mirrordeb_installers is defined %}
-  {% for installer in dapp_mirrordeb_installers %}
-  echo "rsync download installer for {{ installer.name }} ..."\n\
-  rsync {{ installer.rsync_options }} {{ installer.host }}::{{ installer.src}} {{ installer.dest }}\n\
-  {% endfor %}\n\
-  {% endif %}\n'\
-  >> /run_download_installers.sh
+  # copy script files
+  COPY container_files/debmirror.patch /debmirror.patch
+  COPY container_files/run_debmirror.sh /run_debmirror.sh
+  COPY container_files/run_download_installers.sh /run_download_installers.sh
+  COPY container_files/run_download_keys.sh /run_download_keys.sh
+  COPY container_files/run_scanpackages.sh /run_scanpackages.sh
 
   # copy and apply debmirror patch
-  COPY debmirror.patch /debmirror.patch
+  COPY container_files/debmirror.patch /debmirror.patch
   RUN /usr/bin/patch < /debmirror.patch /usr/bin/debmirror
 
   RUN chmod u+x /entrypoint.sh && \
@@ -134,7 +107,7 @@ dapp_mirrordeb_dockerfile: |
     chmod u+x /run_download_signing_keys.sh && \
     chmod u+x /run_download_installers.sh && \
     rm -f /var/www/html/index.nginx-debian.html
-  COPY nginx.conf /etc/nginx/sites-enabled/default
+  COPY container_files/nginx.conf /etc/nginx/sites-enabled/default
   EXPOSE 80
   ENTRYPOINT ["/entrypoint.sh"]
 
@@ -173,6 +146,41 @@ dapp_mirrordeb_nginx_conf: |
     access_log syslog:server=unix:/dev/log;
     error_log syslog:server=unix:/dev/log;
   }
+
+# Script to run debmirror
+dapp_mirrordeb_script_debmirror: |
+  #!/bin/bash
+  {% for amirror in dapp_mirrordeb_mirrors %}
+  echo "debmirror {{ amirror.name }} ..."
+  debmirror {{ amirror.options }} \
+    --method={{ amirror.method }} --host={{ amirror.host }} --root={{ amirror.root }} \
+    --dist={{ amirror.dist }} --arch={{ amirror.arch }} \
+    --section={{ amirror.section }} {{ amirror.dest }}
+  {% endfor %}
+
+# Script to download installer directories
+dapp_mirrordeb_script_download_installers: |
+  #!/bin/bash
+  {% if dapp_mirrordeb_installers is defined %}
+  {% for installer in dapp_mirrordeb_installers %}
+  echo "rsync download installer for {{ installer.name }} ..."
+  rsync {{ installer.rsync_options }} {{ installer.host }}::{{ installer.src}} {{ installer.dest }}
+  {% endfor %}
+  {% endif %}
+
+# Script to download signing keys
+dapp_mirrordeb_script_download_keys: |
+  #!/bin/bash
+  touch /root/.gnupg/trustedkeys.gpg
+  chmod 0600 /root/.gnupg/trustedkeys.gpg
+  {% for akey in dapp_mirrordeb_signing_keys %}
+  curl --silent "{{ akey }}" | gpg --no-default-keyring --keyring trustedkeys.gpg --import -
+  {% endfor %}
+
+# Script to run dpkg-scanpackages on /var/www/html/extras/
+dapp_mirrordeb_script_dpkg_scanpackages: |
+  #!/bin/bash
+  cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz"
 
 # Patch to add '--ignore-missing-arch-all' to debmirror
 # from https://salsa.debian.org/debian/debmirror/-/merge_requests/15/diffs
