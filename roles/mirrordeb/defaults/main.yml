@@ -180,7 +180,7 @@ dapp_mirrordeb_script_download_keys: |
 # Script to run dpkg-scanpackages on /var/www/html/extras/
 dapp_mirrordeb_script_dpkg_scanpackages: |
   #!/bin/bash
-  cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz"
+  cd /var/www/html/extras/ && dpkg-scanpackages -m . > Packages && cat Packages | gzip > Packages.gz
 
 # Patch to add '--ignore-missing-arch-all' to debmirror
 # from https://salsa.debian.org/debian/debmirror/-/merge_requests/15/diffs
