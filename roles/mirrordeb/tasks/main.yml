@@ -23,6 +23,11 @@
     path: "{{ _docker_project_dir }}/keys"
     state: directory
 
+- name: Create container_files directory
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}/container_files"
+    state: directory
+
 - name: Copy docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml
@@ -35,23 +40,21 @@
     content: "{{ dapp_mirrordeb_dockerfile }}"
   notify: Rebuild containers
 
-- name: Copy entrypoint.sh
+- name: Copy container files
   ansible.builtin.copy:
-    dest: "{{ _docker_project_dir }}/entrypoint.sh"
-    content: "{{ dapp_mirrordeb_entrypoint }}"
+    dest: "{{ _docker_project_dir }}/container_files/{{ item.name }}"
+    content: "{{ item.content }}"
   notify: Rebuild containers
-
-- name: Copy nginx.conf
-  ansible.builtin.copy:
-    dest: "{{ _docker_project_dir }}/nginx.conf"
-    content: "{{ dapp_mirrordeb_nginx_conf }}"
-  notify: Rebuild containers
-
-- name: Copy debmirror.patch
-  ansible.builtin.copy:
-    dest: "{{ _docker_project_dir }}/debmirror.patch"
-    content: "{{ __debmirror_patch }}"
-  notify: Rebuild containers
+  loop:
+    - { name: "debmirror.patch", content: "{{ __debmirror_patch }}" }
+    - { name: "entrypoint.sh", content: "{{ dapp_mirrordeb_entrypoint }}" }
+    - { name: "nginx.conf", content: "{{ dapp_mirrordeb_nginx_conf }}" }
+    - { name: "run_debmirror.sh", content: "{{ dapp_mirrordeb_script_debmirror }}" }
+    - { name: "run_download_installers.sh", content: "{{ dapp_mirrordeb_script_download_installers }}" }
+    - { name: "run_download_keys.sh", content: "{{ dapp_mirrordeb_script_download_keys }}" }
+    - { name: "run_scanpackages.sh", content: "{{ dapp_mirrordeb_script_dpkg_scanpackages }}" }
+  loop_control:
+    label: "{{ item.name }}"
 
 - name: Start containers
   ansible.builtin.shell: |
