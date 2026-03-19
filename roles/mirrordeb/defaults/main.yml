@@ -102,9 +102,9 @@ dapp_mirrordeb_dockerfile: |
   RUN /usr/bin/patch < /debmirror.patch /usr/bin/debmirror
 
   RUN chmod u+x /entrypoint.sh && \
-    chmod u+x /run_scanpackages_extras.sh && \
+    chmod u+x /run_scanpackages.sh && \
     chmod u+x /run_debmirror.sh && \
-    chmod u+x /run_download_signing_keys.sh && \
+    chmod u+x /run_download_keys.sh && \
     chmod u+x /run_download_installers.sh && \
     rm -f /var/www/html/index.nginx-debian.html
   COPY container_files/nginx.conf /etc/nginx/sites-enabled/default
@@ -115,19 +115,19 @@ dapp_mirrordeb_dockerfile: |
 dapp_mirrordeb_entrypoint: |
   #!/bin/bash
   {% if dapp_mirrordeb_run_delay is defined %}
-  echo "starting nginx"
+  echo "Starting nginx"
   nginx
   # Auto update mirror
   while true; do
-    /run_download_signing_keys.sh
-    /run_scanpackages_extras.sh
+    /run_download_keys.sh
+    /run_scanpackages.sh
     /run_debmirror.sh
     /run_download_installers.sh
-    echo "going to sleep ..."
+    echo "Waiting {{ dapp_mirrordeb_run_delay }} before next run..."
     sleep {{ dapp_mirrordeb_run_delay }}
   done
   {% else %}
-  echo "starting nginx"
+  echo "Starting nginx"
   nginx -g 'daemon off;'
   {% endif %}
 
