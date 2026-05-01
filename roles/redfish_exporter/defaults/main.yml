@@ -1,5 +1,5 @@
 ---
-dapp_redfish_docker_image: "docker.io/mrlhansen/idrac_exporter"
+dapp_redfish_docker_image: "ghcr.io/mrlhansen/idrac_exporter:2.3.1"
 
 dapp_redfish_docker_environment: |
   {{ dapp_common_docker_environment }}
