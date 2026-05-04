@@ -1,0 +1,43 @@
+---
+dapp_enteliweb_exporter_configuration: |
+  [enteliweb]
+  host = https://server
+  username = user
+  password = changeme
+  insecure = false
+
+  [exporter]
+  port = 8085
+
+  [devices]
+  //A site/10000.AO001 = MOD_VFD_PUMP, Pump modulation
+
+dapp_enteliweb_exporter_dockerfile: |
+  FROM debian:stable-slim
+  COPY entrypoint.sh /entrypoint.sh
+  RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get update && \
+    /usr/bin/apt-get upgrade -y && \
+    /usr/bin/apt-get dist-upgrade -ufy && \
+    /usr/bin/apt-get install git python3 python3-requests -y && \
+    /usr/bin/rm -rf /var/lib/apt/lists/*
+  RUN git clone https://github.com/guilbaults/enteliweb-exporter.git
+  RUN /usr/bin/chmod u+x /entrypoint.sh
+  EXPOSE 8085/tcp
+  ENTRYPOINT ["/entrypoint.sh"]
+
+dapp_enteliweb_exporter_entrypoint: |
+  #!/bin/bash
+  /usr/bin/python3 /enteliweb-exporter/enteliweb-exporter.py /enteliweb.ini
+
+# docker environment variables
+dapp_enteliweb_exporter_docker_environment: |
+  {{ dapp_common_docker_environment }}
+
+# docker healthcheck variables
+dapp_enteliweb_exporter_docker_healthcheck: |
+  {{ dapp_common_docker_healthcheck }}
+
+# dapp_enteliweb_exporter_docker_mem_limit: 512M
+
+dapp_enteliweb_exporter_docker_ports:
+  - "8085:8085"
