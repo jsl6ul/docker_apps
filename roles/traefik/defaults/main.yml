@@ -1,4 +1,7 @@
 ---
+# server address
+dapp_traefik_address: "{{ inventory_hostname }}.{{ dapp_common_domain }}"
+
 # docker image
 dapp_traefik_docker_image: "docker.io/traefik"
 

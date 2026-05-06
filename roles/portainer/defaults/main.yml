@@ -1,4 +1,7 @@
 ---
+# server address
+dapp_portainer_traefik_address: "{{ inventory_hostname }}.{{ dapp_common_domain }}"
+
 # docker image
 dapp_portainer_docker_image: "docker.io/portainer/portainer-ce:latest"
 

@@ -1,4 +1,7 @@
 ---
+# server address
+dapp_glances_traefik_address: "{{ inventory_hostname }}.{{ dapp_common_domain }}"
+
 # glances docker images
 dapp_glances_docker_image: "docker.io/nicolargo/glances:latest"
 
