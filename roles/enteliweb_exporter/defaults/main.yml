@@ -27,7 +27,7 @@
 #   [exporter]
 #   port = 8085
 
-# Device file for use with the new configuration format.
+# Device file to be used with the new configuration format.
 # dapp_enteliweb_exporter_devices: |
 #   //A site/10000.AO001 = MOD_VFD_PUMP
 
