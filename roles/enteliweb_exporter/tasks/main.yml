@@ -13,7 +13,6 @@
     src: docker-compose.yml
     dest: "{{ _docker_project_dir }}/docker-compose.yml"
     mode: 0640
-  no_log: false
 
 - name: Copy Dockerfile
   copy:
@@ -28,6 +27,21 @@
     content: "{{ dapp_enteliweb_exporter_entrypoint }}"
     mode: 0640
   notify: Rebuild containers
+
+- name: Copy config.ini
+  copy:
+    dest: "{{ _docker_project_dir }}/config.ini"
+    content: "{{ dapp_enteliweb_exporter_configuration }}"
+    mode: 0640
+  notify: Restart containers
+  no_log: true
+
+- name: Copy devices.txt
+  copy:
+    dest: "{{ _docker_project_dir }}/devices.txt"
+    content: "{{ dapp_enteliweb_exporter_devices | default('') }}"
+    mode: 0644
+  notify: Restart containers
 
 - name: Start containers
   ansible.builtin.shell: |
