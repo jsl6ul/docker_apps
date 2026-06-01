@@ -158,3 +158,32 @@ Using `ipahost1` for the host running docker and `ipa1` (a CNAME of
 - https://pagure.io/freeipa/issue/7479
 - https://github.com/painless-software/groundcontrol/blob/main/ansible/roles/identitymanagement/tasks/main.yml#L25-L31
 - https://github.com/painless-software/groundcontrol/commit/729f689602da64280a77a67854e899ce3487b4a3
+
+
+## Recover DNA Ranges
+
+If you're trying to create a user and your don't have any dnarange
+set, the command will fail with an error like:
+
+`response user_add: Operations error: Allocation of a new value for
+range cn=posix ids,cn=distributed numeric assignment
+plugin,cn=plugins,cn=config failed! Unable to proceed.`
+
+This can happen after an upgrade.
+
+```
+[root@ipa1]$ ipa-replica-manage dnarange-show
+ipa3.example.com: No range set
+ipa2.example.com: No range set
+ipa1.example.com: No range set
+```
+
+In order to fix this, you must set a dnarange:
+
+```
+[root@ipa1]$ ipa-replica-manage dnarange-set ipa1.example.com 1000000-1099999
+[root@ipa1]$ ipa-replica-manage dnarange-set ipa2.example.com 1100000-1199999
+[root@ipa1]$ ipa-replica-manage dnarange-set ipa3.example.com 1200000-1299999
+```
+
+https://www.freeipa.org/page/V3/Recover_DNA_Ranges
