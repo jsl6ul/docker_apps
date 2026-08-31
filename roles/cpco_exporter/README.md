@@ -1,6 +1,6 @@
 # Carel C.pCO controllers exporter
 
-Prometheus exporter for Carel C.pCO controllers (MCDU-4U-T) — Modbus TCP only.
+Prometheus exporter for Carel C.pCO controllers - Modbus TCP only.
 
 ## Prometheus
 
