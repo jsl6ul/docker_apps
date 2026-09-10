@@ -45,3 +45,6 @@
   when:
     - dapp_freeipa_server_replica1 is defined
     - dapp_freeipa_server_replica2 is defined
+
+- name: Set LDAP anonymous bind
+  ansible.builtin.import_tasks: ldap_anonymous_bind.yml

@@ -1,0 +1,19 @@
+---
+- name: Create LDIF file for anonymous binds
+  ansible.builtin.copy:
+    dest: "{{ _docker_project_dir }}/ldap_anonymous_bind.ldif"
+    content: |
+      dn: cn=config
+      changetype: modify
+      replace: nsslapd-allow-anonymous-access
+      nsslapd-allow-anonymous-access: {{ dapp_freeipa_ldap_anonymous_bind }}
+  register: __ldif
+
+- name: Apply LDIF
+  ansible.builtin.expect:
+    command: >-
+      ldapmodify -x -D 'cn=Directory Manager' -W -H ldap://localhost
+      -f {{ _docker_project_dir }}/ldap_anonymous_bind.ldif
+    responses:
+      "Enter LDAP Password": "{{ dapp_freeipa_pwd_dm }}"
+  when: __ldif.changed
