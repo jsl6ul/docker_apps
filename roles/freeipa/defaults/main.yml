@@ -39,6 +39,12 @@ dapp_freeipa_dns_servers:
 #   key: <secret>
 #   pin: <secret>
 
+# LDAP Anonymous bind
+# on : Allows all anonymous binds (default)
+# rootdse : Only allows reading the root DSE
+# off : Disallows any anonymous binds
+dapp_freeipa_ldap_anonymous_bind: "on"
+
 # The following variables should probably be defined in group_vars/all.yml
 # as they are used in several roles and playbooks.
 dapp_freeipa_realm: "{{ dapp_common_domain }}"
