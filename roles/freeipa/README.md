@@ -28,13 +28,12 @@ rootless mode with cgroup v2, I had to do this:
   - Add `/sys/fs/cgroup/user.slice/user-nnnn.slice/user@nnnn.service:/sys/fs/cgroup/user.slice/user-nnnn.slice/user@nnnn.service:rw` read-write
   - And keep `/sys/fs/cgroup:/sys/fs/cgroup:ro` read-only
 
-This configuration works with Debian 11 and Debian 12.
+This configuration has been tested and works with Debian 11 and Debian 12.
 
 
-## Server role and alias
+## Server role and hostname
 
-You have to set a `dapp_freeipa_role` and `dapp_freeipa_hostname` for
-each host.
+Set `dapp_freeipa_role` and `dapp_freeipa_hostname` for each host.
 
 ```
 [freeipa]
@@ -43,16 +42,54 @@ vm2  dapp_freeipa_role=replica dapp_freeipa_hostname=ipa2
 vm3  dapp_freeipa_role=replica dapp_freeipa_hostname=ipa3
 ```
 
-In a multi-master topology, if you need to reinstall the initial
-master node, don't forget to modify these variables before running the
-playbook.
 
-- change `dapp_freeipa_role` from `master` to `replica`.
-- swap node names between `dapp_freeipa_server_master` and 
-  `dapp_freeipa_server_replica1` or `dapp_freeipa_server_replica2`
+## Upgrade
+
+To update, pull the latest image and restart the container:
+
+```bash
+docker compose pull
+docker compose down
+docker compose up -d
+```
+
+### Reinstalling a Node
+
+If the upgrade fails, you may need to remove the node from the cluster and reinstall it. 
+
+**1. Remove the node from the cluster** (run from a healthy node, e.g., `host1`):
+```bash
+# Enter the container
+docker exec -it freeipa-app-1 bash
+
+# Verify the cluster members
+ipa-replica-manage list
+
+# Delete the failing node (e.g., ipa2)
+ipa-replica-manage del ipa2.example.com
+```
+
+**2. Clean up the failing node** (run on `host2`):
+```bash
+docker compose down -v
+```
+
+**3. Reinstall**
+Run the playbook to reinstall the node. Repeat this process one server at a time to update the entire cluster.
+
+> [!IMPORTANT]
+> **Reinstalling the initial master (`ipa1`)**
+>
+> In a multi-master topology, `ipa1` is no longer the primary setup
+> master, it is now just another cluster member. Update its role
+> **before** running the playbook:
+>
+> - `dapp_freeipa_role: replica`
+> - `dapp_freeipa_server_master: ipa2`
+> - `dapp_freeipa_server_replica: ipa1`
 
 
-## Another instance may already exist
+## Error: Another instance may already exist
 
 You may get this error when reinstalling
 
@@ -67,50 +104,7 @@ disappear.  Running `docker-compose up` manually seems to work every
 time.
 
 
-## FreeIPA Update
-
-Normally, this should work:
-`docker compose pull && docker compose down && docker compose up -d`
-
-For various reasons, this may fail, in that case, a solution is to
-remove the node from the cluster, update it, and re-enrolling it.
-
-Something like:
-
-```
-# on host1, remove ipa2 from the cluster
-host1$ docker exec -it freeipa-app-1 bash
-ipa1$ kinit
-
-ipa1$ ipa-replica-manage list
-ipa1.example.com: master
-ipa2.example.com: master
-ipa3.example.com: master
-
-ipa1$ ipa-replica-manage del ipa2.example.com
-ipa1$ ipa-replica-manage list
-ipa1.example.com: master
-ipa3.example.com: master
-
-# on host2, download new image and wipe ipa2
-host2$ docker compose pull
-host2$ docker compose down -v
-```
-
-You can now run your playbook to reinstall `ipa2` using the latest image.
-
-Proceed one server at a time to update the entire cluster.
-
-Since your cluster already exists and has two other masters, `ipa1` is
-no longer the only master in terms of setup. It is now just another
-member of the cluster that needs to be brought back in sync.
-
-For that reason, make sure to set `dapp_freeipa_role` to `replica` and
-swap the hostname between `dapp_freeipa_server_master` and one of the
-`dapp_freeipa_server_replica` before updating `ipa1`.
-
-
-## FreeIPA & traefik
+## Traefik
 
 You can use freeipa with traefik & let's encrypt. *(set
 `dapp_freeipa_traefik: true`)*
@@ -139,8 +133,8 @@ Bad Request'.*
 
 ### Let's encrypt & passthrough
 
-Make sure that the name of the host running docker is not the name
-used for the freeipa container, and you should be fine.
+Make sure that the name of the host running docker is not the same as
+the name used for the freeipa container, and you should be fine.
 
 If the host on which FreeIPA is running also hosts other containers,
 then Let's Encrypt certificates generated for another container on
