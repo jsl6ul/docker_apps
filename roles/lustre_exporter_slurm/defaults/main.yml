@@ -39,7 +39,11 @@ dapp_lustre_exporter_slurm_docker_environment: |
 
 # docker healthcheck variables
 dapp_lustre_exporter_slurm_docker_healthcheck: |
-  {{ dapp_common_docker_healthcheck }}
+  test: ["CMD-SHELL", "python3 -c \"import socket; s=socket.socket(); s.settimeout(3); s.connect(('127.0.0.1',8080))\""]
+  interval: 60s
+  timeout: 10s
+  retries: 3
+  start_period: 10s
 
 # dapp_lustre_exporter_slurm_docker_mem_limit: 512M
 
