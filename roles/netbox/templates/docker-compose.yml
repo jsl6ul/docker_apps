@@ -1,0 +1,101 @@
+---
+networks:
+  {{ dapp_netbox_default_docker_network }}:
+  {{ dapp_netbox_proxy_docker_network }}:
+    external: true
+
+services:
+  netbox: &netbox
+    image: "{{ dapp_netbox_docker_image }}"
+    restart: unless-stopped
+    logging:
+      driver: journald
+      options:
+        tag: netbox
+    expose:
+      - {{ dapp_netbox_docker_exposed_port }}
+    networks:
+      - {{ dapp_netbox_default_docker_network }}
+      - {{ dapp_netbox_proxy_docker_network }}
+    depends_on:
+      - postgres
+      - redis
+      - redis-cache
+    environment:
+      {{ dapp_netbox_docker_environment | to_nice_yaml | trim | indent(6) }}
+    user: netbox:root
+    healthcheck: 
+      {{ dapp_netbox_docker_healthcheck | to_nice_yaml | trim | indent(6) }}
+    volumes: 
+      {{ dapp_netbox_docker_volumes | to_nice_yaml | trim | indent(6) }}
+    labels:
+      traefik.enable: true
+      traefik.docker.network: "{{ dapp_netbox_proxy_docker_network }}"
+      traefik.http.routers.netbox.rule: "Host(`{{ dapp_netbox_traefik_address }}`)"
+      traefik.http.services.netbox.loadbalancer.server.port: {{ dapp_netbox_docker_exposed_port }}
+      traefik.http.routers.netbox.tls: true
+      traefik.http.routers.netbox.tls.certresolver: "{{ dapp_netbox_traefik_certresolver }}"
+      traefik.http.routers.netbox.tls.domains[0].main: "{{ dapp_netbox_traefik_address }}"
+  netbox-worker:
+    <<: *netbox
+    expose: []
+    labels:
+      traefik.enable: false
+    networks:
+      - {{ dapp_netbox_default_docker_network }}
+    depends_on:
+      netbox:
+        condition: service_healthy
+    command:
+      - /opt/netbox/venv/bin/python
+      - /opt/netbox/netbox/manage.py
+      - rqworker
+    healthcheck: 
+      {{ dapp_netbox_worker_docker_healthcheck | to_nice_yaml | trim | indent(6) }}
+
+  # postgres
+  postgres:
+    image: "{{ dapp_netbox_postgres_docker_image }}"
+    networks:
+      - {{ dapp_netbox_default_docker_network }}
+    environment:
+      {{ dapp_netbox_postgres_docker_environment | to_nice_yaml | trim | indent(6) }}
+    healthcheck: 
+      {{ dapp_netbox_postgres_docker_healthcheck | to_nice_yaml | trim | indent(6)}}
+    volumes: 
+      {{ dapp_netbox_postgres_docker_volumes | to_nice_yaml | trim | indent(6) }}
+
+  # redis
+  redis:
+    image: "{{ dapp_netbox_redis_docker_image }}"
+    networks:
+      - {{ dapp_netbox_default_docker_network }}
+    command:
+      - sh
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - valkey-server --appendonly yes --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
+    environment:
+      {{ dapp_netbox_redis_docker_environment | to_nice_yaml | trim | indent(6) }}
+    healthcheck: &redis_healthcheck
+      {{ dapp_netbox_redis_docker_healthcheck | to_nice_yaml | trim | indent(6)}}
+    volumes: 
+      {{ dapp_netbox_redis_docker_volumes | to_nice_yaml | trim | indent(6) }}
+  redis-cache:
+    image: "{{ dapp_netbox_redis_docker_image }}"
+    networks:
+      - {{ dapp_netbox_default_docker_network }}
+    command:
+      - sh
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - valkey-server --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
+    environment:
+      {{ dapp_netbox_redis_cache_docker_environment | to_nice_yaml | trim | indent(6) }}
+    healthcheck: *redis_healthcheck
+    volumes: 
+      {{ dapp_netbox_redis_cache_docker_volumes | to_nice_yaml | trim | indent(6) }}
+
+volumes:
+{% for volume,driver in dapp_netbox_volume_driver.items() %}
+  {{ volume }}:
+    driver: {{ driver }}
+{% endfor %}

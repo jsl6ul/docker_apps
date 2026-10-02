@@ -1,0 +1,114 @@
+---
+# defaults file for netbox
+
+# Common configurations - docker-compose
+dapp_netbox_traefik_address: "netbox.example.com"
+dapp_netbox_default_docker_network: "default"
+dapp_netbox_proxy_docker_network: "traefik_proxy"
+dapp_netbox_docker_exposed_port: "8080"
+dapp_netbox_traefik_certresolver: "ecpiaca"
+dapp_netbox_volume_driver:
+  netbox-media-files: local
+  netbox-postgres: local
+  netbox-redis-cache-data: local
+  netbox-redis-data: local
+  netbox-reports-files: local
+  netbox-scripts-files: local
+
+# Netbox service - docker-compose configuration
+dapp_netbox_docker_image: "docker.io/netboxcommunity/netbox:${VERSION-v4.7-5.1.1}"
+dapp_netbox_docker_healthcheck:
+  test: /opt/netbox/health.sh
+  start_period: 90s
+  timeout: 3s
+  interval: 15s
+dapp_netbox_docker_volumes:
+  - ./configuration:/etc/netbox/config:z,ro           
+  - netbox-media-files:/opt/netbox/netbox/media:rw    
+  - netbox-reports-files:/opt/netbox/netbox/reports:rw
+  - netbox-scripts-files:/opt/netbox/netbox/scripts:rw
+dapp_netbox_docker_environment:
+  API_TOKEN_PEPPER_1: 'a very long password string'
+  CORS_ORIGIN_ALLOW_ALL: True
+  DB_HOST: postgres
+  DB_NAME: netbox
+  DB_PASSWORD: Pl34s3-Ch4ng3_M3
+  DB_USER: netbox
+  EMAIL_FROM: netbox@bar.com
+  EMAIL_PASSWORD: 
+  EMAIL_PORT: 25
+  EMAIL_SERVER: localhost
+  EMAIL_SSL_CERTFILE: 
+  EMAIL_SSL_KEYFILE: 
+  EMAIL_TIMEOUT: 5
+  EMAIL_USERNAME: netbox
+  # EMAIL_USE_SSL and EMAIL_USE_TLS are mutually exclusive, i.e. they can't both be `true`!
+  EMAIL_USE_SSL: false
+  EMAIL_USE_TLS: false
+  GRAPHQL_ENABLED: true
+  MEDIA_ROOT: /opt/netbox/netbox/media
+  METRICS_ENABLED: false
+  REDIS_CACHE_DATABASE: 1
+  REDIS_CACHE_HOST: redis-cache
+  REDIS_CACHE_INSECURE_SKIP_TLS_VERIFY: false
+  REDIS_CACHE_PASSWORD: Pl34s3-Ch4ng3_M3
+  REDIS_CACHE_SSL: false
+  REDIS_DATABASE: 0
+  REDIS_HOST: redis
+  REDIS_INSECURE_SKIP_TLS_VERIFY: false
+  REDIS_PASSWORD: Pl34s3-Ch4ng3_M3
+  REDIS_SSL: false
+  RELEASE_CHECK_URL: https://api.github.com/repos/netbox-community/netbox/releases
+  SECRET_KEY: 'another very long password string'
+  SKIP_SUPERUSER: true
+  SUPERUSER_API_KEY: ""
+  SUPERUSER_API_TOKEN: ""
+  SUPERUSER_EMAIL: ""
+  SUPERUSER_NAME: ""
+  SUPERUSER_PASSWORD: ""
+  # SSO Configuration
+  SOCIAL_AUTH_OKTA_OPENIDCONNECT_KEY: "your_okta_client_id"
+  SOCIAL_AUTH_OKTA_OPENIDCONNECT_API_URL: "https://your-domain.okta.com"
+  SOCIAL_AUTH_GOOGLE_OAUTH2_KEY: "your_google_client_id"
+  WEBHOOKS_ENABLED: true
+
+# Netbox-worker service - docker-compose configuration
+dapp_netbox_worker_docker_healthcheck:
+  test: ps -aux | grep -v grep | grep -q rqworker || exit 1
+  start_period: 20s
+  timeout: 3s
+  interval: 15s
+
+# Postgres service - docker compose configuration
+dapp_netbox_postgres_docker_image: "docker.io/postgres:18-alpine"
+dapp_netbox_postgres_docker_healthcheck:
+  test: pg_isready -q -t 2 -d $$POSTGRES_DB -U $$POSTGRES_USER
+  start_period: 20s                                           
+  timeout: 30s                                                
+  interval: 10s                                               
+  retries: 5                                                  
+dapp_netbox_postgres_docker_volumes:
+  - netbox-postgres:/var/lib/postgresql
+dapp_netbox_postgres_docker_environment:
+  POSTGRES_DB: netbox
+  POSTGRES_PASSWORD: Pl34s3-Ch4ng3_M3
+  POSTGRES_USER: netbox
+
+# Redis service - docker compose configuration
+dapp_netbox_redis_docker_image: "docker.io/valkey/valkey:9.1-alpine"
+dapp_netbox_redis_docker_healthcheck:
+  test: '[ $$(valkey-cli --pass "$${REDIS_PASSWORD}" ping) = ''PONG'' ]'
+  start_period: 5s                                                      
+  timeout: 3s                                                           
+  interval: 1s                                                          
+  retries: 5                                                            
+dapp_netbox_redis_docker_volumes:
+  - netbox-redis-data:/data
+dapp_netbox_redis_docker_environment:
+  REDIS_PASSWORD: Pl34s3-Ch4ng3_M3
+
+# Redis-cache service - docker compose configuration
+dapp_netbox_redis_cache_docker_volumes:
+  - netbox-redis-cache-data:/data
+dapp_netbox_redis_cache_docker_environment:
+  REDIS_PASSWORD: Pl34s3-Ch4ng3_M3

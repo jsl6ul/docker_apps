@@ -1,0 +1,42 @@
+---
+# tasks file for netbox
+- name: Set project directory
+  ansible.builtin.set_fact:
+    _docker_project_dir: "{{ dapp_common_directory }}/netbox" 
+  tags:
+    - role::dapp_netbox
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}"
+    state: directory
+  tags:
+    - role::dapp_netbox
+
+- name: Copy necessary files
+  ansible.builtin.copy:
+    src: ./
+    dest: "{{ _docker_project_dir }}/"
+  tags:
+    - role::dapp_netbox
+
+- name: Create the docker-compose.yml file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
+    mode: 0600
+  tags:
+    - role::dapp_netbox
+    - task::make_docker_compose
+
+- name: Start Netbox containers
+  community.docker.docker_compose_v2:
+    project_src: "{{ _docker_project_dir }}"
+    state: present
+    wait: true
+    wait_timeout: 300
+  tags:
+    - role::dapp_netbox
+    - task::start_container
+
+
