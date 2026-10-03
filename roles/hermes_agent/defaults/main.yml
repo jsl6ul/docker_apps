@@ -19,7 +19,7 @@ dapp_hermes_agent_docker_environment:
   # HERMES_MODEL: "qwen2.5-coder:32b"
   # HERMES_BASE_URL: "http://localai.example.com:8080/v1"
   # MY_API_KEY: "changeme"
-  
+
 dapp_hermes_agent_docker_volumes:
   - "./data:/opt/data"
 
