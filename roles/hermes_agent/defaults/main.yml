@@ -1,0 +1,30 @@
+---
+# latest / stable
+dapp_hermes_agent_docker_image: "nousresearch/hermes-agent:latest"
+
+dapp_hermes_agent_traefik_address: "hermes.{{ dapp_common_domain }}"
+
+# dapp_hermes_dashboard_traefik_address: "hermes-dashboard.{{ dapp_common_domain }}"
+
+dapp_hermes_agent_docker_command: gateway run
+
+dapp_hermes_agent_docker_environment:
+  TZ: "UTC"
+  # HERMES_DASHBOARD: "1"
+
+  # ANTHROPIC_API_KEY: "ANTHROPIC_API_KEY"
+  # OPENAI_API_KEY: "OPENAI_API_KEY"
+  # TELEGRAM_BOT_TOKEN: "TELEGRAM_BOT_TOKEN"
+
+  # HERMES_MODEL: "qwen2.5-coder:32b"
+  # HERMES_BASE_URL: "http://localai.example.com:8080/v1"
+  # MY_API_KEY: "changeme"
+  
+dapp_hermes_agent_docker_volumes:
+  - "./data:/opt/data"
+
+# dapp_hermes_agent_docker_deploy:
+#   resources:
+#     limits:
+#       memory: 4G
+#       cpus: "2.0"
