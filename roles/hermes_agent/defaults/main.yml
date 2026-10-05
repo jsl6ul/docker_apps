@@ -16,6 +16,7 @@ dapp_hermes_agent_docker_command: gateway run
 #       memory: 4G
 #       cpus: "2.0"
 
+# Environment variables for docker compose file
 dapp_hermes_agent_docker_environment:
   TZ: "UTC"
   # HERMES_DASHBOARD: "1"
@@ -25,24 +26,28 @@ dapp_hermes_agent_docker_environment:
   # API_SERVER_KEY: "$(openssl rand -hex 32)"
   # API_SERVER_CORS_ORIGINS: "*"
 
-  # ANTHROPIC_API_KEY: "ANTHROPIC_API_KEY"
-  # OPENAI_API_KEY: "OPENAI_API_KEY"
-  # TELEGRAM_BOT_TOKEN: "TELEGRAM_BOT_TOKEN"
-
-  # BROWSERBASE_ADVANCED_STEALTH: "false"
-  # BROWSERBASE_PROXIES: "true"
-  # BROWSER_INACTIVITY_TIMEOUT: "120"
-  # BROWSER_SESSION_TIMEOUT: "300"
-  # IMAGE_TOOLS_DEBUG: "false"
-  # MOA_TOOLS_DEBUG: "false"
-  # TERMINAL_LIFETIME_SECONDS: "300"
-  # TERMINAL_MODAL_IMAGE: "nikolaik/python-nodejs:python3.11-nodejs20"
-  # TERMINAL_TIMEOUT: "60"
-  # VISION_TOOLS_DEBUG: "false"
-  # WEB_TOOLS_DEBUG: "false"
-
 dapp_hermes_agent_docker_volumes:
   - "./data:/opt/data"
+
+# Environment variables for hermes/data/.env file
+# dapp_hermes_agent_environment:
+#   ANTHROPIC_API_KEY: "ANTHROPIC_API_KEY"
+#   OPENAI_API_KEY: "OPENAI_API_KEY"
+#   TELEGRAM_BOT_TOKEN: "TELEGRAM_BOT_TOKEN"
+#
+#   BROWSERBASE_ADVANCED_STEALTH: "false"
+#   BROWSERBASE_PROXIES: "true"
+#   BROWSER_INACTIVITY_TIMEOUT: "120"
+#   BROWSER_SESSION_TIMEOUT: "300"
+#   IMAGE_TOOLS_DEBUG: "false"
+#   MOA_TOOLS_DEBUG: "false"
+#   TERMINAL_LIFETIME_SECONDS: "300"
+#   TERMINAL_MODAL_IMAGE: "nikolaik/python-nodejs:python3.11-nodejs20"
+#   TERMINAL_SSH_HOST: "192.168.0.23"
+#   TERMINAL_SSH_USER: "hermesworker"
+#   TERMINAL_TIMEOUT: "60"
+#   VISION_TOOLS_DEBUG: "false"
+#   WEB_TOOLS_DEBUG: "false"
 
 # Elements to add/update in config.yaml. Apply using: -e hermes_config_update=true
 # dapp_hermes_agent_config_yaml:
