@@ -7,11 +7,11 @@ services:
   app:
     image: "{{ dapp_hermes_agent_docker_image }}"
     restart: unless-stopped
-    hostname: "{{ dapp_hermes_agent_traefik_address }}"
+    hostname: "hermes"
     logging:
       driver: journald
       options:
-        tag: "hermes_agent"
+        tag: "hermes"
     networks:
       - traefik_proxy
     expose:
@@ -34,8 +34,11 @@ services:
 
       traefik.http.routers.hermes_agent.entrypoints: "http, https"
       traefik.http.routers.hermes_agent.rule: "Host(`{{ dapp_hermes_agent_traefik_address }}`)"
-      traefik.http.services.hermes_agent.loadbalancer.server.port: "8642"
-
+      traefik.http.routers.hermes_agent.service: "hermes_agent_service"
+      traefik.http.services.hermes_agent_service.loadbalancer.server.port: "8642"
+      traefik.http.services.hermes_agent.loadbalancer.healthcheck.path: "/health"
+      traefik.http.services.hermes_agent.loadbalancer.healthcheck.interval: "30s"
+      traefik.http.services.hermes_agent.loadbalancer.healthcheck.scheme: "http"
 {% if dapp_common_traefik_tls %}
       traefik.http.routers.hermes_agent.tls: "true"
 {% endif %}
@@ -46,7 +49,8 @@ services:
 {% if dapp_hermes_dashboard_traefik_address is defined %}
       traefik.http.routers.hermes_dashboard.entrypoints: "http, https"
       traefik.http.routers.hermes_dashboard.rule: "Host(`{{ dapp_hermes_dashboard_traefik_address }}`)"
-      traefik.http.services.hermes_dashboard.loadbalancer.server.port: "9119"
+      traefik.http.routers.hermes_dashboard.service: "hermes_dashboard_service"
+      traefik.http.services.hermes_dashboard_service.loadbalancer.server.port: "9119"
 {% if dapp_common_traefik_tls %}
       traefik.http.routers.hermes_dashboard.tls: "true"
 {% endif %}
