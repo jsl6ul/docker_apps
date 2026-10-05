@@ -21,3 +21,42 @@
 
 - name: Flush handlers
   meta: flush_handlers
+
+- name: "Update config.yaml (hermes_config_update)"
+  when:
+    - dapp_hermes_agent_config_yaml is defined
+    - hermes_config_update is defined
+  block:
+    - name: Read current config.yaml
+      become: true
+      ansible.builtin.slurp:
+        path: "{{ _docker_project_dir }}/data/config.yaml"
+      register: config_slurp
+
+    - name: Parse YAML into a variable
+      ansible.builtin.set_fact:
+        config_data: "{{ config_slurp.content | b64decode | from_yaml }}"
+
+    - name: Merge ALL dapp_config_yaml entries into config_data
+      ansible.builtin.set_fact:
+        config_data: >-
+          {{
+            config_data | combine(item, recursive=True)
+          }}
+      loop: "{{ dapp_hermes_agent_config_yaml }}"
+
+    - name: Stop container
+      ansible.builtin.shell: |
+        docker compose --project-directory "{{ _docker_project_dir }}" stop
+      changed_when: false
+
+    - name: Write updated config.yaml
+      become: true
+      ansible.builtin.copy:
+        dest: "{{ _docker_project_dir }}/data/config.yaml"
+        content: "{{ config_data | to_nice_yaml }}"
+
+    - name: Start container
+      ansible.builtin.shell: |
+        docker compose --project-directory "{{ _docker_project_dir }}" start
+      changed_when: false
