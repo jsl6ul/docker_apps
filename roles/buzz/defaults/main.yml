@@ -1,0 +1,97 @@
+---
+# Pin to a SHA tag for production (ghcr.io/block/buzz:sha-abc1234)
+# Using :main pulls the latest build, which changes frequently
+dapp_buzz_docker_image: "ghcr.io/block/buzz:main"
+
+# Hermes Agent API
+dapp_buzz_traefik_address: "buzz.{{ dapp_common_domain }}"
+
+# Nostr keypair
+# Run inside the relay container after first start.
+# This gives you a hex pubkey and private key.
+# $ docker compose exec relay buzz-admin generate-key
+# dapp_buzz_relay_owner_public_key: changeme
+# dapp_buzz_relay_owner_secret_key: changeme
+
+# Generate all secrets
+# dapp_buzz_git_hook_hmac_secret: "$(openssl rand -hex 32)"
+# dapp_buzz_relay_private_key: "$(openssl rand -hex 32)"
+# dapp_buzz_s3_access_key: "$(openssl rand -hex 16)"
+# dapp_buzz_s3_secret_key: "$(openssl rand -hex 16)"
+# dapp_buzz_postgres_password: "$(openssl rand -hex 16)"
+# dapp_buzz_redis_password: "$(openssl rand -hex 16)"
+
+# Environment variables for docker compose file
+# dapp_buzz_docker_environment:
+#   TZ: "UTC"
+#   BUZZ_BIND_ADDR: 0.0.0.0:3000
+#   BUZZ_HEALTH_PORT: "8080"
+#   BUZZ_METRICS_PORT: "9102"
+#   DATABASE_URL: postgres://${POSTGRES_USER:-buzz}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-buzz}
+#   REDIS_URL: redis://:${REDIS_PASSWORD:?set REDIS_PASSWORD}@redis:6379
+#   BUZZ_S3_ENDPOINT: http://minio:9000
+#   # Docker DNS resolves `minio`, not arbitrary `<bucket>.minio` hosts.
+#   BUZZ_S3_ADDRESSING_STYLE: path
+#   BUZZ_S3_ACCESS_KEY: ${BUZZ_S3_ACCESS_KEY:?set BUZZ_S3_ACCESS_KEY}
+#   BUZZ_S3_SECRET_KEY: ${BUZZ_S3_SECRET_KEY:?set BUZZ_S3_SECRET_KEY}
+#   BUZZ_S3_BUCKET: ${BUZZ_S3_BUCKET:-buzz-media}
+#   BUZZ_GIT_REPO_PATH: /data/git
+#   BUZZ_AUTO_MIGRATE: ${BUZZ_AUTO_MIGRATE:-false}
+#   BUZZ_GIT_CONFORMANCE_PROBE: ${BUZZ_GIT_CONFORMANCE_PROBE:-true}
+
+
+dapp_buzz_docker_volumes:
+  - "./data:/opt/data"
+
+# Environment variable for .env file
+dapp_buzz_environment: |
+  # ── Image tag ─────────────────────────────────────────────────
+  # Pin to a SHA tag for production (ghcr.io/block/buzz:sha-abc1234)
+  # Using :main pulls the latest build, which changes frequently
+  BUZZ_IMAGE={{ dapp_buzz_docker_image }}
+
+  # ── Domain config ─────────────────────────────────────────────
+  BUZZ_DOMAIN={{ dapp_buzz_traefik_address }}
+  RELAY_URL=wss://{{ dapp_buzz_traefik_address }}
+  BUZZ_MEDIA_BASE_URL=https://{{ dapp_buzz_traefik_address }}/media
+  BUZZ_MEDIA_SERVER_DOMAIN={{ dapp_buzz_traefik_address }}
+  BUZZ_CORS_ORIGINS=https://{{ dapp_buzz_traefik_address }}
+
+  # ── Security ──────────────────────────────────────────────────
+  BUZZ_REQUIRE_AUTH_TOKEN=true          # require auth for connections
+  BUZZ_REQUIRE_RELAY_MEMBERSHIP=true    # only whitelisted members can join
+  BUZZ_ALLOW_NIP_OA_AUTH=true           # allow NIP-OA auth
+  BUZZ_AUTO_MIGRATE=true                # MUST be true for fresh databases
+  BUZZ_GIT_CONFORMANCE_PROBE=true
+
+  # BUZZ_AUTO_MIGRATE=true tells the relay to apply all pending
+  # migrations on startup. Always set this to true for new
+  # installations. It’s safe to leave it on — migrations are idempotent.
+
+  # ── Owner pubkey ──────────────────────────────────────────────
+  # Your hex pubkey from Step 2 (64 chars, no 0x prefix)
+  # NOTE: NO "BUZZ_" prefix on this variable!
+  RELAY_OWNER_PUBKEY={{ dapp_buzz_relay_owner_public_key }}
+
+  # ── Relay signing key ─────────────────────────────────────────
+  # Generated in Step 2. NEVER rotate this.
+  BUZZ_RELAY_PRIVATE_KEY={{ dapp_buzz_relay_owner_secret_key }}
+
+  # ── Git HMAC secret ───────────────────────────────────────────
+  BUZZ_GIT_HOOK_HMAC_SECRET={{ dapp_buzz_git_hook_hmac_secret }}
+
+  # ── Database ──────────────────────────────────────────────────
+  POSTGRES_DB=buzz
+  POSTGRES_USER=buzz
+  POSTGRES_PASSWORD={{ dapp_buzz_postgres_password }}
+
+  # ── Redis ─────────────────────────────────────────────────────
+  REDIS_PASSWORD={{ dapp_buzz_redis_password }}
+
+  # ── S3 / MinIO ────────────────────────────────────────────────
+  BUZZ_S3_ACCESS_KEY={{ dapp_buzz_s3_access_key }}
+  BUZZ_S3_SECRET_KEY={{ dapp_buzz_s3_secret_key }}
+  BUZZ_S3_BUCKET=buzz-media
+
+  # ── Logging ───────────────────────────────────────────────────
+  RUST_LOG=buzz_relay=info,buzz_db=info,buzz_auth=info,buzz_pubsub=info,tower_http=info
