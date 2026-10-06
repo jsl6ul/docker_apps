@@ -7,9 +7,8 @@ dapp_buzz_docker_image: "ghcr.io/block/buzz:main"
 dapp_buzz_traefik_address: "buzz.{{ dapp_common_domain }}"
 
 # Nostr keypair
-# Run inside the relay container after first start.
-# This gives you a hex pubkey and private key.
-# $ docker compose exec relay buzz-admin generate-key
+# Run inside the relay container before the first start.
+# docker run --rm --entrypoint /usr/local/bin/buzz-admin ghcr.io/block/buzz:main generate-key
 # dapp_buzz_relay_owner_public_key: changeme
 # dapp_buzz_relay_owner_secret_key: changeme
 
