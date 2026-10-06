@@ -1,0 +1,89 @@
+---
+# latest / stable
+dapp_hermes_agent_docker_image: "nousresearch/hermes-agent:latest"
+
+# Hermes Agent API
+dapp_hermes_agent_traefik_address: "hermesagent.{{ dapp_common_domain }}"
+
+# Hermes Dashboard WebUI (optional)
+# dapp_hermes_dashboard_traefik_address: "hermes.{{ dapp_common_domain }}"
+
+dapp_hermes_agent_docker_command: gateway run
+
+# dapp_hermes_agent_docker_deploy:
+#   resources:
+#     limits:
+#       memory: 4G
+#       cpus: "2.0"
+
+# Environment variables for docker compose file
+dapp_hermes_agent_docker_environment:
+  TZ: "UTC"
+  # HERMES_DASHBOARD: "1"
+
+  # API_SERVER_ENABLED: "true"
+  # API_SERVER_HOST: "0.0.0.0"
+  # API_SERVER_KEY: "$(openssl rand -hex 32)"
+  # API_SERVER_CORS_ORIGINS: "*"
+
+dapp_hermes_agent_docker_volumes:
+  - "./data:/opt/data"
+
+# Environment variables for hermes/data/.env file
+# dapp_hermes_agent_environment:
+#   ANTHROPIC_API_KEY: "ANTHROPIC_API_KEY"
+#   OPENAI_API_KEY: "OPENAI_API_KEY"
+#   TELEGRAM_BOT_TOKEN: "TELEGRAM_BOT_TOKEN"
+#
+#   BROWSERBASE_ADVANCED_STEALTH: "false"
+#   BROWSERBASE_PROXIES: "true"
+#   BROWSER_INACTIVITY_TIMEOUT: "120"
+#   BROWSER_SESSION_TIMEOUT: "300"
+#   IMAGE_TOOLS_DEBUG: "false"
+#   MOA_TOOLS_DEBUG: "false"
+#   TERMINAL_LIFETIME_SECONDS: "300"
+#   TERMINAL_MODAL_IMAGE: "nikolaik/python-nodejs:python3.11-nodejs20"
+#   TERMINAL_SSH_HOST: "192.168.0.23"
+#   TERMINAL_SSH_USER: "hermesworker"
+#   TERMINAL_TIMEOUT: "60"
+#   VISION_TOOLS_DEBUG: "false"
+#   WEB_TOOLS_DEBUG: "false"
+
+# Elements to add/update in config.yaml. Apply using: -e hermes_config_update=true
+# dapp_hermes_agent_config_yaml:
+#   - dashboard:
+#       basic_auth:
+#         username: admin
+#         password_hash: scrypt$16384$8$1$fzgmQaCgOC5TEA1l9WyTlw==$bPsQKMuKR4wmJ8Zukj+C2ZB/K/ZpqVFrUWMWMFDUuaU=
+#   - custom_providers:
+#       - name: local
+#         base_url: http://192.168.0.12:8080/v1
+#         api_key: secret
+#         models_discovered: true
+#   - model:
+#       base_url: http://192.168.0.12:8080/v1
+#       default: gemma-4-26b-a4b-it-UD-MLX-4bit
+#       provider: custom:local
+#       api_mode: chat_completions
+#   - moa:
+#       presets:
+#         default:
+#           reference_models:
+#             - provider: custom:local
+#               model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#               enabled: true
+#           aggregator:
+#             provider: custom:local
+#             model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#           degraded_reference_policy: loud
+#           fanout: user_turn
+#       reference_models:
+#         - provider: custom:local
+#           model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#           enabled: true
+#       aggregator:
+#         provider: custom:local
+#         model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#       degraded_reference_policy: loud
+#       fanout: user_turn
+#       enabled: true

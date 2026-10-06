@@ -1,0 +1,77 @@
+---
+- name: Set project directory
+  ansible.builtin.set_fact:
+    _docker_project_dir: "{{ dapp_common_directory }}/{{ role_name }}"
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}"
+    state: directory
+
+- name: Copy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
+    mode: 0640
+
+- name: Start container
+  ansible.builtin.shell: |
+    docker compose --project-directory "{{ _docker_project_dir }}" up -d
+  changed_when: false
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: "Update config.yaml (hermes_config_update)"
+  when:
+    - dapp_hermes_agent_config_yaml is defined or dapp_hermes_agent_environment is defined
+    - hermes_config_update is defined
+  block:
+    - name: Read current config.yaml
+      become: true
+      ansible.builtin.slurp:
+        path: "{{ _docker_project_dir }}/data/config.yaml"
+      register: config_slurp
+      when: dapp_hermes_agent_config_yaml is defined
+
+    - name: Parse YAML into a variable
+      ansible.builtin.set_fact:
+        config_data: "{{ config_slurp.content | b64decode | from_yaml }}"
+      when: dapp_hermes_agent_config_yaml is defined
+
+    - name: Merge ALL dapp_config_yaml entries into config_data
+      ansible.builtin.set_fact:
+        config_data: >-
+          {{
+            config_data | combine(item, recursive=True)
+          }}
+      loop: "{{ dapp_hermes_agent_config_yaml }}"
+      when: dapp_hermes_agent_config_yaml is defined
+
+    - name: Stop container
+      ansible.builtin.shell: |
+        docker compose --project-directory "{{ _docker_project_dir }}" stop
+      changed_when: false
+
+    - name: Write updated config.yaml
+      become: true
+      ansible.builtin.copy:
+        dest: "{{ _docker_project_dir }}/data/config.yaml"
+        content: "{{ config_data | to_nice_yaml }}"
+      when: dapp_hermes_agent_config_yaml is defined
+
+    - name: Update .env file
+      become: true
+      ansible.builtin.lineinfile:
+        path: "{{ _docker_project_dir }}/data/.env"
+        regexp: '^{{ item.key }}='
+        line: '{{ item.key }}="{{ item.value }}"'
+        create: yes
+        mode: '0600'
+      loop: "{{ dapp_hermes_agent_environment | dict2items }}"
+      when: dapp_hermes_agent_environment is defined
+
+    - name: Start container
+      ansible.builtin.shell: |
+        docker compose --project-directory "{{ _docker_project_dir }}" start
+      changed_when: false

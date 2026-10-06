@@ -1,0 +1,60 @@
+---
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  app:
+    image: "{{ dapp_hermes_agent_docker_image }}"
+    restart: unless-stopped
+    hostname: "hermes"
+    logging:
+      driver: journald
+      options:
+        tag: "hermes"
+    networks:
+      - traefik_proxy
+    expose:
+      - 8642
+{% if dapp_hermes_dashboard_traefik_address is defined %}
+      - 9119
+{% endif %}
+    environment:
+      {{ dapp_hermes_agent_docker_environment|to_nice_yaml|indent(6) }}
+    volumes:
+      {{ dapp_hermes_agent_docker_volumes|to_nice_yaml|indent(6) }}
+    command: {{ dapp_hermes_agent_docker_command }}
+{% if dapp_hermes_agent_docker_deploy is defined %}
+    deploy:
+      {{ dapp_hermes_agent_docker_deploy|to_nice_yaml|indent(6) }}
+{% endif %}
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "traefik_proxy"
+
+      traefik.http.routers.hermes_agent.entrypoints: "http, https"
+      traefik.http.routers.hermes_agent.rule: "Host(`{{ dapp_hermes_agent_traefik_address }}`)"
+      traefik.http.routers.hermes_agent.service: "hermes_agent_service"
+      traefik.http.services.hermes_agent_service.loadbalancer.server.port: "8642"
+      traefik.http.services.hermes_agent.loadbalancer.healthcheck.path: "/health"
+      traefik.http.services.hermes_agent.loadbalancer.healthcheck.interval: "30s"
+      traefik.http.services.hermes_agent.loadbalancer.healthcheck.scheme: "http"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.hermes_agent.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.hermes_agent.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+{% endif %}
+
+{% if dapp_hermes_dashboard_traefik_address is defined %}
+      traefik.http.routers.hermes_dashboard.entrypoints: "http, https"
+      traefik.http.routers.hermes_dashboard.rule: "Host(`{{ dapp_hermes_dashboard_traefik_address }}`)"
+      traefik.http.routers.hermes_dashboard.service: "hermes_dashboard_service"
+      traefik.http.services.hermes_dashboard_service.loadbalancer.server.port: "9119"
+{% if dapp_common_traefik_tls %}
+      traefik.http.routers.hermes_dashboard.tls: "true"
+{% endif %}
+{% if dapp_common_traefik_tls and dapp_common_traefik_certresolver != "none" %}
+      traefik.http.routers.hermes_dashboard.tls.certresolver: "{{ dapp_common_traefik_certresolver }}"
+{% endif %}
+{% endif %}
