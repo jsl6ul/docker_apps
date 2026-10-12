@@ -1,0 +1,3 @@
+---
+dependencies:
+  - role: jsl6ul.docker_apps.common
