@@ -1,7 +1,8 @@
 ---
 services:
+
   relay:
-    image: ${BUZZ_IMAGE:-ghcr.io/block/buzz:main}
+    image: "{{ dapp_buzz_docker_image }}"
     env_file:
       - .env
     environment:
@@ -20,7 +21,6 @@ services:
       BUZZ_GIT_REPO_PATH: /data/git
       BUZZ_AUTO_MIGRATE: ${BUZZ_AUTO_MIGRATE:-false}
       BUZZ_GIT_CONFORMANCE_PROBE: ${BUZZ_GIT_CONFORMANCE_PROBE:-true}
-
     volumes:
       - buzz-git-data:/data/git
     depends_on:
@@ -50,7 +50,6 @@ services:
     labels:
       traefik.enable: "true"
       traefik.docker.network: "traefik_proxy"
-
       traefik.http.routers.buzz.entrypoints: "http, https"
       traefik.http.routers.buzz.rule: "Host(`{{ dapp_buzz_traefik_address }}`)"
       traefik.http.routers.buzz.service: "buzz_service"
@@ -63,7 +62,7 @@ services:
 {% endif %}
 
   postgres:
-    image: "postgres:17"
+    image: "{{ dapp_buzz_postgres_docker_image }}"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-buzz}
       POSTGRES_USER: ${POSTGRES_USER:-buzz}
@@ -82,7 +81,7 @@ services:
       - buzz-net
 
   redis:
-    image: "redis:7"
+    image: "{{ dapp_buzz_redis_docker_image }}"
     command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?set REDIS_PASSWORD}"]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD}
@@ -99,7 +98,7 @@ services:
       - buzz-net
 
   minio:
-    image: "chainguard/minio:latest"
+    image: "{{ dapp_buzz_s3_docker_image }}"
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: ${BUZZ_S3_ACCESS_KEY:?set BUZZ_S3_ACCESS_KEY}
@@ -119,7 +118,7 @@ services:
       - buzz-net
 
   minio-init:
-    image: "chainguard/minio-client:latest"
+    image: "{{ dapp_buzz_s3client_docker_image }}"
     depends_on:
       minio:
         condition: service_healthy
