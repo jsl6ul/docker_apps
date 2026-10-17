@@ -3,6 +3,11 @@
 # Using :main pulls the latest build, which changes frequently
 dapp_buzz_docker_image: "ghcr.io/block/buzz:main"
 
+dapp_buzz_postgres_docker_image: "postgres:17"
+dapp_buzz_redis_docker_image: "redis:7"
+dapp_buzz_s3_docker_image: "chainguard/minio:latest"
+dapp_buzz_s3client_docker_image: "chainguard/minio-client:latest"
+
 # Hermes Agent API
 dapp_buzz_traefik_address: "buzz.{{ dapp_common_domain }}"
 
@@ -44,11 +49,6 @@ dapp_buzz_docker_volumes:
 
 # Environment variable for .env file
 dapp_buzz_environment: |
-  # ── Image tag ─────────────────────────────────────────────────
-  # Pin to a SHA tag for production (ghcr.io/block/buzz:sha-abc1234)
-  # Using :main pulls the latest build, which changes frequently
-  BUZZ_IMAGE={{ dapp_buzz_docker_image }}
-
   # ── Domain config ─────────────────────────────────────────────
   BUZZ_DOMAIN={{ dapp_buzz_traefik_address }}
   RELAY_URL=wss://{{ dapp_buzz_traefik_address }}
