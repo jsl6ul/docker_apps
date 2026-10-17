@@ -11,6 +11,7 @@ workspace. Set the key to `dapp_buzz_relay_owner_pubkey` variable.
 
 Here are two ways to generate one:
 
+
 ### Desktop App
 
 This method keeps the private key on your device — it never touches the server.
@@ -40,3 +41,13 @@ docker compose exec relay buzz-admin generate-key
 This gives you a hex pubkey and private key. Save the private key
 somewhere safe — you’ll need it for the desktop app.
 
+
+## Local LLM
+
+```
+BUZZ_AGENT_PROVIDER=openai-compat
+OPENAI_COMPAT_BASE_URL=http://192.168.0.12:8080/v1
+OPENAI_COMPAT_MODEL=gemma-4-26b-a4b-it-UD-MLX-4bit
+OPENAI_COMPAT_API_KEY=none
+OPENAI_COMPAT_API=chat
+```
