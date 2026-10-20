@@ -1,0 +1,30 @@
+{
+ "collection_info": {
+  "namespace": "jsl6ul",
+  "name": "docker_apps",
+  "version": "0.6.32",
+  "authors": [
+   "jsl6ul"
+  ],
+  "readme": "README.md",
+  "tags": [],
+  "description": "Ansible collection for docker applications.",
+  "license": [
+   "MIT"
+  ],
+  "license_file": null,
+  "dependencies": {},
+  "repository": "https://github.com/jsl6ul/docker_apps",
+  "documentation": "https://github.com/jsl6ul/docker_apps",
+  "homepage": "https://github.com/jsl6ul/docker_apps",
+  "issues": "https://github.com/jsl6ul/docker_apps/issues"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "3a128d410938f0da4de6c19b6660b56412c841868cf7e11492275705ecc1d690",
+  "format": 1
+ },
+ "format": 1
+}

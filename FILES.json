@@ -1,0 +1,2217 @@
+{
+ "files": [
+  {
+   "name": ".",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "LICENSE",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ef37661ac7ae26e887847e1233dec7d7f560fd351d7b7d668ee206c5779421c2",
+   "format": 1
+  },
+  {
+   "name": "README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57dd9d26d567418c5a4a52a76b67666f2e32486e789e3c10182cf3b3e476d5bc",
+   "format": 1
+  },
+  {
+   "name": "docs",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "docs/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5b11b23109edb25761d00936453ebea86612c7a951d16799d2112a233dfc4bc3",
+   "format": 1
+  },
+  {
+   "name": "meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "meta/runtime.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7b1d88aa041500f5b4a36c20a58adf116fbb48af9b5aa3be93949bd12cdae9dd",
+   "format": 1
+  },
+  {
+   "name": "plugins",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "plugins/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "198c518c26e91bc01c3d50d163582796f2fa21c7b66a5581394b031469942d72",
+   "format": 1
+  },
+  {
+   "name": "roles",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7c6b24e2c52d8e63845f67b2b0479f7f822bc1ffd7c8da1076ee9eb68ac94e73",
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fd334a5ca870177cb666758ea1418d34ea8826955b73df511da125a9fb5c54a5",
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "59a3f33de2b7605a2cbedf4dc29f8db8daa38b1964019ba1476cd03caf52d414",
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/alertmanager/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "25c83c69beb5fb2ebc4a442bcb3dc256a1c173b85f37280894cfbc1ba1397125",
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a2ac56cc25b5fddf0d80e37b1ba485302ebc8049ac25ad1e4e310972c09badf9",
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "17763620d28023920fff117b6bf49925a8a76555355ad4e00d42fbda926b06ec",
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cc4a72b3b896fc0bf234ca09fd01a883c900cd24bf11af6fbd89537e644b4691",
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/blackbox_exporter/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6467a8f236fcc4a3694f99e0147e2ac98900d76da8bce623f35bfc564778b0a5",
+   "format": 1
+  },
+  {
+   "name": "roles/common",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/common/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3293e47171692c98cc2449a48ea2e77623a606466341d2286721a632a3fdcd1e",
+   "format": 1
+  },
+  {
+   "name": "roles/common/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/common/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "61c15a6fe47aa5a8cc26d2f71459f60c3284d4598941e85fb8127a7c75fef685",
+   "format": 1
+  },
+  {
+   "name": "roles/common/handlers",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/common/handlers/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "1ecd5d9531aa03411a1a0abe853f7e59d8a1a2acbc4b498b85bb77bff54e01e0",
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "300274b902df5158cf60c59e6d1ed3033ccb9a90adaec3ee5d638d86cc84cf19",
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b25b6f1252490c3ae470acd211d8f2cb28c05900ef143d1119a48eac384258ed",
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/files",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/files/exporter.py",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "699091f31f87743aaa51e4ff3ce0854175727ca233abdbdad6c6c8b883a920f7",
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "49a1d96fb8c2a17d1fbd296effd768572f842e51ba882e804e8bfdb714f7b9d9",
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/cpco_exporter/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5546ac89a0bcde60828005ae6885cbf62ea9fcf6b492caabb83992b733c1a32f",
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "2dea8c8da55970738d9e65e5df348a7e0920fd543c80e7dd1d1dd54d20a055df",
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e2ea38f3f71630f87a07a7f3897ff5c258a02bc1599a158c99fe36d601eaf767",
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d8bfd5c0cc3a7e354f5e23696ade2a3602b347476c1bdb52e00c13609170b6",
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/enteliweb_exporter/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "845cd4872b27f567ded710a79d82c088031030d5b3feee98bce7cd0f9dadaa04",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5dcb1907f1d493c7b571520750f5b81e51eec342dca0241e3bf391a8eb80527c",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/tasks/certificate.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "47bcb1f851e0c774eed6619d8ff9295039daccd1864abd2766273decb6b13577",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/tasks/fixhttp.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a6eece824d6a3f8085dd2fc506995bc71bfb3db22c84c8bd186ef0993b6b7ed6",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/tasks/ldap_anonymous_bind.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fc945dc58b4a899b8c2200cc4c90c380190213113e1bd8edc4d010a42fea1c43",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4d78f49b1e93cf4bef28ae5d5911a650dc766bf5f2039940803fca211f6852d0",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/tasks/topologysegment.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "962b4b2f768ac497f42e5ff8e30088d1129739b8f6c152e2cda443102d8f70e7",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "452125a302c2e56ecb9b4fe3eafb089148c5c87bcfbff3deaf61b6ca5f0dfe87",
+   "format": 1
+  },
+  {
+   "name": "roles/freeipa/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "78458fb4bbb8e3afe76fa03a1f631a96ccc1f9f0947e8b16fd03d86640a4ff92",
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d428b0d4f413363706298348b702196d927051686a25983abb3ee708f3c121cd",
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74a76a59beb290570807c122ec7d89882eb74799d6358e8be1ae400c163bdd31",
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7f2691fe687c02de559ced97efebe08aac1806daadda2ea51359b8cf32573aa3",
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a41833ec02ceb438e01f3015b72a8396020fd162a2a0a527a524705a9c5c0963",
+   "format": 1
+  },
+  {
+   "name": "roles/gitlab/templates/register-runner.sh",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "62e8be16de5ecd336ab9f84b289640f6aab71798b3fc8467336448d32c5cf499",
+   "format": 1
+  },
+  {
+   "name": "roles/glances",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/glances/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/glances/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "96005599b40885d70e92dbfe031e3116b5b6f44c01d3c2c1233ea87b70cbebd5",
+   "format": 1
+  },
+  {
+   "name": "roles/glances/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/glances/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/glances/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/glances/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bb06d1932e48c5428a2b3f7a19ed4a0372dac06442da1e8b93c4e381e82608a9",
+   "format": 1
+  },
+  {
+   "name": "roles/glances/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/glances/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "853174bc75242735475affdfb77d696b60577f5a9dde186221bedaaffb83a611",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "74d8ea04bd108270ab6aeb6ddc98a9bc9cc78ebd234c3952e26ddd13ae5a125b",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0624d88f86d96c2b14fad365401dc9f8ca7d376d226d3f22ce2f0a61111542d1",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/BMC.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "80d8a29483cbc799853a95d76d7bdf2f835a00b92f0df0dcbc797bab4a576a20",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/BMC_overview.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "12b4481929c946ecf332ff1471bd891233a6409793c420a874b024b60744bf80",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/BMC_status.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cb5e3a064a3589e5c956cd3c59656147e4708a04a048458e28243f8b954abf8f",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/Blackbox Exporter Overview.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f00f89cd618a3662a59efd2687e6435727b01b90dd32719fc860503e0981be0b",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/Ceph_Cluster.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b7553540f5118065923adf75ad6248770ee08374952b2d8f5b4c8aa194dbe682",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/Linux - Node Exporter Full.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "621b279cd4e5ea6472d2f65925fbc7db0cdee9aa5911e36b282a55c58fc5b03d",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/Linux - Node Exporter Server Metrics.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4651d24788992c87c1aa52bfc0258ff4ad0ea74a9f5d21046eb2757e2af54d62",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/Linux - Node Network Overview.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "233a6b037d56afd8d5603de7b0738037bd6abf12eb0a56c35e80b831cdf9bca8",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/files/dashboards/ZFS.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "61ac99318b5253943c92478c9467c5182fa3fdfca45a9ebd31b8b73e7511f189",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "111186eedecbc161f94ca6a34e72a29723d8366104e3990eded0e06e0a690d74",
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/grafana/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5a56b3dc01eef5c7ab1879ac66f845d2c8d942292dd5fe671e0c8cd2bd4c9163",
+   "format": 1
+  },
+  {
+   "name": "roles/graylog",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c839b175b478bf73c9c3cfa53ce07c122eb0a097c53d58c0bcdc783938bbb594",
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "fbe5f5cc450a61e2f6377ae888a6c335f62dd2e51699d816fde84211d96afeed",
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7391cb21f7de4d1ef230c8d88f6fe2b7b3686b51333c3d66d14d7eeeb4a521c4",
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/graylog/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b1d8b89ab1dd6afc5fab30a7601b2a72329f8b51fce43d3c437bc1b5553d7006",
+   "format": 1
+  },
+  {
+   "name": "roles/homepage",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c4ec45e7c66e7a157fbe82f28492802ee4a2a5ad91d18b4ffb4822e0c33dd3ca",
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9e747a9b9cda4914b9e21b9a549de1471574a12b8e133eba36c2e229540195aa",
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/homepage/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "190d9842bf493211e4483f4ba8daef13d639704a01270443209ea1ea9550f95d",
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f6d91474d2a77d61e3576ce1ac241d6f5ded92b355bb2bbb6ae98d04ae8a7dd1",
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "55efaa13de8cfd2bee2bc3962ba513ebb1bbfc46ef684a450493d735d167c868",
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f69099ce9777704c2e6eeb578892b71e7f4522c3bef38145a6e6a03b317ed567",
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/influxdb2/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b41d23a3eb429e9ee25a76cfa6fed72773eac0386da7c671c1e3cb1a9cb4603a",
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "e284569dd146d4578556832849bf49b26d8ffe9e2b0d640ffa0c6c4f3981dc0e",
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "37bc34f3ccbca417651a388719ed8a9f9b7ec7044c85c946d5654ccfa5f2b86c",
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d29757f6e0a2869122e9e5aa2a532b7a791c6fbe78f27f6b353894c69f175e1d",
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/lustre_exporter_slurm/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5b90f74c934227d4179a8530fa57bf39b809063ff74aa24aa375287382f3cc6b",
+   "format": 1
+  },
+  {
+   "name": "roles/minio",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/minio/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8bea25ab6f331385c4c24cf129413a6f98526d228e6a347454df34a801666a6e",
+   "format": 1
+  },
+  {
+   "name": "roles/minio/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/minio/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3bf549bf9d70b98caecb6d0f50d12e5a422c815dfba08edd19ae01e8c20ffd3b",
+   "format": 1
+  },
+  {
+   "name": "roles/minio/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/minio/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/minio/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/minio/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "106b5981a1704680e89fc7385bd89d9c068cdd93624ba798ce343080be99effd",
+   "format": 1
+  },
+  {
+   "name": "roles/minio/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/minio/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c8713a59a8b9bce97dd1c74db9d4e2189d43f21dcd3a6eb2c75443afb48c7965",
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b54b96d0e60400d0eae8f059610ce1238039964d747683c767838bf45f2a76e8",
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cf8676ef5fa90889fb92a1265d93b5bb73bf161f0e111cb4e5fab33cc528be2f",
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "25b7a00a8142de107a0eb4d61b9996600587f2033a7670cc24b59b326c0859e0",
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/mirrordeb/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c0db790b072d6b1a88b645da50c45533027aab858a9594ca2bb357c685987ed0",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4205c919b53a89ba3652502d97e938138163311e57fc88cbf4823fd049ffe0f5",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c8f3c3250237cb09fedbdccfeba55e1be9d0f61be26832840d38d6eec284b864",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/BMC.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "80d8a29483cbc799853a95d76d7bdf2f835a00b92f0df0dcbc797bab4a576a20",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/BMC_overview.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "12b4481929c946ecf332ff1471bd891233a6409793c420a874b024b60744bf80",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/BMC_status.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cb5e3a064a3589e5c956cd3c59656147e4708a04a048458e28243f8b954abf8f",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/Blackbox Exporter Overview.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f00f89cd618a3662a59efd2687e6435727b01b90dd32719fc860503e0981be0b",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/Ceph_Cluster.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b7553540f5118065923adf75ad6248770ee08374952b2d8f5b4c8aa194dbe682",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/Linux - Node Exporter Full.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "621b279cd4e5ea6472d2f65925fbc7db0cdee9aa5911e36b282a55c58fc5b03d",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/Linux - Node Exporter Server Metrics.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4651d24788992c87c1aa52bfc0258ff4ad0ea74a9f5d21046eb2757e2af54d62",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/Linux - Node Network Overview.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "233a6b037d56afd8d5603de7b0738037bd6abf12eb0a56c35e80b831cdf9bca8",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/files/grafana_dashboards/ZFS.json",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "61ac99318b5253943c92478c9467c5182fa3fdfca45a9ebd31b8b73e7511f189",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "83e5fd782ecd8a330cac1b34700f21b8636bd2727d9d79cfe2a3a1fd1cb9857b",
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/monitoring/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "86337ab6e1241bed969b4e31514fc09074b42968350db757830bcb5e295a3631",
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cf9058470aa4c3dd360ece0c71be1827175708e51e6fb80140ba4019fb7f326e",
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "61533e0d85bcfa67b06b53ed61f4377fa2a923b77490c4458afa8a75d7408af0",
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f69099ce9777704c2e6eeb578892b71e7f4522c3bef38145a6e6a03b317ed567",
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/opensearch/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "82ec5fdaf91cd3c424d13764484d84e203ffe96436ad6c13be996733ad926cba",
+   "format": 1
+  },
+  {
+   "name": "roles/portainer",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4fc8f5c787af9cfcac27c42a1d911dcd92460fdd901e030b00b83109afa869c9",
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "81c9939cf4cdd8044668dbdb5c6d6c36252401790fccc6ea648caeec0e9aba4f",
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "0b1e7dc33e5a2adabb8c9ea0b107a3928409559f6812132d3a7777f5da366e61",
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/portainer/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9063158b7174d00343bd070758d72a710f140cf1189f00b2325849f99874ba60",
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a448f8456cd0669ed601e07a78e8c61151d6ac47640480a854a9fcf2ef13a2dd",
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bb06d1932e48c5428a2b3f7a19ed4a0372dac06442da1e8b93c4e381e82608a9",
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/privatebin/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "bc7ec91de9696a7087f0d0ccda74b40706eeb013255bad667e0257e2914fcc8f",
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7e959c3ba760464f565d03a96d0642662c6be17ea3a41dc8674182593661b598",
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "949325dc9ef1cf735b531900678a7777e2356ca6ed78a4522fcbe06e9d7eb5d9",
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "97ab874a06a9215d6d623f0fbdf426dca98ddf3a0fa2c0331f6c2131d702cd67",
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/prometheus/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "69de7a3eb1457032e0e672e50869d02194bc2348113f1748646b18ddd230cf71",
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b0ad32296b88809fa7d539284a38d2deb72f8f74e13dbc82042cfc38e8bc292b",
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "23df0839689b2c7f93af1f17fa4d61edbde9cf9df8b16eae6e6b763e3ae28828",
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5b97ac071bceefe8dd42eb06e0cf791f50d61590f002379c0582be3518ddef96",
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/pve_exporter/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6170aee75514d03c9a248d247a4b260867f3c5d178adaa9ddd13c49193ee1cb5",
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "966d7fb26f5e4eff058b6f325eefcbcb209229e57d5f29189c61d85b20817e7e",
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7ac10b831e86aebccaa9602801944fccad38ac7e0a5a3e34e610c2b02221ae7c",
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "cd7fdd348d9772ea80ea145fe0d937686fe1ba646d6d832da0bbbc690e1e6564",
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/redfish_exporter/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7abb83e95bb0e7038c28ffe8763c5201d2fedba23646455e974934de19dd9013",
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "afabbe09b610296f09d98ac90de35997fdcdfd6bac7d031db13570b3e8c23af8",
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "63f56b5afd57fc66e2427a7af7bb2adc35e07465bfa213c4f8ee0a957b2b9b3b",
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "210f3d32f280fa19fbd2a0dcb570725878469ed801f8b0d007680b31de47fb0b",
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/rsyslog/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5bb07f3bceedd8f05293ee87cfec9d7a16155d5c7b73564675f453a90853bec2",
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a0b53a88d6a1260fe69554a1ad9f2814c9b3792575ad6c82af49a6e7d6787f05",
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d9c2bebc8a90b042039ca7342eac0294346ead3fdeef7ea2c0765343bfaf6c80",
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "b16c67a428e0ba97d48ec5a94ef69989016216c9ffded6a6f0a5bc23d0dca69f",
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/siemens_exporter/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "416b10b81ebf73e712811b14c31558193a60b61256bb0752ca09ae86568971f1",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "ef56744e494b6f081ed89b3b5defb7cba6769065da31b43f0331a368593fcce0",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "24b1e1d2d5ff6a78d404aa543407044a3931a24bffd245be6d96091fec72373c",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "01aed87870b6e7b8f01f74cd0451244de2280d217468a9852ef6055a79f4a14e",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/templates/compactor.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "3cf5894f899ea8792ff9d6036a5bd6efc03e478e6a0a9e60e92821ecb79bc1bc",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a57d0c5920e960ee2f33930ee1e8b90c9e7958ef3328c2a00de3b2292769b82b",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/templates/querier.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "9048436078a939d15a2f3cbaf3058aa79bb6da3958df8992968acdbd11d5b259",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/templates/sidecar.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8eb7087dd996ccc53259d11b1a1eede7013bac00a840259bbe8c01248149fc1d",
+   "format": 1
+  },
+  {
+   "name": "roles/thanos/templates/store.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "8e7eb31cca6436225282e369e665d63242ebcdb28d6977a6b5c109601c4e4d68",
+   "format": 1
+  },
+  {
+   "name": "roles/traefik",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "d2547addb1f7ceb13858a48111194899c7afddb78c4e5162ec35503a4d1388d5",
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/tasks/certificate.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "6d675cf9658ab2db3a524f6389ff0cf225bc2b44bbb1f945a2e49ba6d285f7eb",
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "7867e919041bbd5662b9defabd64b48e887f53f5f79c9bdd5cc469c8ff4252ff",
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/traefik/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "4f3b3e49b47892b96a57029123a54365b4160069b089e07b5d8dd6f0f5b1506d",
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "51038e29839012f89580e183fc52ff8ddba386353d9ef32043d477803c39f5f9",
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c7cde46337e99b58a135ad6f04aa13f8e7f5fc2d7b4afa95c27d6edc81360f55",
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "58cc6b308e26da6387545e82b721f25ce73f05911aa2d017a1d58af980d2c40c",
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trailblazing/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "a4617407c276589ddbc32bf1e040f2c837c4a20c4cfe0621d22b2427f4e4efb5",
+   "format": 1
+  },
+  {
+   "name": "roles/trivy",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/README.md",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "5188ca60b88607fe893d09e4b9e4046505b733005442342453d7f121e4646772",
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/defaults",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/defaults/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "c09c6b2907da7483ec399f96705bfcf1732868c9562ab874151d2605a8f496ee",
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/meta",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/meta/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "57b98cd27f5da44cfcda1529791c55260fdcd6138a6f28b8e0235623a1640ed8",
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/tasks",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/tasks/main.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "f69099ce9777704c2e6eeb578892b71e7f4522c3bef38145a6e6a03b317ed567",
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/templates",
+   "ftype": "dir",
+   "chksum_type": null,
+   "chksum_sha256": null,
+   "format": 1
+  },
+  {
+   "name": "roles/trivy/templates/docker-compose.yml",
+   "ftype": "file",
+   "chksum_type": "sha256",
+   "chksum_sha256": "dc7aea3184ad749688d3cda63fc48507983e1e8b25b8cac8dc992c5a3c42b83c",
+   "format": 1
+  }
+ ],
+ "format": 1
+}

@@ -16,7 +16,8 @@ dapp_netbox_volume_driver:
   netbox-scripts-files: local
 
 # Netbox service - docker-compose configuration
-dapp_netbox_docker_image: "docker.io/netboxcommunity/netbox:${VERSION-v4.7-5.1.1}"
+dapp_netbox_version: "v4.7.0"
+dapp_netbox_docker_image: "netbox-custom:local"
 dapp_netbox_docker_healthcheck:
   test: /opt/netbox/health.sh
   start_period: 90s
@@ -112,3 +113,19 @@ dapp_netbox_redis_cache_docker_volumes:
   - netbox-redis-cache-data:/data
 dapp_netbox_redis_cache_docker_environment:
   REDIS_PASSWORD: Pl34s3-Ch4ng3_M3
+
+# List of plugins to be installed and their respective configurations
+# The dictionary key is the name of python package (it will be used in the command pip install)
+# The name is the plugin name (it will be used inside netbox configuration file)
+dapp_netbox_plugins:
+  netbox-idrac-inventory:
+    name: netbox_idrac_inventory
+    config:
+      idrac_default_username: "root"
+      idrac_default_password: ""
+      idrac_verify_ssl: False
+      idrac_timeout: 30
+      update_device_serial: True
+      manage_idrac_interface: True
+      sync_interval_minutes: 0
+      allowed_networks: []

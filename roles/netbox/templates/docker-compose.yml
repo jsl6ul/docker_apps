@@ -6,7 +6,11 @@ networks:
 
 services:
   netbox: &netbox
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: "{{ dapp_netbox_docker_image }}"
+    pull_policy: never
     restart: unless-stopped
     logging:
       driver: journald
