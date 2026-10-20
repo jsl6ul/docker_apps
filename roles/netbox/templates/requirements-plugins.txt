@@ -1,0 +1,3 @@
+{% for plugin in dapp_netbox_plugins.keys() %}
+{{ plugin }}
+{% endfor %}
