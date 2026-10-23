@@ -95,9 +95,18 @@ https://hermes-agent.nousresearch.com/docs/user-guide/messaging/matrix
    Hermes gateway owns. Never leave a parallel Element web (or
    desktop/mobile) session logged in as the same bot account.
 
-3. Set Matrix environment variables, see defaults/main.yml
+3. Generate a fresh token via the login API
+   (this creates access token, device id and user id, independent of the web session)
 
-4. Run playbook, this will apply configuration and restart container.
+   ```
+   curl -X POST https://matrix.org/_matrix/client/v3/login \
+     -H "Content-Type: application/json" \
+     -d '{"type":"m.login.password","user":"@changeme:matrix.org","password":"secret"}'
+   ```
+
+4. Set Matrix environment variables, see defaults/main.yml
+
+5. Run playbook, this will apply configuration and restart hermes gateway container.
    `ansible-playbook <playbook> -e hermes_config_update=true`
 
 
@@ -131,5 +140,5 @@ https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram
 
 3. Set Telegram environment variables, see defaults/main.yml
 
-4. Run playbook, this will apply configuration and restart container.
+4. Run playbook, this will apply configuration and restart hermes gateway container.
    `ansible-playbook <playbook> -e hermes_config_update=true`
