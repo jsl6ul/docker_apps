@@ -30,6 +30,7 @@ dapp_hermes_agent_docker_volumes:
   - "./data:/opt/data"
 
 # Environment variables for hermes/data/.env file
+# Apply using: -e hermes_config_update=true
 # dapp_hermes_agent_environment:
 #   ANTHROPIC_API_KEY: "ANTHROPIC_API_KEY"
 #   OPENAI_API_KEY: "OPENAI_API_KEY"
@@ -40,16 +41,51 @@ dapp_hermes_agent_docker_volumes:
 #   BROWSER_INACTIVITY_TIMEOUT: "120"
 #   BROWSER_SESSION_TIMEOUT: "300"
 #   IMAGE_TOOLS_DEBUG: "false"
+#
+#   # Matrix Channel
+#   # Base auth; the device ID is derived from it automatically
+#   MATRIX_ACCESS_TOKEN: "secret"
+#   # E2EE requires the mautrix library with encryption extras and the libolm C library
+#   MATRIX_E2EE_MODE: "required"
+#   # If your Matrix account has cross-signing enabled (the default in
+#   # Element), set the recovery key (aka "Security Key") so the bot can
+#   # self-sign its device on startup. Without this, other Matrix
+#   # clients may refuse to share encryption sessions with the bot after
+#   # a device key rotation.
+#   MATRIX_RECOVERY_KEY: "secret"
+#   # For private Matrix deployments, set both user and room allowlists.
+#   # Matrix users allowed to trigger agent turns
+#   MATRIX_ALLOWED_USERS: "@changeme:matrix.org"
+#   # Matrix rooms allowed to trigger agent turns
+#   MATRIX_ALLOWED_ROOMS: "!changeme:matrix.org"
+#   # Bridge/appservice ghost users to ignore
+#   MATRIX_IGNORE_USER_PATTERNS: "'^@telegram_,^@whatsapp_'"
+#   # Only enable notices when a trusted human workflow really sends m.notice
+#   MATRIX_PROCESS_NOTICES: "true"
+#   # Rooms exempt from mention requirement
+#   MATRIX_FREE_RESPONSE_ROOMS: "!changeme:matrix.org"
+#   # auto|room|thread; room is recommended for project rooms
+#   MATRIX_SESSION_SCOPE: "room"
+#   # You can designate a "home room" where the bot sends proactive
+#   # messages (such as cron job output, reminders, and notifications).
+#   MATRIX_HOME_ROOM: "!changeme:matrix.org"
+#
 #   MOA_TOOLS_DEBUG: "false"
+#
+#   TELEGRAM_BOT_TOKEN: "secret"
+#   TELEGRAM_HOME_CHANNEL: "changeme"
+#
 #   TERMINAL_LIFETIME_SECONDS: "300"
 #   TERMINAL_MODAL_IMAGE: "nikolaik/python-nodejs:python3.11-nodejs20"
 #   TERMINAL_SSH_HOST: "192.168.0.23"
 #   TERMINAL_SSH_USER: "hermesworker"
 #   TERMINAL_TIMEOUT: "60"
+#
 #   VISION_TOOLS_DEBUG: "false"
 #   WEB_TOOLS_DEBUG: "false"
 
-# Elements to add/update in config.yaml. Apply using: -e hermes_config_update=true
+# Elements to add/update in config.yaml.
+# Apply using: -e hermes_config_update=true
 # dapp_hermes_agent_config_yaml:
 #   - dashboard:
 #       basic_auth:
@@ -62,7 +98,7 @@ dapp_hermes_agent_docker_volumes:
 #         models_discovered: true
 #   - model:
 #       base_url: http://192.168.0.12:8080/v1
-#       default: gemma-4-26b-a4b-it-UD-MLX-4bit
+#       default: Qwen3.6-35B-A3B
 #       provider: custom:local
 #       api_mode: chat_completions
 #   - moa:
@@ -70,20 +106,20 @@ dapp_hermes_agent_docker_volumes:
 #         default:
 #           reference_models:
 #             - provider: custom:local
-#               model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#               model: Qwen3.6-35B-A3B
 #               enabled: true
 #           aggregator:
 #             provider: custom:local
-#             model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#             model: Qwen3.6-35B-A3B
 #           degraded_reference_policy: loud
 #           fanout: user_turn
 #       reference_models:
 #         - provider: custom:local
-#           model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#           model: Qwen3.6-35B-A3B
 #           enabled: true
 #       aggregator:
 #         provider: custom:local
-#         model: gemma-4-26b-a4b-it-UD-MLX-4bit
+#         model: Qwen3.6-35B-A3B
 #       degraded_reference_policy: loud
 #       fanout: user_turn
 #       enabled: true
