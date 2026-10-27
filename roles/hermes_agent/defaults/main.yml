@@ -97,10 +97,10 @@ dapp_hermes_agent_docker_volumes:
 #         api_key: secret
 #         models_discovered: true
 #   - model:
-#       base_url: http://192.168.0.12:8080/v1
-#       default: Qwen3.6-35B-A3B
 #       provider: custom:local
+#       default: Qwen3.6-35B-A3B
 #       api_mode: chat_completions
+#       context_length: 65536  # Requires at least 64,000 tokens of context
 #   - moa:
 #       presets:
 #         default:
