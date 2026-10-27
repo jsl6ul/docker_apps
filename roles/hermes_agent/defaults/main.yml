@@ -61,7 +61,7 @@ dapp_hermes_agent_docker_volumes:
 #   # Bridge/appservice ghost users to ignore
 #   MATRIX_IGNORE_USER_PATTERNS: "'^@telegram_,^@whatsapp_'"
 #   # Only enable notices when a trusted human workflow really sends m.notice
-#   MATRIX_PROCESS_NOTICES: "true"
+#   MATRIX_PROCESS_NOTICES: "false"
 #   # Rooms exempt from mention requirement
 #   MATRIX_FREE_RESPONSE_ROOMS: "!changeme:matrix.org"
 #   # auto|room|thread; room is recommended for project rooms
