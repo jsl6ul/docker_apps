@@ -22,10 +22,11 @@
 - name: Flush handlers
   meta: flush_handlers
 
-- name: "Update config.yaml (hermes_config_update)"
+- name: Update config.yaml
   when:
     - dapp_hermes_agent_config_yaml is defined or dapp_hermes_agent_environment is defined
     - hermes_config_update is defined
+    - hermes_config_update
   block:
     - name: Read current config.yaml
       become: true
@@ -53,14 +54,14 @@
         docker compose --project-directory "{{ _docker_project_dir }}" stop
       changed_when: false
 
-    - name: Write updated config.yaml
+    - name: "Write updated config.yaml (hermes_config_update=yes)"
       become: true
       ansible.builtin.copy:
         dest: "{{ _docker_project_dir }}/data/config.yaml"
         content: "{{ config_data | to_nice_yaml }}"
       when: dapp_hermes_agent_config_yaml is defined
 
-    - name: Update .env file
+    - name: "Update .env file (hermes_config_update=yes)"
       become: true
       ansible.builtin.lineinfile:
         path: "{{ _docker_project_dir }}/data/.env"
