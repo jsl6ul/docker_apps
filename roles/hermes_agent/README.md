@@ -4,80 +4,90 @@ Running Hermes in Docker - the agent itself runs inside a container.
 [Documentation here](https://hermes-agent.nousresearch.com/docs/user-guide/docker).
 
 
-## Configuration
+## Dashboard password
 
-You can run this command to generate the dashboard password hash:
+You can generate a password hash for the dashboard using:
 `python3 -c "from plugins.dashboard_auth.basic import hash_password; print(hash_password('your-password'))"`
 
+## Configuration
 
-### 1. Manual Wizard
+### Option 1: Hermes CLI
 
-Run the setup container to interactively configure API keys and chat systems:
+Run the full setup wizard, or configure individual settings:
+
+```bash
+# Full setup wizard
+hermes setup
+
+# Or configure individually:
+hermes model          # Choose LLM provider and model
+hermes tools          # Configure enabled tools
+hermes gateway setup  # Set up messaging platforms
+hermes config set     # Set a config value
+hermes config get     # Inspect a config value
+```
+
+In Docker:
 
 ```bash
 docker run -it --rm -v ~/docker/hermes_agent/data:/opt/data nousresearch/hermes-agent setup
 ```
 
+### Option 2: Ansible
 
-### 2. Automated (Ansible)
-
-Define your setup via `dapp_hermes_agent_config_yaml` and trigger the update using:
+Define your setup using `dapp_hermes_agent_config_yaml` and `dapp_hermes_agent_environment`, then apply:
 
 ```bash
 ansible-playbook <playbook> -e hermes_config_update=true
 ```
 
 
-### Ssh Terminal
+## Ssh Terminal
 
 To enable SSH Terminal backend:
 
 1. Create the identity keys inside the running Hermes container.
+   ```
+   # Enter the container
+   user@host:~$ docker exec -it hermes_agent-app-1 bash
+
+   # Switch to the hermes user
+   root@hermes:~# su - hermes
+
+   # Generate the keys (no passphrase)
+   hermes@hermes:~$ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
+   ```
+
 2. Apply the terminal settings to Hermes via Ansible.
+   ```
+   # Define terminal settings:
+   dapp_hermes_agent_environment: |
+     TERMINAL_SSH_HOST: "192.168.0.23"
+     TERMINAL_SSH_USER: "hermes-worker"
+
+   # Set terminal backend as ssh
+   dapp_hermes_agent_config_yaml:
+     - terminal:
+         backend: ssh
+         container_cpu: 1
+         container_disk: 51200
+         container_memory: 5120
+         container_persistent: true
+         cwd: .
+         docker_mount_cwd_to_workspace: false
+         home_mode: auto
+         lifetime_seconds: 300
+         timeout: 180
+   ```
+
+   Apply changes:
+   ```bash
+   ansible-playbook <playbook> -e hermes_config_update=true
+   ```
+
 3. Create the `hermes-worker` account on the remote target host.
+
 4. Copy Hermes public key to the worker's `authorized_keys` file.
-
-1. Create Hermes ssh keys
-```
-# Enter the container
-user@host:~$ docker exec -it hermes_agent-app-1 bash
-
-# Switch to the hermes user
-root@hermes:~# su - hermes
-
-# Generate the keys (no passphrase)
-hermes@hermes:~$ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
-```
-
-2. Define terminal settings:
-
-```
-dapp_hermes_agent_environment: |
-  TERMINAL_SSH_HOST: "192.168.0.23"
-  TERMINAL_SSH_USER: "hermes-worker"
-```
-
-3. Set terminal backend as ssh
-```
-dapp_hermes_agent_config_yaml:
-  - terminal:
-      backend: ssh
-      container_cpu: 1
-      container_disk: 51200
-      container_memory: 5120
-      container_persistent: true
-      cwd: .
-      docker_mount_cwd_to_workspace: false
-      home_mode: auto
-      lifetime_seconds: 300
-      timeout: 180
-```
-
-4. Apply changes using the configuration update switch:
-
-```bash
-ansible-playbook <playbook> -e hermes_config_update=true
-```
 
 
 ## Matrix Channel
