@@ -1,0 +1,68 @@
+---
+# tasks file for netbox
+- name: Set project directory
+  ansible.builtin.set_fact:
+    _docker_project_dir: "{{ dapp_common_directory }}/netbox" 
+  tags:
+    - role::dapp_netbox
+
+- name: Create project directory
+  ansible.builtin.file:
+    path: "{{ _docker_project_dir }}"
+    state: directory
+  tags:
+    - role::dapp_netbox
+
+- name: Copy necessary files
+  ansible.builtin.copy:
+    src: ./
+    dest: "{{ _docker_project_dir }}/"
+  tags:
+    - role::dapp_netbox
+
+- name: Create Dockerfile
+  ansible.builtin.template:
+    src: Dockerfile
+    dest: "{{ _docker_project_dir }}"
+  tags:
+    - role::dapp_netbox
+
+- name: Create the docker-compose.yml file
+  ansible.builtin.template:
+    src: docker-compose.yml
+    dest: "{{ _docker_project_dir }}/docker-compose.yml"
+    mode: 0600
+  tags:
+    - role::dapp_netbox
+
+- name: Create the requirements-plugins.txt file
+  ansible.builtin.template:
+    src: requirements-plugins.txt
+    dest: "{{_docker_project_dir }}/requirements-plugins.txt"
+    mode: 0600
+  when: dapp_netbox_plugins is defined
+  tags:
+    - role::dapp_netbox
+
+- name: Create the configurations/plugins.py file
+  ansible.builtin.template:
+    src: plugins.py
+    dest: "{{_docker_project_dir }}/configuration/plugins.py"
+    mode: 0664
+  when: dapp_netbox_plugins is defined
+  tags:
+    - role::dapp_netbox
+
+- name: Start Netbox containers
+  community.docker.docker_compose_v2:
+    project_src: "{{ _docker_project_dir }}"
+    state: present
+    build: "{{ dapp_netbox_build_image | default('never') }}"
+    remove_orphans: true
+    wait: true
+    wait_timeout: 1800
+  tags:
+    - role::dapp_netbox
+    - task::start_container
+
+
